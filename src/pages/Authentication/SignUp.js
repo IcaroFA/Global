@@ -18,7 +18,6 @@ function SignUp() {
           "Content-Type": "multipart/form-data"
         },
         url: URL + "/api/auth/signup",
-
         data: formData
       });
       if (response.data.success) {

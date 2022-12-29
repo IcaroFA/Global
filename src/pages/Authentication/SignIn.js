@@ -5,7 +5,7 @@ import { GlobalContex } from "../../context/contex";
 
 function SignIn() {
   const navigate = useNavigate();
-  const { notify } = useContext(GlobalContex);
+  const { notify, setUserData } = useContext(GlobalContex);
   const [signInLoading, setSignUpLoading] = useState(false);
   const [signData, setsigninData] = useState({});
   const URL = process.env.REACT_APP_URL;
@@ -21,12 +21,12 @@ function SignIn() {
       });
       if (response.data.success) {
         navigate("/");
+        setUserData(response.data.data);
         setSignUpLoading(false);
       }
     } catch (error) {
       setSignUpLoading(false);
-      console.log(error);
-      // notify(error.response.data.message);
+      notify(error.response.data.message, "error");
     }
   }
 
