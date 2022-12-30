@@ -2,25 +2,31 @@ import React, { useState, useContext, useEffect } from "react";
 import { GlobalContex } from "../context/contex";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.js";
+import { v4 as uuidv4 } from "uuid";
 function Donation() {
+  const navigate = useNavigate();
   const { userData, notify } = useContext(GlobalContex);
   const [isSameAddress, setIsSameAddress] = useState(false);
   const [pickupAddress, setPickupAddress] = useState({});
-  const [foodItems, setFoodItems] = useState({});
+  const [foodItems, setFoodItems] = useState([
+    { _id: uuidv4(), unit: "Kilogram" }
+  ]);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    isSameAddress
+      ? setPickupAddress(userData.address)
+      : setPickupAddress({
+          country: "",
+          state: "",
+          city: "",
+          street: "",
+          building: "",
+          zipCode: ""
+        });
+  }, [isSameAddress]);
   useEffect(() => {
     if (Object.keys(userData).length < 1) return navigate("/");
   }, []);
-
-  function handleDropDown(e) {
-    const dropdown = e.target.parentElement.lastChild;
-    if (!dropdown.className.includes("hidden")) {
-      dropdown.className = dropdown.className + " hidden";
-    } else {
-      dropdown.className = dropdown.className.replace("hidden", "");
-    }
-  }
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -41,61 +47,91 @@ function Donation() {
             </h1>
             <div>
               <ul>
-                <li className="flex md:gap-5 gap-2  flex-wrap ">
-                  <input
-                    type="text"
-                    id="Food Item"
-                    className="  max-w-lg bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter Food Item"
-                    required
-                  />
-                  <div className="flex gap-3 ">
+                {foodItems.map((item, i) => (
+                  <li
+                    key={item._id}
+                    className="flex md:gap-5 mb-4 gap-2  flex-wrap "
+                  >
                     <input
-                      type="Number"
-                      id="Quantity"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Quantity"
+                      type="text"
+                      id="Food Item"
+                      className="  max-w-lg bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Enter Food Item"
                       required
                     />
-                    <div className="relative">
-                      <button
-                        id="dropdownDefault"
-                        data-dropdown-toggle="dropdown"
-                        onClick={(e) => handleDropDown(e)}
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        type="button"
-                      >
-                        Unit
-                      </button>
-                      <div
-                        id="dropdown"
-                        className=" hidden shadow-2xl absolute top-12 z-10 w-24 bg-white rounded divide-y divide-gray-100  dark:bg-gray-700"
-                      >
-                        <ul
-                          className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby="dropdownDefault"
+                    <div className="flex gap-3 ">
+                      <input
+                        type="Number"
+                        id="Quantity"
+                        className="bg-gray-50 border w-28 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Quantity"
+                        required
+                      />
+                      <div className="relative">
+                        <button
+                          id="dropdownDefault"
+                          data-dropdown-toggle="dropdown"
+                          onClick={() => {
+                            setFoodItems((preVal) =>
+                              preVal.map((e, index) =>
+                                i === index
+                                  ? {
+                                      ...e,
+                                      unit:
+                                        e.unit === "Kilogram"
+                                          ? "Liter"
+                                          : "Kilogram"
+                                    }
+                                  : e
+                              )
+                            );
+                          }}
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          type="button"
                         >
-                          <li onClick={(e) => {}}>
-                            <div className="cursor-pointer block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                              Kilo Gram
-                            </div>
-                          </li>
-                          <li>
-                            <div className="cursor-pointer block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                              Mili Gram
-                            </div>
-                          </li>
-                        </ul>
+                          {item.unit}
+                        </button>
                       </div>
+                      {/* <!-- unit Dropdown menu --> */}
+                      {/* remove  */}
+                      {i !== 0 && (
+                        <button
+                          className="py-2  px-3 text-xs font-semibold text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                          onClick={() =>
+                            setFoodItems(
+                              foodItems.filter((e, index) => index !== i)
+                            )
+                          }
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                      {/* remove  end */}
                     </div>
-                    {/* <!-- unit Dropdown menu --> */}
-                  </div>
-                </li>
+                  </li>
+                ))}
               </ul>
             </div>
             {/* add Items Button */}
             <button
               type="button"
+              onClick={() =>
+                setFoodItems((preVal) => [
+                  ...preVal,
+                  { _id: uuidv4(), unit: "Kilogram" }
+                ])
+              }
               className="py-2 mt-4 px-3 text-xs font-semibold text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Add more
@@ -105,7 +141,7 @@ function Donation() {
           {/* food Items end */}
 
           {/* address */}
-          <div>
+          <div className="mb-8">
             <h1 className=" text-xl mb-6 font-semibold  text-blue-500   dark:text-white">
               PickUp Address
             </h1>
@@ -124,7 +160,12 @@ function Donation() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Country"
                   required
-                  value={isSameAddress ? userData.address.country : ""}
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, country: e.target.value };
+                    })
+                  }
+                  value={pickupAddress.country}
                   autoComplete="off"
                   disabled={isSameAddress}
                   style={
@@ -149,7 +190,12 @@ function Donation() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="State"
                   required
-                  value={isSameAddress ? userData.address.state : ""}
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, state: e.target.value };
+                    })
+                  }
+                  value={pickupAddress.state}
                   disabled={isSameAddress}
                   style={
                     isSameAddress
@@ -172,7 +218,12 @@ function Donation() {
                   id="city"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
-                  value={isSameAddress ? userData.address.city : ""}
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, city: e.target.value };
+                    })
+                  }
+                  value={pickupAddress.city}
                   placeholder="City"
                   disabled={isSameAddress}
                   style={
@@ -196,7 +247,12 @@ function Donation() {
                   id="street"
                   className="bg-gray-50 border w-full  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
-                  value={isSameAddress ? userData.address.street : ""}
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, street: e.target.value };
+                    })
+                  }
+                  value={pickupAddress.street}
                   placeholder="Street"
                   autoComplete="off"
                   disabled={isSameAddress}
@@ -219,8 +275,13 @@ function Donation() {
                 <input
                   type="text"
                   id="Building"
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, building: e.target.value };
+                    })
+                  }
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={isSameAddress ? userData.address.building : ""}
+                  value={pickupAddress.building}
                   placeholder="Apt, office, suite, etc. (Optional)"
                   disabled={isSameAddress}
                   style={
@@ -244,7 +305,12 @@ function Donation() {
                   id="zip"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
-                  value={isSameAddress ? userData.address.zipCode : ""}
+                  onChange={(e) =>
+                    setPickupAddress((preVal) => {
+                      return { ...preVal, zipcode: e.target.value };
+                    })
+                  }
+                  value={pickupAddress.zipCode}
                   disabled={isSameAddress}
                   style={
                     isSameAddress
@@ -270,6 +336,22 @@ function Donation() {
             </div>
           </div>
           {/* address end */}
+          {/* message */}
+          <div className="mb-8">
+            <label
+              htmlFor="message"
+              className=" text-xl  font-semibold  text-blue-500   dark:text-white"
+            >
+              Message
+            </label>
+            <textarea
+              id="message"
+              rows="3"
+              class="block p-2.5    w-full mt-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Write your thoughts here..."
+            ></textarea>
+          </div>
+          {/* message emd */}
 
           <button
             type="submit"
