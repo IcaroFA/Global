@@ -23,6 +23,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard/Dashboard.js";
 import Logout from "./components/popUp/Logout.js";
 import Donation from "./pages/Donation";
+import Status from "./pages/Status";
 function App() {
   const { notify, setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
@@ -66,7 +67,7 @@ function App() {
               <Route path="/forgot_password" element={<FogotPassword />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/donation" element={<Donation />} />
-
+              <Route path="/status" element={<Status />} />
               <Route path="/" element={<Home />} />
             </Routes>
           </div>

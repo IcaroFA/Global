@@ -7,6 +7,7 @@ const Contex = ({ children }) => {
   const [userLoading, setUserLoading] = useState(true);
   const [showSideBar, setShowSideBar] = useState(false);
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
+  const [currentDonation, setCurrentDonation] = useState({});
   const notify = (message, type) => {
     return toast[type](message, {
       position: "bottom-left",
@@ -31,7 +32,9 @@ const Contex = ({ children }) => {
         showSideBar,
         setShowSideBar,
         showLogoutPopUp,
-        setShowLogoutPopUp
+        setShowLogoutPopUp,
+        currentDonation,
+        setCurrentDonation
       }}
     >
       {children}

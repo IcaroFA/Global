@@ -3,16 +3,31 @@ import { GlobalContex } from "../context/contex";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.js";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+
 function Donation() {
   const navigate = useNavigate();
-  const { userData, notify } = useContext(GlobalContex);
+  const URL = process.env.REACT_APP_URL;
+  const { userData, notify, currentDonation } = useContext(GlobalContex);
   const [isSameAddress, setIsSameAddress] = useState(false);
-  const [pickupAddress, setPickupAddress] = useState({});
+  const [pickUpAddress, setPickupAddress] = useState({});
+  const [message, setMessage] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [foodItems, setFoodItems] = useState([
-    { _id: uuidv4(), unit: "Kilogram" }
+    { _id: uuidv4(), unit: "Kilogram", item: "", quantity: 1 }
   ]);
 
   useEffect(() => {
+    if (Object.keys(userData).length < 1) return navigate("/");
+  }, []);
+
+  // toggle same address
+  useEffect(() => {
+    if (Object.keys(currentDonation).length > 0) {
+      return isSameAddress
+        ? setPickupAddress(userData.address)
+        : setPickupAddress(currentDonation.pickUpAddress);
+    }
     isSameAddress
       ? setPickupAddress(userData.address)
       : setPickupAddress({
@@ -21,12 +36,68 @@ function Donation() {
           city: "",
           street: "",
           building: "",
-          zipCode: ""
+          pinCode: ""
         });
   }, [isSameAddress]);
+
   useEffect(() => {
-    if (Object.keys(userData).length < 1) return navigate("/");
-  }, []);
+    handleEditState();
+  }, [currentDonation]);
+
+  // edit state
+  function handleEditState() {
+    if (Object.keys(currentDonation).length > 0) {
+      setPickupAddress(currentDonation.pickUpAddress);
+      setFoodItems(
+        currentDonation.items.map((item) => {
+          return { ...item, _id: uuidv4() };
+        })
+      );
+      setMessage(currentDonation.message);
+    }
+  }
+
+  /// axios post and put options
+  function axiosOptions() {
+    const donationInfo = {
+      items: foodItems.map((item) => {
+        delete item._id;
+        return item;
+      }),
+      pickUpAddress,
+      message
+    };
+    return Object.keys(currentDonation).length > 0
+      ? {
+          method: "put",
+          url: URL + "/api/donation/" + currentDonation._id,
+          withCredentials: true,
+          data: donationInfo
+        }
+      : {
+          method: "post",
+          url: URL + "/api/donation",
+          withCredentials: true,
+          data: donationInfo
+        };
+  }
+
+  // handle from submit
+  async function handleSubmitDonation(e) {
+    e.preventDefault();
+    setSubmitLoading(true);
+    try {
+      const response = await axios(axiosOptions());
+      if (response.data.success) {
+        notify("successfuly", "success");
+        navigate("/status");
+      }
+      setSubmitLoading(false);
+    } catch (error) {
+      setSubmitLoading(false);
+      notify(error.response.data.message, "error");
+    }
+  }
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -39,7 +110,11 @@ function Donation() {
         </header>
 
         {/* form  */}
-        <form className="mt-12 md:ml-6" autoComplete="off">
+        <form
+          className="mt-12 md:ml-6"
+          autoComplete="off"
+          onSubmit={(e) => handleSubmitDonation(e)}
+        >
           {/* food Items */}
           <div className="mb-8">
             <h1 className=" text-xl mb-6 font-semibold  text-blue-500   dark:text-white">
@@ -58,6 +133,21 @@ function Donation() {
                       className="  max-w-lg bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Enter Food Item"
                       required
+                      value={
+                        foodItems.find((itemObj, index) => i === index).item
+                      }
+                      onChange={(e) => {
+                        setFoodItems((preVal) =>
+                          preVal.map((itemObj, index) =>
+                            i === index
+                              ? {
+                                  ...itemObj,
+                                  item: e.target.value
+                                }
+                              : itemObj
+                          )
+                        );
+                      }}
                     />
                     <div className="flex gap-3 ">
                       <input
@@ -66,6 +156,23 @@ function Donation() {
                         className="bg-gray-50 border w-28 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Quantity"
                         required
+                        value={
+                          foodItems.find((itemObj, index) => i === index)
+                            .quantity
+                        }
+                        min="1"
+                        onChange={(e) => {
+                          setFoodItems((preVal) =>
+                            preVal.map((itemObj, index) =>
+                              i === index
+                                ? {
+                                    ...itemObj,
+                                    quantity: e.target.value
+                                  }
+                                : itemObj
+                            )
+                          );
+                        }}
                       />
                       <div className="relative">
                         <button
@@ -129,7 +236,7 @@ function Donation() {
               onClick={() =>
                 setFoodItems((preVal) => [
                   ...preVal,
-                  { _id: uuidv4(), unit: "Kilogram" }
+                  { _id: uuidv4(), unit: "Kilogram", item: "", quantity: 1 }
                 ])
               }
               className="py-2 mt-4 px-3 text-xs font-semibold text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -165,7 +272,7 @@ function Donation() {
                       return { ...preVal, country: e.target.value };
                     })
                   }
-                  value={pickupAddress.country}
+                  value={pickUpAddress.country ? pickUpAddress.country : ""}
                   autoComplete="off"
                   disabled={isSameAddress}
                   style={
@@ -195,7 +302,7 @@ function Donation() {
                       return { ...preVal, state: e.target.value };
                     })
                   }
-                  value={pickupAddress.state}
+                  value={pickUpAddress.state ? pickUpAddress.state : ""}
                   disabled={isSameAddress}
                   style={
                     isSameAddress
@@ -223,7 +330,7 @@ function Donation() {
                       return { ...preVal, city: e.target.value };
                     })
                   }
-                  value={pickupAddress.city}
+                  value={pickUpAddress.city ? pickUpAddress.city : ""}
                   placeholder="City"
                   disabled={isSameAddress}
                   style={
@@ -252,7 +359,7 @@ function Donation() {
                       return { ...preVal, street: e.target.value };
                     })
                   }
-                  value={pickupAddress.street}
+                  value={pickUpAddress.street ? pickUpAddress.street : ""}
                   placeholder="Street"
                   autoComplete="off"
                   disabled={isSameAddress}
@@ -281,7 +388,7 @@ function Donation() {
                     })
                   }
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={pickupAddress.building}
+                  value={pickUpAddress.building ? pickUpAddress.building : ""}
                   placeholder="Apt, office, suite, etc. (Optional)"
                   disabled={isSameAddress}
                   style={
@@ -298,19 +405,19 @@ function Donation() {
                   htmlFor="zip"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Zip Code
+                  Pin Code
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="zip"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                   onChange={(e) =>
                     setPickupAddress((preVal) => {
-                      return { ...preVal, zipcode: e.target.value };
+                      return { ...preVal, pinCode: e.target.value };
                     })
                   }
-                  value={pickupAddress.zipCode}
+                  value={pickUpAddress.pinCode ? pickUpAddress.pinCode : ""}
                   disabled={isSameAddress}
                   style={
                     isSameAddress
@@ -347,8 +454,11 @@ function Donation() {
             <textarea
               id="message"
               rows="3"
-              class="block p-2.5    w-full mt-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block p-2.5    w-full mt-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Write your thoughts here..."
+              required
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             ></textarea>
           </div>
           {/* message emd */}
@@ -357,8 +467,50 @@ function Donation() {
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Submit
+            {Object.keys(currentDonation) > 0 ? "Submit" : "Update"}
+
+            {submitLoading ? (
+              <svg
+                aria-hidden="true"
+                role="status"
+                className="inline ml-3 w-4 h-4 text-white animate-spin"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="#E5E7EB"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentColor"
+                />
+              </svg>
+            ) : null}
           </button>
+          {/* cancle reset button */}
+          {Object.keys(currentDonation).length > 0 ? (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  navigate("/status?donationId=" + currentDonation._id)
+                }
+                className="text-white mx-3 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+              >
+                Cancle
+              </button>{" "}
+              <button
+                type="button"
+                onClick={() => handleEditState()}
+                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              >
+                Reset
+              </button>
+            </>
+          ) : null}
+          {/* cancle reset button */}
         </form>
         {/* from end */}
       </div>
