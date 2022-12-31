@@ -6,9 +6,11 @@ function DarkModeToggleButton() {
   useEffect(() => {
     // Change the icons inside the button based on previous settings
     if (
-      localStorage.getItem("color-theme") === "dark" ||
-      (!("color-theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
+      "color-theme" in localStorage &&
+      localStorage.getItem("color-theme") === "dark"
+      //   ||
+      // (!("color-theme" in localStorage) &&
+      //   window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
       setIsDark(true);
       document.documentElement.classList.add("dark");
@@ -23,28 +25,31 @@ function DarkModeToggleButton() {
   function handleToggle() {
     // toggle icons inside button
     setIsDark((preVal) => !preVal);
-
+    console.log(localStorage.getItem("color-theme"));
     // if set via local storage previously
-    if (localStorage.getItem("color-theme")) {
-      if (localStorage.getItem("color-theme") === "light") {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("color-theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("color-theme", "light");
-      }
-
-      // if NOT set via local storage previously
+    if (
+      "color-theme" in localStorage &&
+      localStorage.getItem("color-theme") === "dark"
+    ) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("color-theme", "light");
     } else {
-      if (document.documentElement.classList.contains("dark")) {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("color-theme", "light");
-      } else {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("color-theme", "dark");
-      }
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("color-theme", "dark");
     }
+
+    // if NOT set via local storage previously
+    // } else {
+    // if (document.documentElement.classList.contains("dark")) {
+    // document.documentElement.classList.remove("dark");
+    // localStorage.setItem("color-theme", "light");
+    // } else {
+    // document.documentElement.classList.add("dark");
+    // localStorage.setItem("color-theme", "dark");
+    // }
+    // }
   }
+  // localStorage.removeItem("color-theme");
 
   return (
     <button
