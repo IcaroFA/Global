@@ -13,11 +13,15 @@ function DarkModeToggleButton() {
       //   window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
       setIsDark(true);
-      document.documentElement.classList.add("dark");
+      // document.documentElement.classList.add("dark");
+      document.querySelector(".App").classList.add("dark");
+
       localStorage.setItem("color-theme", "dark");
     } else {
       setIsDark(false);
-      document.documentElement.classList.remove("dark");
+      document.querySelector(".App").classList.remove("dark");
+
+      // document.documentElement.classList.remove("dark");
       localStorage.setItem("color-theme", "light");
     }
   }, []);
@@ -31,23 +35,15 @@ function DarkModeToggleButton() {
       "color-theme" in localStorage &&
       localStorage.getItem("color-theme") === "dark"
     ) {
-      document.documentElement.classList.remove("dark");
+      document.querySelector(".App").classList.remove("dark");
+      // document.documentElement.classList.remove("dark");
       localStorage.setItem("color-theme", "light");
     } else {
-      document.documentElement.classList.add("dark");
+      // document.documentElement.classList.add("dark");
+      document.querySelector(".App").classList.add("dark");
+
       localStorage.setItem("color-theme", "dark");
     }
-
-    // if NOT set via local storage previously
-    // } else {
-    // if (document.documentElement.classList.contains("dark")) {
-    // document.documentElement.classList.remove("dark");
-    // localStorage.setItem("color-theme", "light");
-    // } else {
-    // document.documentElement.classList.add("dark");
-    // localStorage.setItem("color-theme", "dark");
-    // }
-    // }
   }
   // localStorage.removeItem("color-theme");
 
