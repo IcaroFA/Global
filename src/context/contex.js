@@ -8,6 +8,14 @@ const Contex = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
+  const [filter, setfilter] = useState({
+    from: "",
+    to: "",
+    donorId: "",
+    status: "ALL",
+    page: 1,
+    limit: 10
+  });
   const notify = (message, type) => {
     return toast[type](message, {
       position: "bottom-left",
@@ -34,7 +42,9 @@ const Contex = ({ children }) => {
         showLogoutPopUp,
         setShowLogoutPopUp,
         currentDonation,
-        setCurrentDonation
+        setCurrentDonation,
+        filter,
+        setfilter
       }}
     >
       {children}

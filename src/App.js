@@ -25,7 +25,7 @@ import Logout from "./components/popUp/Logout.js";
 import Donation from "./pages/Donation";
 import Status from "./pages/Status";
 function App() {
-  const { notify, setUserData, userLoading, showLogoutPopUp, setUserLoading } =
+  const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
   useEffect(() => {
@@ -71,6 +71,7 @@ function App() {
               <Route path="/" element={<Home />} />
             </Routes>
           </div>
+
           {/* // logout popup */}
           {showLogoutPopUp ? <Logout /> : null}
           {/* // tostify */}

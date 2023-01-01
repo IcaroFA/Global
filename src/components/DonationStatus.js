@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import { GlobalContex } from "../context/contex";
 import { useNavigate, useLocation } from "react-router-dom";
 function DonationStatus({ item }) {
-  const urlQuery = new URLSearchParams(useLocation().search);
-
+  const location = useLocation();
+  const urlQuery = new URLSearchParams(location.search);
   const navigate = useNavigate();
   const { setCurrentDonation } = useContext(GlobalContex);
   const [showFooditems, setShowFoodItems] = useState(
@@ -15,10 +15,10 @@ function DonationStatus({ item }) {
     <div className="overflow-x-auto relative shadow-2xl sm:rounded-lg  mb-4 ">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <caption
-          className="p-5 text-lg font-semibold text-left     text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
+          className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
           onClick={() => {
             setShowFoodItems((preVal) => !preVal);
-            navigate("/status");
+            if (location.pathname == "/status") navigate("/status");
           }}
         >
           <div className=" flex-col  md:flex-row  flex   md:gap-8 md-4">
@@ -88,7 +88,7 @@ function DonationStatus({ item }) {
             className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
             onClick={() => {
               setCurrentDonation(item);
-              navigate("/donation");
+              navigate("/donation?edit=" + item._id);
             }}
           >
             Edit
