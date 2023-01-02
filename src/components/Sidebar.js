@@ -84,9 +84,9 @@ function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/user"
+                  to="/profile"
                   className={
-                    location.pathname === "/user"
+                    location.pathname === "/profile"
                       ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                       : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }
@@ -104,7 +104,7 @@ function Sidebar() {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                  <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
+                  <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                 </Link>
               </li>
               <li>

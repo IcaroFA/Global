@@ -1,11 +1,6 @@
 import "./App.css";
 // import "flowbite";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -24,6 +19,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.js";
 import Logout from "./components/popUp/Logout.js";
 import Donation from "./pages/Donation";
 import Status from "./pages/Status";
+import Profile from "./pages/Profile";
 function App() {
   const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
@@ -68,6 +64,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/donation" element={<Donation />} />
               <Route path="/status" element={<Status />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/" element={<Home />} />
             </Routes>
           </div>
