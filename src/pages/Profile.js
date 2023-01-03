@@ -1,30 +1,28 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { GlobalContex } from "../context/contex.js";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-
+import useForgotPassword from "../customHooks/userForgotPassword.js";
+import axios from "axios";
 // component
 import Address from "../components/popUp/Address.js";
-
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import useForgotPassword from "../customHooks/userForgotPassword.js";
-
+import Sidebar from "../components/Sidebar";
 import DarkModeToggleButton from "../components/DarkModeToggleButton.js";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng
-} from "react-places-autocomplete";
 
 function Profile() {
+  const URL = process.env.REACT_APP_URL;
   const imageInputRef = useRef(null);
   const navigate = useNavigate();
-  const { notify, userData } = useContext(GlobalContex);
+  const { notify, userData, setUserData } = useContext(GlobalContex);
   const [isEdit, setIsEdit] = useState(false);
-  const URL = process.env.REACT_APP_URL;
-  const [address, setAddress] = useState("");
+  const [editedData, setEditedData] = useState({
+    address: userData.address ? userData.address : ""
+  });
+  const [showAddress, setShowAddress] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
-
-  const [inputImage, setInputtImage] = useState({ base64: "", file: "" });
+  const [inputImage, setInputtImage] = useState({
+    base64: userData.profileImage.url ? userData.profileImage.url : "",
+    file: ""
+  });
   const reader = new FileReader();
   const { data, loading, error, forgot } = useForgotPassword(userData.email);
   const [reset, setReset] = useState({ data, error, loading });
@@ -45,21 +43,39 @@ function Profile() {
     false
   );
 
-  async function handleSelect(address) {
-    try {
-      const response = await geocodeByAddress(address);
-      const latlng = await getLatLng(response[0]);
-      console.log(latlng);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
     if (error) notify(error.response.data.message, "error");
     if (data) notify(data.message, "success");
     setReset({ data, error, loading });
   }, [data, error, loading]);
+
+  async function handleEdit(e) {
+    e.preventDefault();
+    setEditLoading(true);
+    const formData = new FormData();
+    for (const key in editedData) {
+      formData.append(key, editedData[key]);
+    }
+    if (inputImage.file) formData.append("profileImage", inputImage.file);
+    if (userData.profileImage) formData.append("imgUrl", userData.profileImage);
+    try {
+      setEditLoading(true);
+      const response = await axios({
+        method: "patch",
+        url: URL + "/api/auth/user",
+        withCredentials: true,
+        data: formData
+      });
+      if (response.data.success) {
+        setUserData(response.data.data);
+        setIsEdit(false);
+      }
+      setEditLoading(false);
+    } catch (error) {
+      setEditLoading(false);
+      notify(error.response.data.message, "error");
+    }
+  }
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -70,10 +86,9 @@ function Profile() {
             Profile
           </h1>
         </header>
-
         {/* profile body */}
         {isEdit ? (
-          <form>
+          <form onSubmit={(e) => handleEdit(e)}>
             <div className="flex  pt-4   md:gap-10    md:flex-row         flex-col items-center ">
               {/* profile image */}
               <div className="relative">
@@ -100,7 +115,7 @@ function Profile() {
                 )}
                 {/* edit button */}
                 <div
-                  onClick={() => console.log(imageInputRef.current.click())}
+                  onClick={() => imageInputRef.current.click()}
                   className="absolute text-sm bottom-5 left-[8rem]  h-9 w-9 rounded-full cursor-pointer  hover:shadow-2xl    bg-blue-200  hover:bg-blue-100 dark:bg-[#9885855d] dark:hover:bg-[#98858526] flex items-center  justify-center"
                 >
                   <svg
@@ -125,18 +140,23 @@ function Profile() {
                 {/* first name */}
                 <div className="mb-3  flex  md:block">
                   <label
-                    htmlFor="email"
+                    htmlFor="firstName"
                     className="md:block  mb-2   md:mr-0 mr-4 md:text-sm  text-lg font-semibold text-gray-800 dark:text-white flex items-center"
                   >
                     firstName
                   </label>
                   <input
-                    type="email"
-                    id="email"
+                    type="text"
+                    id="firstName"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@flowbite.com"
                     required
                     defaultValue={userData.firstName}
+                    onChange={(e) =>
+                      setEditedData((preVal) => {
+                        return { ...preVal, firstName: e.target.value };
+                      })
+                    }
                   />
                 </div>
                 {/* firstname end */}
@@ -154,6 +174,11 @@ function Profile() {
                     defaultValue={userData.lastName}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
+                    onChange={(e) =>
+                      setEditedData((preVal) => {
+                        return { ...preVal, lastName: e.target.value };
+                      })
+                    }
                   />
                 </div>
                 {/* lastName end */}
@@ -177,6 +202,11 @@ function Profile() {
                   className="md:w-fit  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                   defaultValue={userData.phoneNo}
+                  onChange={(e) =>
+                    setEditedData((preVal) => {
+                      return { ...preVal, phoneNo: e.target.value };
+                    })
+                  }
                 />
               </div>
               {/* phone no  end */}
@@ -188,7 +218,15 @@ function Profile() {
                 >
                   Address
                 </label>
-                <Address />
+                <textarea
+                  type="text"
+                  id="address"
+                  value={editedData.address}
+                  onChange={() => {}}
+                  className="  md:max-w-lg  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                  onClick={() => setShowAddress(true)}
+                />
               </div>
               {/* address end */}
               {/* password  reset password */}
@@ -228,6 +266,61 @@ function Profile() {
               </div>
               {/* password  reset password */}
             </div>
+            {showAddress ? (
+              <Address
+                setEditedData={setEditedData}
+                editedData={editedData}
+                setShowAddress={setShowAddress}
+              />
+            ) : null}
+
+            {/* cancle  save button  */}
+            <div>
+              <button
+                type="button"
+                className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                onClick={() => {
+                  setIsEdit(false);
+                  setEditedData({
+                    address: userData.address ? userData.address : ""
+                  });
+                  setInputtImage({
+                    base64: userData.profileImage.url
+                      ? userData.profileImage.url
+                      : "",
+                    file: ""
+                  });
+                }}
+              >
+                Cancle
+              </button>
+              <button
+                type="submit"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Update
+                {editLoading ? (
+                  <svg
+                    aria-hidden="true"
+                    role="status"
+                    className="inline ml-3 w-4 h-4 text-white animate-spin"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="#E5E7EB"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                ) : null}
+              </button>
+            </div>
+            {/* cancle  save button  */}
           </form>
         ) : (
           // userInfo
@@ -257,19 +350,27 @@ function Profile() {
 
               {/* profile image */}
               <div className="relative">
-                <svg
-                  className="w-40 h-40 text-gray-200 dark:text-gray-700"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                {userData.profileImage.url ? (
+                  <img
+                    src={userData.profileImage.url}
+                    className="w-44 h-44 rounded-full"
+                    alt="img"
+                  />
+                ) : (
+                  <svg
+                    className="w-40 h-40 text-gray-200 dark:text-gray-700"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                )}
                 <p className="absolute text-sm bottom-5 left-24 h-6 w-[4rem] flex items-center justify-center bg-blue-500  text-white font-semibold rounded-3xl">
                   {userData.role}
                 </p>
@@ -297,45 +398,10 @@ function Profile() {
                 </span>
               </h1>
               <div className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white flex">
-                Address <br />{" "}
-                <div className="mt-8">
-                  <p>
-                    <span className="text-lg  font-semibold text-gray-500">
-                      country :
-                    </span>
-                    <span className="text-lg  font-medium text-gray-500">
-                      {" "}
-                      {userData.address.country}
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-lg  font-semibold text-gray-500">
-                      State :
-                    </span>
-                    <span className="text-lg  font-medium text-gray-500">
-                      {" "}
-                      {userData.address.state}
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-lg  font-semibold text-gray-500">
-                      City :
-                    </span>
-                    <span className="text-lg  font-medium text-gray-500">
-                      {" "}
-                      {userData.address.city}
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-lg  font-semibold text-gray-500">
-                      pinCode :
-                    </span>
-                    <span className="text-lg  font-medium text-gray-500">
-                      {" "}
-                      {userData.address.pinCode}
-                    </span>
-                  </p>
-                </div>
+                Address :{" "}
+                <span className="text-lg  font-semibold text-gray-500">
+                  {userData.address}
+                </span>
               </div>
               <h1 className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white">
                 Password :
@@ -353,6 +419,7 @@ function Profile() {
           // userInfo end
         )}
       </div>
+      {/* /// image input hidden */}
       <input
         type="file"
         ref={imageInputRef}
