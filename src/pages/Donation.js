@@ -6,17 +6,19 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import loadingSvg from "../asset/loading.svg";
 import { useLocation } from "react-router-dom";
+import Address from "../components/popUp/Address";
 
 function Donation() {
   const navigate = useNavigate();
   const location = useLocation();
   const URL = process.env.REACT_APP_URL;
+  const [showAddress, setShowAddress] = useState(false);
   const urlQuery = new URLSearchParams(location.search);
   const { userData, notify } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
   const [isSameAddress, setIsSameAddress] = useState(false);
-  const [pickUpAddress, setPickupAddress] = useState({});
+  const [pickUpAddress, setPickupAddress] = useState("");
   const [message, setMessage] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
   const [foodItems, setFoodItems] = useState([
@@ -37,16 +39,7 @@ function Donation() {
         ? setPickupAddress(userData.address)
         : setPickupAddress(currentDonation.pickUpAddress);
     }
-    isSameAddress
-      ? setPickupAddress(userData.address)
-      : setPickupAddress({
-          country: "",
-          state: "",
-          city: "",
-          street: "",
-          building: "",
-          pinCode: ""
-        });
+    isSameAddress ? setPickupAddress(userData.address) : setPickupAddress();
   }, [isSameAddress]);
 
   // edit state
@@ -82,8 +75,7 @@ function Donation() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
-      // notify(error.response.data.message, "error");
+      notify(error.response.data.message, "error");
     }
   }
 
@@ -120,7 +112,7 @@ function Donation() {
       const response = await axios(axiosOptions());
       if (response.data.success) {
         notify("successfuly", "success");
-        navigate("/status");
+        navigate("/status?donationId=" + urlQuery.get("edit"));
       }
       setSubmitLoading(false);
     } catch (error) {
@@ -285,200 +277,22 @@ function Donation() {
 
               {/* address */}
               <div className="mb-8">
-                <h1 className=" text-xl mb-6 font-semibold  text-blue-500   dark:text-white">
+                <label
+                  id="address"
+                  className=" text-xl mb-6 font-semibold  text-blue-500   dark:text-white"
+                >
                   PickUp Address
-                </h1>
-                <div className="flex items-center flex-wrap md:gap-6 justify-start w-full">
-                  {/* countru */}
-                  <div className="md:mb-6  mb-3 w-full md:w-60">
-                    <label
-                      htmlFor="Country"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      id="Country"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Country"
-                      required
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, country: e.target.value };
-                        })
-                      }
-                      value={pickUpAddress.country ? pickUpAddress.country : ""}
-                      autoComplete="off"
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>{" "}
-                  {/* country  end */}
-                  {/* State */}
-                  <div className="md:mb-6  mb-3 w-full md:w-60">
-                    <label
-                      htmlFor="state"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      id="state"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="State"
-                      required
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, state: e.target.value };
-                        })
-                      }
-                      value={pickUpAddress.state ? pickUpAddress.state : ""}
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* State end */}
-                  {/* city */}
-                  <div className="md:mb-6  mb-3 w-full md:w-60">
-                    <label
-                      htmlFor="city"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, city: e.target.value };
-                        })
-                      }
-                      value={pickUpAddress.city ? pickUpAddress.city : ""}
-                      placeholder="City"
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* city end */}
-                  {/* street     */}
-                  <div className="mb-6 w-full md:w-[24rem]">
-                    <label
-                      htmlFor="street"
-                      className="block mb-2   text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Street
-                    </label>
-                    <input
-                      type="text"
-                      id="street"
-                      className="bg-gray-50 border w-full  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, street: e.target.value };
-                        })
-                      }
-                      value={pickUpAddress.street ? pickUpAddress.street : ""}
-                      placeholder="Street"
-                      autoComplete="off"
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* street end */}
-                  {/* building     */}
-                  <div className="md:mb-6  mb-3 w-full md:w-60">
-                    <label
-                      htmlFor="Building"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Building
-                    </label>
-                    <input
-                      type="text"
-                      id="Building"
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, building: e.target.value };
-                        })
-                      }
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      value={
-                        pickUpAddress.building ? pickUpAddress.building : ""
-                      }
-                      placeholder="Apt, office, suite, etc. (Optional)"
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* building end */}
-                  {/* building     */}
-                  <div className="md:mb-6  mb-3 w-full md:w-60">
-                    <label
-                      htmlFor="zip"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Pin Code
-                    </label>
-                    <input
-                      type="number"
-                      id="zip"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      onChange={(e) =>
-                        setPickupAddress((preVal) => {
-                          return { ...preVal, pinCode: e.target.value };
-                        })
-                      }
-                      value={pickUpAddress.pinCode ? pickUpAddress.pinCode : ""}
-                      disabled={isSameAddress}
-                      style={
-                        isSameAddress
-                          ? { background: "rgba(125, 125, 125, 0.3)" }
-                          : null
-                      }
-                    />
-                  </div>
-                  {/* building end */}
-                  {/* same address toggle */}
-                  <label className="inline-flex relative items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      onChange={() => setIsSameAddress((preVal) => !preVal)}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span className="ml-3 text-sm    font-semibold text-gray-900 dark:text-gray-300">
-                      Your Address
-                    </span>
-                  </label>
-                  {/* same address toggle end */}
-                </div>
+                </label>
+                <textarea
+                  type="text"
+                  id="address"
+                  value={pickUpAddress}
+                  onChange={() => {}}
+                  disabled={isSameAddress}
+                  className="  md:max-w-lg  mt-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                  onClick={() => setShowAddress(true)}
+                />
               </div>
               {/* address end */}
               {/* message */}
@@ -492,7 +306,7 @@ function Donation() {
                 <textarea
                   id="message"
                   rows="3"
-                  className="block p-2.5    w-full mt-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 md:max-w-lg   w-full mt-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your thoughts here..."
                   required
                   value={message}
@@ -553,6 +367,13 @@ function Donation() {
           )
           // from end
         }
+        {showAddress ? (
+          <Address
+            setData={setPickupAddress}
+            data={pickUpAddress}
+            setShowAddress={setShowAddress}
+          />
+        ) : null}
       </div>
     </div>
   );

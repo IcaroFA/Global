@@ -48,7 +48,13 @@ function Status() {
         ) : (
           <div className="  md:my-3">
             {donationData.map((item) => {
-              return <DonationStatus key={item._id} item={item} />;
+              return (
+                <DonationStatus
+                  key={item._id}
+                  item={item}
+                  setDonationData={setDonationData}
+                />
+              );
             })}
           </div>
         )}

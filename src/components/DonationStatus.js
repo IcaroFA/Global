@@ -1,16 +1,19 @@
 import React, { useState, useContext } from "react";
 import { GlobalContex } from "../context/contex";
 import { useNavigate, useLocation } from "react-router-dom";
-function DonationStatus({ item }) {
+import RemoveDonation from "./popUp/RemoveDonation";
+function DonationStatus({ item, setDonationData }) {
   const location = useLocation();
   const urlQuery = new URLSearchParams(location.search);
   const navigate = useNavigate();
-  const { setCurrentDonation } = useContext(GlobalContex);
+  const [showRmoveDonation, setShowRemoveDonation] = useState(false);
+  const { userData } = useContext(GlobalContex);
   const [showFooditems, setShowFoodItems] = useState(
     urlQuery.get("donationId") && urlQuery.get("donationId") == item._id
       ? true
       : false
   );
+  if (item.status === "ACCEPTED") return;
   return (
     <div className="overflow-x-auto relative shadow-2xl sm:rounded-lg  mb-4 ">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -27,9 +30,7 @@ function DonationStatus({ item }) {
               <p>{item.status}</p>
             </div>
             <p className=" mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-              Browse a list of Flowbite products designed to help you work and
-              play, stay organized, get answers, keep in touch, grow your
-              business, and more.
+              {item.message}
             </p>
           </div>
         </caption>
@@ -78,22 +79,39 @@ function DonationStatus({ item }) {
             Address :{" "}
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
               {" "}
-              {item.pickUpAddress.country} {item.pickUpAddress.state}{" "}
-              {item.pickUpAddress.city} {item.pickUpAddress.street}{" "}
-              {item.pickUpAddress.building} {item.pickUpAddress.pinCode}
+              {item.pickUpAddress}
             </span>
           </h1>
-          <button
-            type="button"
-            className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-            onClick={() => {
-              setCurrentDonation(item);
-              navigate("/donation?edit=" + item._id);
-            }}
-          >
-            Edit
-          </button>
+          <div className="flex gap-4">
+            <button
+              type="button"
+              className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              onClick={() => {
+                navigate("/donation?edit=" + item._id);
+              }}
+            >
+              Edit
+            </button>
+            {(userData.role === "DONOR" && item.status === "PENDING") ||
+            item.status == "REJECTED" ? (
+              <button
+                onClick={() => setShowRemoveDonation(true)}
+                typr="button"
+                className="py-2 px-3 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+              >
+                cancle
+              </button>
+            ) : null}
+          </div>
         </div>
+      ) : null}
+
+      {showRmoveDonation ? (
+        <RemoveDonation
+          setShowRemoveDonation={setShowRemoveDonation}
+          id={item._id}
+          setDonationData={setDonationData}
+        />
       ) : null}
     </div>
   );
