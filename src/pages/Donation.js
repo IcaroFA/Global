@@ -112,7 +112,7 @@ function Donation() {
       const response = await axios(axiosOptions());
       if (response.data.success) {
         notify("successfuly", "success");
-        navigate("/status?donationId=" + urlQuery.get("edit"));
+        navigate("/status?donationId=" + response.data.data._id);
       }
       setSubmitLoading(false);
     } catch (error) {
@@ -124,7 +124,7 @@ function Donation() {
   return (
     <div className="flex  h-full md:gap-1 ">
       <Sidebar />
-      <div className="relative h-full flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
+      <div className="scroll  relative h-full flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
         <header className="border-b-4 border-blue-300  dark:border-gray-500 ">
           <h1 className="md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
             Donation
@@ -372,6 +372,7 @@ function Donation() {
             setData={setPickupAddress}
             data={pickUpAddress}
             setShowAddress={setShowAddress}
+            type="ADDRESS"
           />
         ) : null}
       </div>

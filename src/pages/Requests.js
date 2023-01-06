@@ -1,78 +1,66 @@
-import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
-import Filter from "../../components/popUp/Filter.js";
-import { GlobalContex } from "../../context/contex";
-import loadingSvg from "../../asset/loading.svg";
-import axios from "axios";
-import DonationStatus from "../../components/DonationStatus.js";
+import React, { useContext, useEffect, useState } from "react";
+import Sidebar from "../components/Sidebar";
+import { GlobalContex } from "../context/contex";
+import useFetchData from "../customHooks/useFetchData";
+import loadingSvg from "../asset/loading.svg";
 
-function Dashboard() {
+// component
+import DonationStatus from "../components/DonationStatus";
+
+function Requests() {
+  const { filter, setFilter, notify } = useContext(GlobalContex);
+  const [page, setPage] = useState(1);
   const URL = process.env.REACT_APP_URL;
-  const { notify, filter, setfilter, userData } = useContext(GlobalContex);
-  const [loading, setLoading] = useState(false);
   const [donationData, setDonationData] = useState({ donations: [] });
-  useEffect(() => {
-    getDonation();
-  }, [filter]);
 
-  async function getDonation() {
-    setLoading(true);
-    try {
-      const response = await axios({
-        method: "get",
-        withCredentials: true,
-        url: `${URL}/api/donations?donorId=${
-          userData.role === "DONOR" ? userData._id : ""
-        }&from=${filter.from}&to=${filter.to}&status=${
-          filter.status === "ALL" ? "" : filter.status
-        }&page=${filter.page}&limit=${2}`
-      });
-      if (response.data.success) {
-        setLoading(false);
-        setDonationData(response.data.data);
-      }
-    } catch (error) {
-      notify(error.response.data.message, "error");
-    }
-  }
+  const url = (page) => URL + `/api/donations?status=PENDING&page=${page}`;
+  const { loading, data, error, fetchData } = useFetchData(url(page));
+
+  useEffect(() => {
+    notify(error, "error");
+  }, [error]);
+
+  useEffect(() => {
+    if (!loading) setDonationData(data);
+  }, [loading]);
 
   return (
     <div className="flex  h-full md:gap-1">
       <Sidebar />
-      <div className=" scroll h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll w-full">
-        <header className="  border-b-4 border-blue-300  dark:border-gray-500  flex    items-center justify-between">
-          <h1 className="text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
-            Dashboard
+      <div className="scroll h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
+        <header className="md:block    hidden   border-b-4    border-blue-300  dark:border-gray-500 ">
+          <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
+            Donation requests
           </h1>
-          <Filter />
         </header>
+        {/* // profile body */}
         {loading ? (
           <div className="absolute flex items-center justify-center h-full    left-0 top-0 w-full">
             <img src={loadingSvg} alt="loging" />
           </div>
         ) : (
           <div className="  my-3">
-            {donationData.donations.map((item, i) => {
-              return (
-                <DonationStatus
-                  key={item._id}
-                  item={item}
-                  setDonationData={setDonationData}
-                />
-              );
-            })}
+            {donationData.donations &&
+              donationData.donations
+                .filter((item) => item.status === "PENDING")
+                .map((item) => {
+                  return (
+                    <DonationStatus
+                      key={item._id}
+                      item={item}
+                      setDonationData={setDonationData}
+                    />
+                  );
+                })}
           </div>
         )}
+        {/*  profile end */}
         {/* page  */}
         <div className="  fixed bottom-5   right-5     flex gap-5   items-center h-11   justify-center  w-40">
           <button
             type="button"
-            onClick={() =>
-              setfilter((preVal) => {
-                return { ...preVal, page: preVal.page - 1 };
-              })
-            }
-            disabled={loading || filter.page <= 1}
+            onClick={() => setPage((preVal) => preVal.page + 1)}
+            disabled={loading || page <= 1}
             className={
               filter.page > 1
                 ? "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -118,11 +106,7 @@ function Dashboard() {
             )}
           </div>
           <button
-            onClick={() =>
-              setfilter((preVal) => {
-                return { ...preVal, page: preVal.page + 1 };
-              })
-            }
+            onClick={() => setPage((preVal) => preVal.page + 1)}
             type="button"
             disabled={loading || !donationData.next}
             className={
@@ -152,4 +136,5 @@ function Dashboard() {
     </div>
   );
 }
-export default Dashboard;
+
+export default Requests;

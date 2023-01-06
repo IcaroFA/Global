@@ -9,7 +9,7 @@ import {
   DirectionsRenderer
 } from "@react-google-maps/api";
 
-function Address({ setShowAddress, data, setData }) {
+function Address({ setShowAddress, data, setData, type = "" }) {
   /** @type React.MutableRefObject<HTMLInputElement> */
   const searchRef = useRef(null);
   const { userData, notify } = useContext(GlobalContex);
@@ -139,7 +139,7 @@ function Address({ setShowAddress, data, setData }) {
               <div className=" my-8 md:w-[50rem] w-full relative ">
                 {!isLoaded ? (
                   <div className="flex items-center justify-center ">
-                    <img src={loadingSvg} alt="loading" />
+                    <img src={loadingSvg} alt="loading" className="h-40 w-40" />
                   </div>
                 ) : (
                   <>
@@ -167,7 +167,7 @@ function Address({ setShowAddress, data, setData }) {
                       />
                     </GoogleMap>
 
-                    {userData.role === "DONOR" ? (
+                    {type === "ADDRESS" ? (
                       <Autocomplete
                         onPlaceChanged={() =>
                           handleSearch(searchRef.current.value)

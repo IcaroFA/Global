@@ -26,7 +26,8 @@ function Filter() {
     setfilter({
       ...donationFilter,
       from: startDate === null ? "" : startDate,
-      to: endDate === null ? "" : endDate
+      to: endDate === null ? "" : endDate,
+      page: 1
     });
     setShowFilterPopUp(false);
   }
@@ -90,7 +91,7 @@ function Filter() {
         <div
           id="popup-modal"
           tabIndex="-1"
-          className="fixed top-0 left-0 right-0 z-50  bg-[#000000c7] flex  justify-center items-center p-4 overflow-x-hidden overflow-y-auto md:inset-0  h-full"
+          className="fixed top-0 left-0 right-0 z-50   bg-[#000000c7] flex  justify-center items-center p-4 overflow-x-hidden overflow-y-auto md:inset-0  h-full"
         >
           <div className="relative max-w-md md:h-auto shadow-2xl">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -205,7 +206,7 @@ function Filter() {
                         htmlFor="yellow-radio"
                         className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
-                        Accepeted
+                        Accepted
                       </label>
                     </div>
                     <div className="flex items-center mr-4 mt-2">

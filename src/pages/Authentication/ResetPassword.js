@@ -12,13 +12,13 @@ function ResetPassword() {
     password: "",
     confirmPassword: ""
   });
+
   const [resetPasswordLoading, setresetPasswordLoading] = useState(false);
   const { resetPasswordToken } = useParams();
 
   async function handleResetSubmit(e) {
     e.preventDefault();
     setresetPasswordLoading(true);
-
     try {
       const response = await axios({
         method: "post",

@@ -11,6 +11,7 @@ function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
+    console.log(formData);
     try {
       const response = await axios({
         method: "post",
@@ -71,6 +72,25 @@ function SignUp() {
                 name="lastName"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Enter Your Last Name"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="phoneNo"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                phoneNo
+              </label>
+              <input
+                type="tel"
+                pattern="[0-9]{10}"
+                placeholder="0000000000"
+                id="phoneNo"
+                name="phoneNo"
+                minLength="10"
+                maxLength="10"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 required
               />
             </div>

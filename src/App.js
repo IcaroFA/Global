@@ -20,6 +20,7 @@ import Logout from "./components/popUp/Logout.js";
 import Donation from "./pages/Donation";
 import Status from "./pages/Status";
 import Profile from "./pages/Profile";
+import Requests from "./pages/Requests";
 function App() {
   const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
@@ -65,6 +66,7 @@ function App() {
               <Route path="/donation" element={<Donation />} />
               <Route path="/status" element={<Status />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/requests" element={<Requests />} />
               <Route path="/" element={<Home />} />
             </Routes>
           </div>

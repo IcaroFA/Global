@@ -23,7 +23,9 @@ function Status() {
         withCredentials: true
       });
       if (response.data.success) {
-        setDonationData(response.data.data);
+        setDonationData(
+          response.data.data.filter((item) => item.role !== "ACCEPTED")
+        );
       }
       setStatusLoading(false);
     } catch (error) {
@@ -35,7 +37,7 @@ function Status() {
   return (
     <div className="flex  h-full md:gap-1">
       <Sidebar />
-      <div className="h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
+      <div className="scroll h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
         <header className="border-b-4 border-blue-300  dark:border-gray-500 ">
           <h1 className="text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
             Donation Status
