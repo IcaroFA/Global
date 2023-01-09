@@ -21,6 +21,10 @@ import Donation from "./pages/Donation";
 import Status from "./pages/Status";
 import Profile from "./pages/Profile";
 import Requests from "./pages/Requests";
+import Agents from "./pages/Agents/Index.js";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import AgentInfo from "./pages/Agents/AgentInfo";
+
 function App() {
   const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
@@ -62,12 +66,18 @@ function App() {
                 element={<ResetPassword />}
               />
               <Route path="/forgot_password" element={<FogotPassword />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/donation" element={<Donation />} />
-              <Route path="/status" element={<Status />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/requests" element={<Requests />} />
               <Route path="/" element={<Home />} />
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/donation" element={<Donation />} />
+                <Route path="/status" element={<Status />} />
+                <Route path="/requests" element={<Requests />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/agents" element={<Agents />} />
+                <Route path="/agents/:agentId" element={<Agents />} />
+
+                <Route />
+              </Route>
             </Routes>
           </div>
 

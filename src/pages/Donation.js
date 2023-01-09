@@ -26,7 +26,6 @@ function Donation() {
   ]);
 
   useEffect(() => {
-    if (Object.keys(userData).length < 1) return navigate("/");
     if (urlQuery.get("edit")) {
       handleEditState(urlQuery.get("edit"));
     }

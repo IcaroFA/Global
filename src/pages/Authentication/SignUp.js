@@ -43,38 +43,42 @@ function SignUp() {
           </div>
           {/* form */}
           <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
-            <div>
-              <label
-                htmlFor="firstName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                First Name
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                className=" bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Enter Your First Name"
-                required
-              />
+            <div className="flex gap-2">
+              <div>
+                <label
+                  htmlFor="firstName"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  className=" bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="First Name"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="lastName"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Last Name"
+                  required
+                />
+              </div>
             </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Enter Your Last Name"
-                required
-              />
-            </div>
+
             <div>
               <label
                 htmlFor="phoneNo"

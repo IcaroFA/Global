@@ -6,10 +6,10 @@ function useFetchData(url) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   useEffect(() => {
-    fetchData();
+    fetchData(url);
   }, []);
 
-  async function fetchData() {
+  async function fetchData(url) {
     setLoading(true);
     try {
       const response = await axios({

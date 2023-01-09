@@ -23,9 +23,11 @@ function Dashboard() {
         withCredentials: true,
         url: `${URL}/api/donations?donorId=${
           userData.role === "DONOR" ? userData._id : ""
-        }&from=${filter.from}&to=${filter.to}&status=${
+        }&agentId=${userData.role === "AGENT" ? userData._id : ""}&from=${
+          filter.from
+        }&to=${filter.to}&status=${
           filter.status === "ALL" ? "" : filter.status
-        }&page=${filter.page}&limit=${2}`
+        }&page=${filter.page}&limit=${2}  `
       });
       if (response.data.success) {
         setLoading(false);
@@ -64,7 +66,7 @@ function Dashboard() {
           </div>
         )}
         {/* page  */}
-        <div className="  fixed bottom-5   right-5     flex gap-5   items-center h-11   justify-center  w-40">
+        <div className="  fixed bottom-5   right-5 flex gap-5   items-center h-11   justify-center  w-40">
           <button
             type="button"
             onClick={() =>
@@ -75,8 +77,8 @@ function Dashboard() {
             disabled={loading || filter.page <= 1}
             className={
               filter.page > 1
-                ? "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                : "text-blue-700 border border-blue-700    focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
+                ? "text-white shadow-2xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                : "text-blue-700 border shadow-2xl border-blue-700    focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
             }
           >
             <svg
@@ -94,7 +96,7 @@ function Dashboard() {
             <span className="sr-only">Icon description</span>
           </button>
 
-          <div className=" rounded-lg bg-blue-600 h-10 w-10 text-white flex items-center justify-center font-semibold text-lg">
+          <div className=" shadow-2xl rounded-lg bg-blue-600 h-10 w-10 text-white flex items-center justify-center font-semibold text-lg">
             {loading ? (
               <svg
                 aria-hidden="true"
@@ -127,8 +129,8 @@ function Dashboard() {
             disabled={loading || !donationData.next}
             className={
               donationData.next
-                ? "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                : "text-blue-700 border border-blue-700   focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
+                ? "text-white shadow-2xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                : "text-blue-700 shadow-2xl border border-blue-700   focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
             }
           >
             <svg

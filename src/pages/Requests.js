@@ -8,7 +8,7 @@ import loadingSvg from "../asset/loading.svg";
 import DonationStatus from "../components/DonationStatus";
 
 function Requests() {
-  const { filter, setFilter, notify } = useContext(GlobalContex);
+  const { filter, notify } = useContext(GlobalContex);
   const [page, setPage] = useState(1);
   const URL = process.env.REACT_APP_URL;
   const [donationData, setDonationData] = useState({ donations: [] });
@@ -59,7 +59,10 @@ function Requests() {
         <div className="  fixed bottom-5   right-5     flex gap-5   items-center h-11   justify-center  w-40">
           <button
             type="button"
-            onClick={() => setPage((preVal) => preVal.page + 1)}
+            onClick={() => {
+              !loading && fetchData(url(page - 1));
+              setPage((preVal) => preVal - 1);
+            }}
             disabled={loading || page <= 1}
             className={
               filter.page > 1
@@ -106,7 +109,10 @@ function Requests() {
             )}
           </div>
           <button
-            onClick={() => setPage((preVal) => preVal.page + 1)}
+            onClick={() => {
+              !loading && fetchData(url(page + 1));
+              setPage((preVal) => preVal + 1);
+            }}
             type="button"
             disabled={loading || !donationData.next}
             className={

@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 export const GlobalContex = createContext();
 
@@ -12,10 +12,12 @@ const Contex = ({ children }) => {
     from: "",
     to: "",
     donorId: "",
+    agentId: "",
     status: "ALL",
     page: 1,
     limit: 10
   });
+
   const notify = (message, type) => {
     return toast[type](message, {
       position: "bottom-left",
