@@ -4,35 +4,24 @@ import axios from "axios";
 import { GlobalContex } from "../context/contex";
 import loadingSvg from "../asset/loading.svg";
 import DonationStatus from "../components/DonationStatus";
+import useFetchData from "../customHooks/useFetchData";
 
 function Status() {
   const URL = process.env.REACT_APP_URL;
-  const [statusLoading, setStatusLoading] = useState(false);
-  const [donationData, setDonationData] = useState([]);
+  const [donationData, setDonationData] = useState({ donations: [] });
   const { notify, userData } = useContext(GlobalContex);
-  useEffect(() => {
-    getDonation();
-  }, []);
+  const [page, setPage] = useState(1);
+  const url = (page) => `${URL}/api/donations?donorId=${userData._id}`;
 
-  async function getDonation() {
-    setStatusLoading(true);
-    try {
-      const response = await axios({
-        method: "get",
-        url: `${URL}/api/donations?donorId=${userData._id}`,
-        withCredentials: true
-      });
-      if (response.data.success) {
-        setDonationData(
-          response.data.data.filter((item) => item.role !== "ACCEPTED")
-        );
-      }
-      setStatusLoading(false);
-    } catch (error) {
-      setStatusLoading(false);
-      notify(error.response.data.message, "error");
-    }
-  }
+  const { loading, error, data, fetchData } = useFetchData(url(page));
+
+  useEffect(() => {
+    if (!loading) setDonationData(data);
+  });
+
+  useEffect(() => {
+    if (error) notify(error);
+  }, [error]);
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -43,21 +32,26 @@ function Status() {
             Donation Status
           </h1>
         </header>
-        {statusLoading ? (
+        {loading ? (
           <div className="absolute flex items-center justify-center h-full    left-0 top-0 w-full">
             <img src={loadingSvg} alt="loging" />
           </div>
         ) : (
           <div className="  md:my-3">
-            {donationData.map((item) => {
-              return (
-                <DonationStatus
-                  key={item._id}
-                  item={item}
-                  setDonationData={setDonationData}
-                />
-              );
-            })}
+            {donationData.donations &&
+              donationData.donations
+                .filter(
+                  (e) => e.status === "PENDING" || e.status === "ACCEPTED"
+                )
+                .map((item) => {
+                  return (
+                    <DonationStatus
+                      key={item._id}
+                      item={item}
+                      setDonationData={setDonationData}
+                    />
+                  );
+                })}
           </div>
         )}
       </div>

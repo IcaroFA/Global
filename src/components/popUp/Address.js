@@ -9,17 +9,21 @@ import {
   DirectionsRenderer
 } from "@react-google-maps/api";
 
-function Address({ setShowAddress, data, setData, type = "" }) {
+function Address({ setShowAddress, data, setData = "", type = "" }) {
   /** @type React.MutableRefObject<HTMLInputElement> */
   const searchRef = useRef(null);
   const { userData, notify } = useContext(GlobalContex);
   const [map, setMap] = useState(null);
   const [currentlocationLoading, setCurrentLocationLoading] = useState(false);
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration] = useState("");
+  const [directionsResponse, setDirectionsResponse] = useState(null);
   const [center, setCenter] = useState({
     lat: 28.7041,
     lng: 77.1025
   });
   const [address, setAddress] = useState(data ? data : "");
+  const [to, setTo] = useState("");
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_URL_GOOGLE_API_KEY,
@@ -28,7 +32,7 @@ function Address({ setShowAddress, data, setData, type = "" }) {
 
   useEffect(() => {
     // console.log(data.address);
-    if (data) handleSearch(data);
+    if (type === "ADDRESS" && data) handleSearch(data);
   }, [isLoaded]);
 
   ///  load current location
@@ -52,6 +56,36 @@ function Address({ setShowAddress, data, setData, type = "" }) {
         notify("enable to get your location", "error");
       }
     );
+  }
+
+  function handleLocation() {
+    if (type === "ADDRESS") {
+      loadCurrentLocation();
+      map.panTo(center);
+    } else {
+      loadCurrentLocation();
+
+      calculateRoute();
+    }
+  }
+
+  async function calculateRoute() {
+    setCurrentLocationLoading(true);
+
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService();
+    const results = await directionsService.route({
+      origin: to,
+      destination: data,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING
+    });
+    if (results) {
+      setDirectionsResponse(results);
+      setCurrentLocationLoading(false);
+      setDistance(results.routes[0].legs[0].distance.text);
+      setDuration(results.routes[0].legs[0].duration.text);
+    }
   }
 
   ///  handle search
@@ -85,6 +119,7 @@ function Address({ setShowAddress, data, setData, type = "" }) {
       // eslint-disable-next-line no-undef
       if (status == google.maps.GeocoderStatus.OK) {
         setAddress(results[0].formatted_address); // if address found, pass to processing function
+        setTo(results[0].formatted_address);
       } else {
         alert("Geocode failure: " + status); // alert any other error(s)
         return false;
@@ -127,12 +162,41 @@ function Address({ setShowAddress, data, setData, type = "" }) {
             </button>
             <div className="p-6 ">
               <div className="md:w-[50rem]">
-                <p className=" text-gray-700 dark:text-white font-semibold">
-                  Address :{" "}
-                  <span className=" font-medium   text-gray-600 dark:text-gray-300">
-                    {address}
-                  </span>
-                </p>{" "}
+                {type === "ADDRESS" ? (
+                  <p className=" text-gray-700 dark:text-white font-semibold">
+                    Address :{" "}
+                    <span className=" font-medium   text-gray-600 dark:text-gray-300">
+                      {address}
+                    </span>
+                  </p>
+                ) : (
+                  <>
+                    <p className=" text-gray-700 dark:text-white font-semibold">
+                      From :
+                      <span className=" font-medium   text-gray-600 dark:text-gray-300">
+                        {data}
+                      </span>
+                    </p>
+                    <p className=" text-gray-700 dark:text-white font-semibold">
+                      To :{" "}
+                      <span className=" font-medium   text-gray-600 dark:text-gray-300">
+                        {to}
+                      </span>
+                    </p>{" "}
+                    <p className=" text-gray-700 dark:text-white font-semibold">
+                      distance:{" "}
+                      <span className=" font-medium   text-gray-600 dark:text-gray-300">
+                        {distance}
+                      </span>
+                    </p>
+                    <p className=" text-gray-700 dark:text-white font-semibold">
+                      duration:{" "}
+                      <span className=" font-medium   text-gray-600 dark:text-gray-300">
+                        {duration}
+                      </span>
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* map */}
@@ -165,6 +229,9 @@ function Address({ setShowAddress, data, setData, type = "" }) {
                           getAddress(e.latLng.lat(), e.latLng.lng())
                         }
                       />
+                      {directionsResponse && (
+                        <DirectionsRenderer directions={directionsResponse} />
+                      )}
                     </GoogleMap>
 
                     {type === "ADDRESS" ? (
@@ -229,12 +296,11 @@ function Address({ setShowAddress, data, setData, type = "" }) {
                         {/* search  */}
                       </Autocomplete>
                     ) : null}
-
+                    {/* current location */}
                     <div
                       className="absolute bottom-8 right-4  text-blue-600 h-8 w-8 rounded-full hover:bg-blue-500 hover:text-white items-center flex justify-center"
                       onClick={() => {
-                        loadCurrentLocation();
-                        map.panTo(center);
+                        handleLocation();
                       }}
                     >
                       {currentlocationLoading ? (
@@ -272,35 +338,37 @@ function Address({ setShowAddress, data, setData, type = "" }) {
                         </svg>
                       )}
                     </div>
+                    {/* currentLocation */}
                   </>
                 )}
               </div>
               {/* map */}
-
-              <div className="flex  gap-5    flex-wrap  justify-center items-center">
-                <button
-                  type="button"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-                  onClick={() => {
-                    setData(address);
-                    setShowAddress(false);
-                    setAddress("");
-                  }}
-                >
-                  Yes, I'm sure
-                </button>
-                <button
-                  data-modal-toggle="popup-modal"
-                  type="button"
-                  className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                  onClick={() => {
-                    setShowAddress(false);
-                    setAddress("");
-                  }}
-                >
-                  No, cancel
-                </button>
-              </div>
+              {type === "ADDRESS" ? (
+                <div className="flex  gap-5    flex-wrap  justify-center items-center">
+                  <button
+                    type="button"
+                    className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                    onClick={() => {
+                      setData(address);
+                      setShowAddress(false);
+                      setAddress("");
+                    }}
+                  >
+                    Yes, I'm sure
+                  </button>
+                  <button
+                    data-modal-toggle="popup-modal"
+                    type="button"
+                    className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    onClick={() => {
+                      setShowAddress(false);
+                      setAddress("");
+                    }}
+                  >
+                    No, cancel
+                  </button>
+                </div>
+              ) : null}
               {/* button end */}
             </div>
           </div>

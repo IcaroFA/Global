@@ -1,17 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-function AgentListComponent({ agent, setCurrentAgent }) {
+function DonationListComonent({ donation, setCurrentDonation }) {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th
         scope="row"
         className="flex  items-center gap-2   px-2 py-1 md:px-6 md:py-4   font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
-        {agent.profileImage && agent.profileImage.url ? (
+        {donation.donorImage ? (
           <img
             className="w-12 h-12 rounded-full"
-            src={agent.profileImage.url}
+            src={donation.donorImage}
             alt="img"
           />
         ) : (
@@ -29,28 +28,30 @@ function AgentListComponent({ agent, setCurrentAgent }) {
             ></path>
           </svg>
         )}
-        <div className="text-base font-semibold">
-          {agent.firstName + " " + agent.lastName}
-        </div>
+        <div className="text-base font-semibold">{donation.donorName}</div>
       </th>
       <td className="px-6 py-4 text-center dark:text-gray-200 text-gray-700     ">
-        {agent.phoneNo}
+        {new Date(donation.createdAt).toDateString()}
       </td>
       <td className="px-6 py-4  ">
-        <div className="flex items-center justify-center dark:text-gray-200 text-gray-700">
-          {agent.email}
+        <div
+          className={`flex items-center justify-center   ${
+            donation.status === "ACCEPTED" && "text-green-500"
+          }       font-bold`}
+        >
+          {donation.status === "ACCEPTED" ? "ASSIGNED" : donation.status}
         </div>
       </td>
       <td className="px-6 py-4  text-center">
         <Link
-          to={`/agents/` + agent._id}
+          to={`/assigned/` + donation._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentAgent(agent)}>more Info</div>
+          <div onClick={() => setCurrentDonation(donation)}>more Info</div>
         </Link>
       </td>
     </tr>
   );
 }
 
-export default AgentListComponent;
+export default DonationListComonent;

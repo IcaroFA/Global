@@ -11,10 +11,12 @@ function Agents() {
   return (
     <div className="flex  h-full md:gap-1">
       <Sidebar />
-      <div className="scroll h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll ">
-        <div className="sticky top-0 left-0  bg-blue-50  dark:bg-gray-800"></div>
+      <div className="scroll h-full  relative flex-1 bg-blue-50  dark:bg-gray-800 overflow-scroll ">
         {agentId ? (
-          <AgentInfo currentAgent={currentAgent} />
+          <AgentInfo
+            currentAgent={currentAgent}
+            setCurrentAgent={setCurrentAgent}
+          />
         ) : (
           <AgentList setCurrentAgent={setCurrentAgent} />
         )}

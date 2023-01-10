@@ -106,7 +106,7 @@ function Profile() {
                   {inputImage.base64 ? (
                     <img
                       src={inputImage.base64}
-                      className="w-44 h-44 rounded-full"
+                      className="w-44 h-44 rounded-full object-cover"
                       alt="img"
                     />
                   ) : (

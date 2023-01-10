@@ -24,6 +24,7 @@ import Requests from "./pages/Requests";
 import Agents from "./pages/Agents/Index.js";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import AgentInfo from "./pages/Agents/AgentInfo";
+import Assigned from "./pages/Assigned/Index";
 
 function App() {
   const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
@@ -75,7 +76,8 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/agents" element={<Agents />} />
                 <Route path="/agents/:agentId" element={<Agents />} />
-
+                <Route path="/assigned" element={<Assigned />} />
+                <Route path="/assigned/:donationId" element={<Assigned />} />
                 <Route />
               </Route>
             </Routes>

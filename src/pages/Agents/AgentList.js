@@ -11,7 +11,8 @@ function AgentList({ setCurrentAgent }) {
   const URL = process.env.REACT_APP_URL;
   const [search, setSearch] = useState("");
   const [agentData, setAgentData] = useState({ agents: [] });
-  const url = (page) => URL + `/api/auth/users?role=AGENT&page=${page}&limit=3`;
+  const url = (page, search = "") =>
+    URL + `/api/auth/users?role=AGENT&search=${search}&page=${page}&limit=5`;
   const { loading, data, error, fetchData } = useFetchData(url(page));
 
   useEffect(() => {
@@ -28,42 +29,44 @@ function AgentList({ setCurrentAgent }) {
 
   return (
     <>
-      <header className="   border-b-4    border-blue-300  dark:border-gray-500 ">
-        <div className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
+      <header className="   border-b-4   p-4  shadow-xl bg-blue-50  dark:bg-gray-800  border-blue-300  dark:border-gray-500   sticky top-0 left-0 ">
+        <div className="   text-xl md:text-2xl  font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
           <h1>Agents</h1>
           <Search setSearch={setSearch} handleSearch={handleSearch} />
         </div>
       </header>
-      <table className="   w-full  mt-4">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-          <tr>
-            <th scope="col" className="px-6 py-3  text-start  ">
-              Name
-            </th>
-            <th scope="col" className="px-6 py-3 ">
-              Position
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3 ">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody className="w-full">
-          {loading
-            ? null
-            : agentData.agents &&
-              agentData.agents.map((agent) => (
-                <AgentListComponent
-                  key={agent._id}
-                  agent={agent}
-                  setCurrentAgent={setCurrentAgent}
-                />
-              ))}
-        </tbody>
-      </table>
+      <div className="px-4">
+        <table className="   w-full  mt-4">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+            <tr>
+              <th scope="col" className="px-6 py-3  text-start  ">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3 ">
+                Position
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3 ">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="w-full">
+            {loading
+              ? null
+              : agentData.agents &&
+                agentData.agents.map((agent) => (
+                  <AgentListComponent
+                    key={agent._id}
+                    agent={agent}
+                    setCurrentAgent={setCurrentAgent}
+                  />
+                ))}
+          </tbody>
+        </table>
+      </div>
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">
           <img src={loadingSvg} />

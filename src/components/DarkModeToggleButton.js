@@ -29,7 +29,6 @@ function DarkModeToggleButton() {
   function handleToggle() {
     // toggle icons inside button
     setIsDark((preVal) => !preVal);
-    console.log(localStorage.getItem("color-theme"));
     // if set via local storage previously
     if (
       "color-theme" in localStorage &&
