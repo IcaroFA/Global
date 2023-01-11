@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // component
 import AcceptDonation from "./AcceptDonation";
 import SelectAgent from "./SelectAgent";
-function Accept({ setDonationData, id }) {
+function Accept({ setDonationData, id, setCurrentDonation }) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [component, setComponent] = useState("ACCEPT");
   return (
@@ -31,6 +31,7 @@ function Accept({ setDonationData, id }) {
               setShowPopUp={setShowPopUp}
               setComponent={setComponent}
               setDonationData={setDonationData}
+              setCurrentDonation={setCurrentDonation}
               id={id}
             />
           ) : null}

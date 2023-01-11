@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-function DonationListComonent({ donation, setCurrentDonation }) {
+import { Link, useLocation } from "react-router-dom";
+
+function DonationListComonent({ donation, setCurrentDonation, path, page }) {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th
@@ -36,18 +37,23 @@ function DonationListComonent({ donation, setCurrentDonation }) {
       <td className="px-6 py-4  ">
         <div
           className={`flex items-center justify-center   ${
-            donation.status === "ACCEPTED" && "text-green-500"
+            (donation.status === "ACCEPTED" && "text-green-500") ||
+            (donation.status === "REJECTED" && "text-red-500") ||
+            (donation.status === "PENDING" && "text-yellow-300") ||
+            (donation.status === "DELIVERED" && "text-blue-500")
           }       font-bold`}
         >
-          {donation.status === "ACCEPTED" ? "ASSIGNED" : donation.status}
+          {donation.status}
         </div>
       </td>
       <td className="px-6 py-4  text-center">
         <Link
-          to={`/assigned/` + donation._id}
+          to={path + "/" + donation._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentDonation(donation)}>more Info</div>
+          <div onClick={() => setCurrentDonation({ page, donation })}>
+            more Info
+          </div>
         </Link>
       </td>
     </tr>

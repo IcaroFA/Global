@@ -8,7 +8,13 @@ import Search from "../../Search";
 // component
 import AgentComponent from "./AgentComponent.js";
 
-function SelectAgent({ setShowPopUp, setComponent, setDonationData, id }) {
+function SelectAgent({
+  setShowPopUp,
+  setComponent,
+  setDonationData,
+  id,
+  setCurrentDonation
+}) {
   const { notify } = useContext(GlobalContex);
   const [agentsData, setAgentsData] = useState({});
   const [conformLoading, setConformLoading] = useState(false);
@@ -43,13 +49,12 @@ function SelectAgent({ setShowPopUp, setComponent, setDonationData, id }) {
         withCredentials: true,
         data: { status: "ACCEPTED" }
       });
+      /// update current donation
       if (response.data.success) {
-        setDonationData((preVal) => {
+        setCurrentDonation((preVal) => {
           return {
             ...preVal,
-            donations: preVal.donations.map((item) =>
-              item._id === id ? response.data.data : item
-            )
+            donation: { ...preVal.donation, status: "ACCEPTED" }
           };
         });
 
@@ -109,8 +114,8 @@ function SelectAgent({ setShowPopUp, setComponent, setDonationData, id }) {
                   <img src={loadingSvg} alt="img" />
                 </div>
               ) : (
-                agentsData.agents &&
-                agentsData.agents.map((agent) => (
+                agentsData.users &&
+                agentsData.users.map((agent) => (
                   <AgentComponent
                     key={agent._id}
                     agent={agent}

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { useParams } from "react-router-dom";
-import AssignedDonationList from "./AssignedDonationList";
-import DonationInfo from "../../components/DonationInfo";
+import DonationInfo from "../../components/DonationInfo.js";
+import RequestList from "./RequestList";
 
 function Index() {
   const { donationId } = useParams();
@@ -19,10 +19,10 @@ function Index() {
           <DonationInfo
             currentDonation={currentDonation}
             setCurrentDonation={setCurrentDonation}
-            path="Assigned"
+            path="Requests"
           />
         ) : (
-          <AssignedDonationList setCurrentDonation={setCurrentDonation} />
+          <RequestList setCurrentDonation={setCurrentDonation} />
         )}
       </div>
     </div>

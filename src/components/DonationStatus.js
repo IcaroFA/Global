@@ -3,7 +3,7 @@ import { GlobalContex } from "../context/contex";
 import { useNavigate, useLocation } from "react-router-dom";
 
 // conponent
-import RemoveRejectDonation from "./popUp/Remove.Reject.Donation.js";
+import RemoveRejectDonation from "./popUp/Remove.Reject.delivered.Donation.js";
 import Accept from "./popUp/AcceptDonation/Accept.js";
 
 function DonationStatus({ item, setDonationData }) {
@@ -172,7 +172,7 @@ function DonationStatus({ item, setDonationData }) {
             {/* reject button form admin  end*/}
 
             {(userData.role === "DONOR" && item.status === "PENDING") ||
-            item.status == "Reject" ? (
+            item.status == "REJECTED" ? (
               <>
                 <button
                   type="button"

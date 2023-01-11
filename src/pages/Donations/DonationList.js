@@ -1,63 +1,70 @@
 import React, { useState, useContext, useEffect } from "react";
 import useFetchData from "../../customHooks/useFetchData";
 import { GlobalContex } from "../../context/contex";
-import AgentListComponent from "../../components/AgentListComponent.js";
 import loadingSvg from "../../asset/loading.svg";
-import Search from "../../components/Search";
+import DonationListConponent from "../../components/DonationListComonent.js";
+import Filter from "../../components/popUp/Filter.js";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-function AgentList({ setCurrentAgent, search, setSearch }) {
+function DonationList({ setCurrentDonation }) {
+  const [donationData, setDonationData] = useState({ donations: [] });
   const navigate = useNavigate();
-  const { notify } = useContext(GlobalContex);
+  const { notify, filter, setfilter, userData } = useContext(GlobalContex);
+  const URL = process.env.REACT_APP_URL;
+
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
-  const [page, setPage] = useState(currentPage ? Number(currentPage) : 1);
-  const URL = process.env.REACT_APP_URL;
-  const [agentData, setAgentData] = useState({ agents: [] });
-  const url = (page, search = "") =>
-    URL + `/api/auth/users?role=AGENT&search=${search}&page=${page}&limit=10`;
+
+  const url = (page) =>
+    `${URL}/api/donations?donorId=${
+      userData.role === "DONOR" ? userData._id : ""
+    }&agentId=${userData.role === "AGENT" ? userData._id : ""}&from=${
+      filter.from
+    }&to=${filter.to}&status=${
+      filter.status === "ALL" ? "" : filter.status
+    }&page=${page}&limit=10`;
+
   const { loading, data, error, fetchData } = useFetchData();
 
   useEffect(() => {
-    if (currentPage) {
-      fetchData(url(page, search));
-    } else fetchData(url(1));
-  }, []);
+    if (!loading) setDonationData(data);
+  }, [loading]);
 
   useEffect(() => {
     notify(error, "error");
   }, [error]);
 
-  function handleSearch() {
-    if (!loading) fetchData(url(1, search));
-  }
+  useEffect(() => {
+    if (currentPage) {
+      fetchData(url(currentPage));
+      setfilter((preVal) => {
+        return { ...preVal, page: Number(currentPage) };
+      });
+    } else fetchData(url(filter.page));
+  }, []);
 
   useEffect(() => {
-    if (!loading) setAgentData(data);
-  }, [loading]);
+    fetchData(url(filter.page));
+  }, [filter]);
 
   return (
     <>
-      <header className="   border-b-4   p-4  shadow-xl bg-blue-50  dark:bg-gray-800  border-blue-300  dark:border-gray-500   sticky top-0 left-0 ">
-        <div className="   text-xl md:text-2xl  font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
-          <h1>Agents</h1>
-          <Search
-            setSearch={setSearch}
-            search={search}
-            handleSearch={handleSearch}
-          />
-        </div>
+      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center   border-blue-300  dark:border-gray-500 ">
+        <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
+          Donations
+        </h1>
+        <Filter />
       </header>
       <div className="px-4">
         <table className="   w-full  mt-4">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
             <tr>
               <th scope="col" className="px-6 py-3  text-start  ">
-                Name
+                Donor
               </th>
               <th scope="col" className="px-6 py-3 ">
-                Position
+                date
               </th>
               <th scope="col" className="px-6 py-3">
                 Status
@@ -70,13 +77,14 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
           <tbody className="w-full">
             {loading
               ? null
-              : agentData.users &&
-                agentData.users.map((agent) => (
-                  <AgentListComponent
-                    key={agent._id}
-                    agent={agent}
-                    page={page}
-                    setCurrentAgent={setCurrentAgent}
+              : donationData.donations &&
+                donationData.donations.map((donation) => (
+                  <DonationListConponent
+                    key={donation._id}
+                    donation={donation}
+                    setCurrentDonation={setCurrentDonation}
+                    path="/donations"
+                    page={filter.page}
                   />
                 ))}
           </tbody>
@@ -92,13 +100,15 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
         <button
           type="button"
           onClick={() => {
-            currentPage && navigate("/agents");
-            !loading && fetchData(url(page - 1));
-            setPage((preVal) => preVal - 1);
+            currentPage && navigate("/dashboard");
+            fetchData(url(filter.page - 1));
+            setfilter((preVal) => {
+              return { ...preVal, page: preVal.page - 1 };
+            });
           }}
-          disabled={loading || page <= 1}
+          disabled={loading || filter.page <= 1}
           className={
-            page > 1
+            filter.page > 1
               ? "text-white shadow-2xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               : "text-blue-700 border shadow-2xl border-blue-700    focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
           }
@@ -138,19 +148,21 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
               />
             </svg>
           ) : (
-            page
+            filter.page
           )}
         </div>
         <button
           onClick={() => {
-            currentPage && navigate("/agents");
-            !loading && fetchData(url(page + 1));
-            setPage((preVal) => preVal + 1);
+            currentPage && navigate("/dashboard");
+            fetchData(url(filter.page + 1));
+            setfilter((preVal) => {
+              return { ...preVal, page: preVal.page + 1 };
+            });
           }}
           type="button"
-          disabled={loading || !agentData.next}
+          disabled={loading || !donationData.next}
           className={
-            agentData.next
+            donationData.next
               ? "text-white shadow-2xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               : "text-blue-700 shadow-2xl border border-blue-700   focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
           }
@@ -176,4 +188,4 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
   );
 }
 
-export default AgentList;
+export default DonationList;

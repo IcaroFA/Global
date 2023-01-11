@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { GlobalContex } from "../../context/contex";
+import { useNavigate } from "react-router-dom";
 
-function RemoveRejectDonation({ type, id, setDonationData }) {
+function RemoveRejectDonation({ type, id, setCurrentDonation }) {
+  const navigate = useNavigate();
   const { notify } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
@@ -16,12 +18,7 @@ function RemoveRejectDonation({ type, id, setDonationData }) {
         withCredentials: true
       });
       if (response.data.success) {
-        setDonationData((preVal) => {
-          return {
-            ...preVal,
-            donations: preVal.donations.filter((e) => e._id !== id)
-          };
-        });
+        navigate("/dashboard");
         notify(response.data.message, "success");
         setShowPopUp(false);
       }
@@ -30,9 +27,34 @@ function RemoveRejectDonation({ type, id, setDonationData }) {
       notify(error.response.message.error);
     }
   }
-  // console.log(setDonationData);
 
-  async function handleRejectDonaiton() {
+  async function handleRejectDonaiton(type) {
+    setLoading(true);
+    try {
+      const response = await axios({
+        method: "put",
+        url: URL + "/api/donation/" + id,
+        withCredentials: true,
+        data: { status: type }
+      });
+      if (response.data.success) {
+        setCurrentDonation((preVal) => {
+          return {
+            ...preVal,
+            donation: { ...preVal.donation, status: type }
+          };
+        });
+        notify(`you just ${type} one  donation`, "success");
+        setShowPopUp(false);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      notify(error.response.data.message, "error");
+    }
+  }
+
+  async function handleDeliveredDonaiton() {
     setLoading(true);
     try {
       const response = await axios({
@@ -42,14 +64,10 @@ function RemoveRejectDonation({ type, id, setDonationData }) {
         data: { status: "REJECTED" }
       });
       if (response.data.success) {
-        setDonationData((preVal) => {
+        setCurrentDonation((preVal) => {
           return {
             ...preVal,
-            donations: preVal.donations.map((item) =>
-              item._id === id
-                ? { ...item, status: response.data.data.status }
-                : item
-            )
+            donation: { ...preVal.donation, status: "REJECTED" }
           };
         });
         notify(`you just rejected one  donation`, "success");
@@ -125,11 +143,12 @@ function RemoveRejectDonation({ type, id, setDonationData }) {
                   <button
                     type="button"
                     className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-                    onClick={() =>
-                      type === "Remove"
-                        ? handleRemoveDonation()
-                        : handleRejectDonaiton()
-                    }
+                    onClick={() => {
+                      if (type === "Remove") handleRemoveDonation();
+                      if (type === "REJECTED" || type === "DELIVERED") {
+                        handleRejectDonaiton(type);
+                      }
+                    }}
                   >
                     Yes, I'm sure
                     {loading ? (

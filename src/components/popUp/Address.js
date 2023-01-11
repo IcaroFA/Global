@@ -108,6 +108,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
       }
     });
   }
+
   /// handle get address from lat , lng
   function getAddress(myLatitude, myLongitude) {
     if (!isLoaded) return;

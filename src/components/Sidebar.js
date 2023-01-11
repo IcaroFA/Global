@@ -16,12 +16,12 @@ function Sidebar() {
         <aside className="w-64  h-full shadow-2xl" aria-label="Sidebar">
           <div className="overflow-y-auto h-full py-4 px-3 bg-gray-50   dark:bg-gray-800">
             <ul className="space-y-2  border-b pb-5 border-gray-200 dark:border-gray-700">
-              {/* dashboard */}
+              {/* donations */}
               <li>
                 <Link
-                  to="/dashboard"
+                  to="/donations"
                   className={
-                    location.pathname === "/dashboard"
+                    location.pathname === "/donations"
                       ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                       : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }
@@ -36,10 +36,10 @@ function Sidebar() {
                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                   </svg>
-                  <span className="ml-3">Dashboard</span>
+                  <span className="ml-3">Donations</span>
                 </Link>
               </li>
-              {/* dashbord end */}
+              {/* donations end */}
               {/* Assigned */}
               {userData.role === "AGENT" ? (
                 <li>
@@ -120,11 +120,11 @@ function Sidebar() {
                 </li>
               ) : null}
               {/*  agents end */}
-              {/* donor */}
+              {/* donate */}
               {userData.role === "DONOR" ? (
                 <li>
                   <Link
-                    to="/donation"
+                    to="/donate"
                     className={
                       location.pathname === "/donation"
                         ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
@@ -141,12 +141,12 @@ function Sidebar() {
                       <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
                     <span className="flex-1 ml-3 whitespace-nowrap">
-                      Donation
+                      Donate
                     </span>
                   </Link>
                 </li>
               ) : null}
-              {/* donor */}
+              {/* donate */}
               {/* Inbox */}
               {userData.role === "DONOR" ? (
                 <li>

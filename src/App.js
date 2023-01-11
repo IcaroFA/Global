@@ -15,15 +15,14 @@ import SignUp from "./pages/Authentication/SignUp.js";
 import FogotPassword from "./pages/Authentication/ForgotPassword.js";
 import ResetPassword from "./pages/Authentication/ResetPassword.js";
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard/Dashboard.js";
+import Donations from "./pages/Donations/Index.js";
 import Logout from "./components/popUp/Logout.js";
-import Donation from "./pages/Donation";
+import Donate from "./pages/Donate";
 import Status from "./pages/Status";
 import Profile from "./pages/Profile";
-import Requests from "./pages/Requests";
+import Requests from "./pages/requests/Index.js";
 import Agents from "./pages/Agents/Index.js";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import AgentInfo from "./pages/Agents/AgentInfo";
 import Assigned from "./pages/Assigned/Index";
 
 function App() {
@@ -69,10 +68,12 @@ function App() {
               <Route path="/forgot_password" element={<FogotPassword />} />
               <Route path="/" element={<Home />} />
               <Route element={<ProtectedRoutes />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/donation" element={<Donation />} />
+                <Route path="/donations" element={<Donations />} />
+                <Route path="/donations/:donationId" element={<Donations />} />
+                <Route path="/donate" element={<Donate />} />
                 <Route path="/status" element={<Status />} />
                 <Route path="/requests" element={<Requests />} />
+                <Route path="/requests/:donationId" element={<Requests />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/agents" element={<Agents />} />
                 <Route path="/agents/:agentId" element={<Agents />} />

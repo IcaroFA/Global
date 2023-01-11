@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function AgentListComponent({ agent, setCurrentAgent }) {
+function AgentListComponent({ agent, setCurrentAgent, page }) {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th
@@ -46,7 +46,7 @@ function AgentListComponent({ agent, setCurrentAgent }) {
           to={`/agents/` + agent._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentAgent(agent)}>more Info</div>
+          <div onClick={() => setCurrentAgent({ page, agent })}>more Info</div>
         </Link>
       </td>
     </tr>

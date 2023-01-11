@@ -1,22 +1,6 @@
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
-import { TabItem } from "flowbite-react/lib/esm/components/Tab/TabItem";
 import React, { useState } from "react";
 function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
   const [showAgentDetail, setShowAgentDetail] = useState(false);
-
-  function delivered() {
-    return agent.donations.reduce(
-      (acc, crr) => (acc = crr.status === "DELIVERED" ? acc + 1 : acc),
-      0
-    );
-  }
-
-  function inBetween() {
-    return agent.donations.reduce(
-      (acc, crr) => (acc = crr.status === "ACCEPTED" ? acc + 1 : acc),
-      0
-    );
-  }
 
   return (
     <div className="  my-4   w-full  ">
@@ -114,10 +98,10 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
           {/* Address */}
 
           <p className="text-gray-900 truncate dark:text-white  mx-4 md:px-8 ">
-            Delivered : {delivered()}
+            Delivered : {agent.delivered}
           </p>
           <p className="text-gray-900 truncate dark:text-white  mx-4 md:px-8">
-            Pending : {inBetween()}
+            Assigned : {agent.accepted}
           </p>
           <div className="  md:px-8">
             {agent.address ? (

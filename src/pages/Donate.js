@@ -8,7 +8,7 @@ import loadingSvg from "../asset/loading.svg";
 import { useLocation } from "react-router-dom";
 import Address from "../components/popUp/Address";
 
-function Donation() {
+function Donate() {
   const navigate = useNavigate();
   const location = useLocation();
   const URL = process.env.REACT_APP_URL;
@@ -126,7 +126,7 @@ function Donation() {
       <div className="scroll  relative h-full flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
         <header className="border-b-4 border-blue-300  dark:border-gray-500 ">
           <h1 className="md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
-            Donation
+            Donate
           </h1>
         </header>
 
@@ -378,4 +378,4 @@ function Donation() {
     </div>
   );
 }
-export default Donation;
+export default Donate;

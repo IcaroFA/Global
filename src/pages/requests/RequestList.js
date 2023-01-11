@@ -2,20 +2,24 @@ import React, { useState, useContext, useEffect } from "react";
 import useFetchData from "../../customHooks/useFetchData";
 import { GlobalContex } from "../../context/contex";
 import loadingSvg from "../../asset/loading.svg";
-import DonationListComonent from "../../components/DonationListComonent.js";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import DonationListConponent from "../../components/DonationListComonent.js";
+import Filter from "../../components/popUp/Filter.js";
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PaginationComponent from "../../components/PaginationComponent";
 
-function AssignedDonationList({ setCurrentDonation }) {
-  const { notify, userData } = useContext(GlobalContex);
-  const navigate = useNavigate();
+function DonationList({ setCurrentDonation }) {
   const [donationData, setDonationData] = useState({ donations: [] });
+  const navigate = useNavigate();
+  const { notify } = useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
   const [page, setPage] = useState(currentPage ? Number(currentPage) : 1);
+
   const url = (page) =>
-    `${URL}/api/donations?agentId=${userData._id}&page=${page}&status=ACCEPTED&limit=10`;
+    URL + `/api/donations?status=PENDING&page=${page}&limit=10`;
+
   const { loading, data, error, fetchData } = useFetchData();
 
   useEffect(() => {
@@ -28,15 +32,16 @@ function AssignedDonationList({ setCurrentDonation }) {
 
   useEffect(() => {
     fetchData(url(page));
-    if (currentPage) navigate("/assigned");
+    if (currentPage) navigate("/requests");
   }, [page]);
 
   return (
     <>
-      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4    border-blue-300  dark:border-gray-500 ">
+      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center   border-blue-300  dark:border-gray-500 ">
         <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
-          Assigned donations
+          Requests
         </h1>
+        <Filter />
       </header>
       <div className="px-4">
         <table className="   w-full  mt-4">
@@ -61,12 +66,12 @@ function AssignedDonationList({ setCurrentDonation }) {
               ? null
               : donationData.donations &&
                 donationData.donations.map((donation) => (
-                  <DonationListComonent
+                  <DonationListConponent
                     key={donation._id}
                     donation={donation}
                     setCurrentDonation={setCurrentDonation}
+                    path="/requests"
                     page={page}
-                    path="/assigned"
                   />
                 ))}
           </tbody>
@@ -90,4 +95,4 @@ function AssignedDonationList({ setCurrentDonation }) {
   );
 }
 
-export default AssignedDonationList;
+export default DonationList;

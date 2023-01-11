@@ -3,29 +3,29 @@ import { useParams } from "react-router-dom";
 import { GlobalContex } from "../../context/contex";
 import loadingSvg from "../../asset/loading.svg";
 import useFetchData from "../../customHooks/useFetchData";
-import DonationListComponent from "../../components/DonationStatus.js";
 import axios from "axios";
+import DonationListConponent from "../../components/DonationListComonent.js";
 
 import { Link } from "react-router-dom";
-import Search from "../../components/Search";
 import AgentProfileInfoComponent from "../../components/AgentProfileInfoComponent";
 function AgentInfo({ currentAgent, setCurrentAgent }) {
   const donationHeader = useRef(null);
   const [showShadow, setShowShaDow] = useState(false);
   const { notify } = useContext(GlobalContex);
   const { agentId } = useParams();
+
   const [page, setPage] = useState(1);
-  const [donatiosData, setDonationsData] = useState({ donations: [] });
+  const [currentDonation, setCurrentDonation] = useState({});
+  const [donationData, setDonationsData] = useState({ donations: [] });
   const [agentLoading, setAgentLoading] = useState(false);
   const URL = process.env.REACT_APP_URL;
-  const [search, setSearch] = useState("");
 
   const DonationsUrl = (page) =>
     `${URL}/api/donations?agentId=${agentId}&page=${page}&limit=10`;
   const { loading, data, error, fetchData } = useFetchData(DonationsUrl(page));
 
   useEffect(() => {
-    if (Object.keys(currentAgent).length < 1) fetchCurrentAgent();
+    if (Object.keys(currentAgent.agent).length < 1) fetchCurrentAgent();
   }, []);
 
   // fetch agent info if current agent info in not present
@@ -33,7 +33,9 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
     setAgentLoading(true);
     axios(`${URL}/api/auth/user?userId=${agentId}`, { withCredentials: true })
       .then((response) => {
-        setCurrentAgent(response.data.data);
+        setCurrentAgent((preVal) => {
+          return { ...preVal, agent: response.data.data };
+        });
         setAgentLoading(false);
       })
       .catch((error) => {
@@ -43,7 +45,7 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
   }
 
   handleSearch = () => {
-    if (!loading) fetchData(DonationsUrl(1, search));
+    if (!loading) fetchData(DonationsUrl(1));
   };
 
   useEffect(() => {
@@ -51,14 +53,13 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
   }, [error]);
 
   function handleSearch() {
-    if (!loading) fetchData(DonationsUrl(1, search));
+    if (!loading) fetchData(DonationsUrl(1));
   }
-
   useEffect(() => {
     if (!loading) setDonationsData(data);
   }, [loading]);
 
-  // /////
+  // ///// intersection observer
   const observer = new IntersectionObserver((e) => {
     setShowShaDow(!e[0].isIntersecting);
   });
@@ -77,7 +78,10 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
       >
         <div className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
           <div>
-            <Link className=" hover:text-blue-500" to="/agents">
+            <Link
+              className=" hover:text-blue-500"
+              to={"/agents?page=" + currentAgent.page}
+            >
               {" "}
               Agents
             </Link>
@@ -86,9 +90,9 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
                 {agentLoading
                   ? null
                   : " / " +
-                    currentAgent.firstName +
+                    currentAgent.agent.firstName +
                     " " +
-                    currentAgent.lastName}
+                    currentAgent.agent.lastName}
               </Link>
             ) : null}
           </div>
@@ -99,9 +103,9 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
       {/*  agent info  */}
       {agentLoading
         ? null
-        : Object.keys(currentAgent).length > 0 && (
+        : Object.keys(currentAgent.agent).length > 0 && (
             <div className="p-4">
-              <AgentProfileInfoComponent agent={currentAgent} />
+              <AgentProfileInfoComponent agent={currentAgent.agent} />
             </div>
           )}
       {/*  agent info end */}
@@ -124,15 +128,39 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
             }
           >
             <p>Assigned Donations</p>
-            {showShadow ? (
-              <Search setSearch={setSearch} handleSearch={handleSearch} />
-            ) : null}
           </div>
           <div className="md:p-4 ">
-            {donatiosData.donations &&
-              donatiosData.donations.map((donation) => (
-                <DonationListComponent key={donation._id} item={donation} />
-              ))}
+            <table className="   w-full">
+              {donationData.donations && donationData.donations.length > 0 ? (
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+                  <tr>
+                    <th scope="col" className="px-6 py-3  text-start  ">
+                      Donor
+                    </th>
+                    <th scope="col" className="px-6 py-3 ">
+                      date
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3 ">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+              ) : null}
+              <tbody className="w-full">
+                {donationData.donations &&
+                  donationData.donations.map((donation) => (
+                    <DonationListConponent
+                      key={donation._id}
+                      donation={donation}
+                      setCurrentDonation={setCurrentDonation}
+                      path="/donations"
+                    />
+                  ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
@@ -198,9 +226,9 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
               setPage((preVal) => preVal + 1);
             }}
             type="button"
-            disabled={loading || !donatiosData.next}
+            disabled={loading || !donationData.next}
             className={
-              donatiosData.next
+              donationData.next
                 ? "text-white shadow-2xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 : "text-blue-700 shadow-2xl border border-blue-700   focus:outline-none  font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center  dark:border-blue-500 dark:text-blue-500  "
             }
