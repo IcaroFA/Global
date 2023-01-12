@@ -43,6 +43,7 @@ function SignUp() {
           </div>
           {/* form */}
           <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
+            {/* name */}
             <div className="flex gap-2">
               <div>
                 <label
@@ -78,7 +79,8 @@ function SignUp() {
                 />
               </div>
             </div>
-
+            {/* name end */}
+            {/* phone */}
             <div>
               <label
                 htmlFor="phoneNo"
@@ -98,6 +100,8 @@ function SignUp() {
                 required
               />
             </div>
+            {/* phone end */}
+            {/* email   */}
             <div>
               <label
                 htmlFor="email"
@@ -114,6 +118,8 @@ function SignUp() {
                 required
               />
             </div>
+            {/* email end */}
+            {/* password */}
             <div>
               <label
                 htmlFor="password"
@@ -132,7 +138,8 @@ function SignUp() {
                 minLength="8"
               />
             </div>
-
+            {/* password */}
+            {/* comform password */}
             <div>
               <label
                 htmlFor="confirmPass"
@@ -152,6 +159,7 @@ function SignUp() {
                 autoComplete="off"
               />
             </div>
+            {/* comform password  end*/}
 
             <button
               type="submit"

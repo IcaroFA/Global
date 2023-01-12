@@ -24,6 +24,7 @@ function Profile() {
     base64: userData.profileImage?.url ? userData.profileImage.url : "",
     file: ""
   });
+
   const reader = new FileReader();
   const { data, loading, error, forgot } = useForgotPassword(userData.email);
   const [reset, setReset] = useState({ data, error, loading });

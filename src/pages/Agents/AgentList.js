@@ -6,6 +6,7 @@ import loadingSvg from "../../asset/loading.svg";
 import Search from "../../components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import AgentListComponentmobile from "../../components/AgentListComponentmobile.js";
 
 function AgentList({ setCurrentAgent, search, setSearch }) {
   const navigate = useNavigate();
@@ -50,37 +51,52 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
         </div>
       </header>
       <div className="px-4">
-        <table className="   w-full  mt-4">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-            <tr>
-              <th scope="col" className="px-6 py-3  text-start  ">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3 ">
-                Position
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-              <th scope="col" className="px-6 py-3 ">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className="w-full">
-            {loading
-              ? null
-              : agentData.users &&
-                agentData.users.map((agent) => (
-                  <AgentListComponent
-                    key={agent._id}
-                    agent={agent}
-                    page={page}
-                    setCurrentAgent={setCurrentAgent}
-                  />
-                ))}
-          </tbody>
-        </table>
+        <div className="hidden md:block mt-4">
+          <table className="   w-full  mt-4">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+              <tr>
+                <th scope="col" className="px-6 py-3  text-start  ">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Position
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Status
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="w-full">
+              {loading
+                ? null
+                : agentData.users &&
+                  agentData.users.map((agent) => (
+                    <AgentListComponent
+                      key={agent._id}
+                      agent={agent}
+                      page={page}
+                      setCurrentAgent={setCurrentAgent}
+                    />
+                  ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className=" block md:hidden mt-4">
+          {loading
+            ? null
+            : agentData.users &&
+              agentData.users.map((agent) => (
+                <AgentListComponentmobile
+                  key={agent._id}
+                  agent={agent}
+                  redirectPath="/agents"
+                />
+              ))}
+        </div>
       </div>
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">

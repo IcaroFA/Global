@@ -6,6 +6,7 @@ import DonationListConponent from "../components/DonationListComonent.js";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import PaginationComponent from "../components/PaginationComponent";
+import DonationListComponentMobile from "../components/DonationListComponentMobile.js";
 
 function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
   const [donationData, setDonationData] = useState({ donations: [] });
@@ -39,38 +40,56 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
         </h1>
       </header>
       <div className="px-4">
-        <table className="   w-full  mt-4">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-            <tr>
-              <th scope="col" className="px-6 py-3  text-start  ">
-                Donor
-              </th>
-              <th scope="col" className="px-6 py-3 ">
-                date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-              <th scope="col" className="px-6 py-3 ">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className="w-full">
-            {loading
-              ? null
-              : donationData.donations &&
-                donationData.donations.map((donation) => (
-                  <DonationListConponent
-                    key={donation._id}
-                    donation={donation}
-                    setCurrentDonation={setCurrentDonation}
-                    path={baseUrl}
-                    page={page}
-                  />
-                ))}
-          </tbody>
-        </table>
+        {/* destop view */}
+        <div className="hidden md:block mt-4">
+          <table className="   w-full  mt-4">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+              <tr>
+                <th scope="col" className="px-6 py-3  text-start  ">
+                  Donor
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Status
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="w-full">
+              {loading
+                ? null
+                : donationData.donations &&
+                  donationData.donations.map((donation) => (
+                    <DonationListConponent
+                      key={donation._id}
+                      donation={donation}
+                      setCurrentDonation={setCurrentDonation}
+                      path={baseUrl}
+                      page={page}
+                    />
+                  ))}
+            </tbody>
+          </table>
+        </div>
+        {/* desk top view end */}
+        {/* mobile view  */}
+        <div className=" block md:hidden mt-4">
+          {loading
+            ? null
+            : donationData.donations &&
+              donationData.donations.map((donation) => (
+                <DonationListComponentMobile
+                  key={donation._id}
+                  donation={donation}
+                  redirectPath={baseUrl}
+                />
+              ))}
+        </div>
+        {/* mobile view  end */}
       </div>
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">

@@ -5,6 +5,7 @@ import loadingSvg from "../../asset/loading.svg";
 import useFetchData from "../../customHooks/useFetchData";
 import axios from "axios";
 import DonationListConponent from "../../components/DonationListComonent.js";
+import DonationListComponentMobile from "../../components/DonationListComponentMobile.js";
 
 import { Link } from "react-router-dom";
 import AgentProfileInfoComponent from "../../components/AgentProfileInfoComponent";
@@ -123,44 +124,61 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
           <div
             className={
               showShadow
-                ? " sticky  md:px-4 py-2  shadow-2xl md:top-0 border-blue-300  dark:border-gray-500 px-4 pt-4 border-b-4  left-0  z-10 text-xl md:text-2xl mb-3 font-semibold  flex   justify-between  text-blue-500   dark:text-white  bg-blue-50  dark:bg-gray-800"
+                ? " sticky  md:px-4 py-2   shadow-2xl md:top-0 border-blue-300  dark:border-gray-500 px-4 pt-4 border-b-4  left-0  z-10 text-xl md:text-2xl mb-3 font-semibold  flex   justify-between  text-blue-500   dark:text-white  bg-blue-50  dark:bg-gray-800"
                 : "sticky  md:px-4 py-2 md:top-[4rem]  left-0  z-10 text-xl md:text-2xl mb-3 font-semibold  flex   justify-between  text-blue-500   dark:text-white  bg-blue-50  dark:bg-gray-800"
             }
           >
             <p>Assigned Donations</p>
           </div>
-          <div className="md:p-4 ">
-            <table className="   w-full">
-              {donationData.donations && donationData.donations.length > 0 ? (
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-                  <tr>
-                    <th scope="col" className="px-6 py-3  text-start  ">
-                      Donor
-                    </th>
-                    <th scope="col" className="px-6 py-3 ">
-                      date
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Status
-                    </th>
-                    <th scope="col" className="px-6 py-3 ">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-              ) : null}
-              <tbody className="w-full">
-                {donationData.donations &&
+          <div className="p-4 ">
+            {/* dasktop view */}
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block ">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                {donationData.donations && donationData.donations.length > 0 ? (
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="px-6 py-3  text-start  ">
+                        Donor
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        date
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                ) : null}
+                <tbody className="w-full">
+                  {donationData.donations &&
+                    donationData.donations.map((donation) => (
+                      <DonationListConponent
+                        key={donation._id}
+                        donation={donation}
+                        setCurrentDonation={setCurrentDonation}
+                        path="/donations"
+                      />
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            {/* dasktop view  end*/}
+            {/* mobile view  */}
+            <div className=" block md:hidden mt-4">
+              {loading
+                ? null
+                : donationData.donations &&
                   donationData.donations.map((donation) => (
-                    <DonationListConponent
-                      key={donation._id}
+                    <DonationListComponentMobile
                       donation={donation}
-                      setCurrentDonation={setCurrentDonation}
-                      path="/donations"
+                      redirectPath="/donations"
                     />
                   ))}
-              </tbody>
-            </table>
+            </div>
+            {/* mobile view  end */}
           </div>
         </>
       )}

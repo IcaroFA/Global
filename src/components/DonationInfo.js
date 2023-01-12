@@ -58,11 +58,11 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
           <>
             {/* daonation info */}
             <div className="md:p-6  p-2  bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-              <div className="flex   md:flex-row flex-col ">
+              <div className="flex   md:flex-row flex-col md:gap-20  gap-5 ">
                 {/* donor details */}
-                <div className="flex  flex-col  md:flex-row md:gap-10  gap-5">
+                <div className="flex  flex-col  md:flex-row ">
+                  {/* image */}
                   <div className="flex items-center     gap-5">
-                    {/* image */}
                     {currentDonation.donation.donorImage ? (
                       <img
                         src={currentDonation.donation.donorImage}
@@ -102,11 +102,8 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                       </p>
                     </span>
                   </div>
-                  <p className="text-white ">
-                    {currentDonation.donation.message}
-                  </p>
                 </div>
-                {/* donor details */}
+                {/* donor details  end*/}
 
                 {/* agent details */}
                 {userData.role !== "AGENT" &&
@@ -158,6 +155,17 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
               </div>
 
               <div className=" mt-4   flex flex-col gap-3">
+                {/* message */}
+                <span className="flex  md:flex-row flex-col ">
+                  <p className=" text-md font-semibold  dark:text-white text-gray-800">
+                    message:
+                  </p>
+                  <p className="text-white ">
+                    {currentDonation.donation.message}
+                  </p>
+                </span>
+
+                {/* message */}
                 {/* donation status */}
                 <p
                   className={`${
