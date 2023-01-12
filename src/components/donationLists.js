@@ -97,7 +97,6 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
         </div>
       ) : null}
       {/* page  */}
-
       <PaginationComponent
         loading={loading}
         page={page}
