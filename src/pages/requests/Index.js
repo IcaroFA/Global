@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { useParams } from "react-router-dom";
 import DonationInfo from "../../components/DonationInfo.js";
-import RequestList from "./RequestList";
-
+import DonationList from "../../components/donationLists";
 function Index() {
   const { donationId } = useParams();
   const [currentDonation, setCurrentDonation] = useState({
     page: 1,
     donation: {}
   });
+
+  const URL = process.env.REACT_APP_URL;
+  const donationsUrl = URL + "/api/donations?status=PENDING";
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -22,7 +24,12 @@ function Index() {
             path="Requests"
           />
         ) : (
-          <RequestList setCurrentDonation={setCurrentDonation} />
+          <DonationList
+            setCurrentDonation={setCurrentDonation}
+            donationsUrl={donationsUrl}
+            PageType="Requests"
+            baseUrl="/requests"
+          />
         )}
       </div>
     </div>

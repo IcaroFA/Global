@@ -1,7 +1,9 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { GlobalContex } from "../context/contex";
 
 function DonationListComonent({ donation, setCurrentDonation, path, page }) {
+  const { userData } = useContext(GlobalContex);
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th
@@ -40,10 +42,13 @@ function DonationListComonent({ donation, setCurrentDonation, path, page }) {
             (donation.status === "ACCEPTED" && "text-green-500") ||
             (donation.status === "REJECTED" && "text-red-500") ||
             (donation.status === "PENDING" && "text-yellow-300") ||
-            (donation.status === "DELIVERED" && "text-blue-500")
+            (donation.status === "COLLECTED" && "text-blue-500")
           }       font-bold`}
         >
-          {donation.status}
+          {donation.status === "ACCEPTED" &&
+          (userData.role === "ADMIN" || userData.role === "AGENT")
+            ? "ASSIGNED"
+            : donation.status}
         </div>
       </td>
       <td className="px-6 py-4  text-center">

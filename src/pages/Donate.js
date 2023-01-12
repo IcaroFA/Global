@@ -111,7 +111,7 @@ function Donate() {
       const response = await axios(axiosOptions());
       if (response.data.success) {
         notify("successfuly", "success");
-        navigate("/status?donationId=" + response.data.data._id);
+        navigate("/donations/" + response.data.data._id);
       }
       setSubmitLoading(false);
     } catch (error) {
@@ -346,7 +346,7 @@ function Donate() {
                   <button
                     type="button"
                     onClick={() =>
-                      navigate("/status?donationId=" + urlQuery.get("edit"))
+                      navigate("/donations/" + urlQuery.get("edit"))
                     }
                     className="text-white mx-3 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                   >

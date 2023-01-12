@@ -52,11 +52,11 @@ function AgentProfileInfoComponent({ agent }) {
         {/* delivered */}
         <span className="flex gap-3 items-center">
           <p className="text-md font-semibold   dark:text-white text-gray-800">
-            delivered :{" "}
+            Collected :{" "}
           </p>
           <p className="text-md   dark:text-gray-400 text-gray-700">
             {" "}
-            {agent.delivered}
+            {agent.collected}
           </p>
         </span>
         {/* delivered  end*/}

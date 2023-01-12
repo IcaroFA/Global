@@ -3,7 +3,12 @@ import axios from "axios";
 import { GlobalContex } from "../../context/contex";
 import { useNavigate } from "react-router-dom";
 
-function RemoveRejectDonation({ type, id, setCurrentDonation }) {
+function RemoveRejectDonation({
+  type,
+  id,
+  setCurrentDonation,
+  redirectPath = "/donations"
+}) {
   const navigate = useNavigate();
   const { notify } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
@@ -18,7 +23,7 @@ function RemoveRejectDonation({ type, id, setCurrentDonation }) {
         withCredentials: true
       });
       if (response.data.success) {
-        navigate("/dashboard");
+        navigate(redirectPath);
         notify(response.data.message, "success");
         setShowPopUp(false);
       }
@@ -54,39 +59,19 @@ function RemoveRejectDonation({ type, id, setCurrentDonation }) {
     }
   }
 
-  async function handleDeliveredDonaiton() {
-    setLoading(true);
-    try {
-      const response = await axios({
-        method: "put",
-        url: URL + "/api/donation/" + id,
-        withCredentials: true,
-        data: { status: "REJECTED" }
-      });
-      if (response.data.success) {
-        setCurrentDonation((preVal) => {
-          return {
-            ...preVal,
-            donation: { ...preVal.donation, status: "REJECTED" }
-          };
-        });
-        notify(`you just rejected one  donation`, "success");
-        setShowPopUp(false);
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      notify(error.response.data.message, "error");
-    }
-  }
-
   return (
     <>
       <button
-        className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+        className={
+          type === "COLLECTED"
+            ? " mx-2   py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            : " mx-2   py-2 px-3 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+        }
         onClick={() => setShowPopUp((preVal) => !preVal)}
       >
-        {type}
+        {type === "COLLECTED" && "COLLECT"}
+        {type === "REJECTED" && "REJECT"}
+        {type === "Remove" && "REMOVE"}
       </button>
       {showPopUp ? (
         <div
@@ -136,13 +121,20 @@ function RemoveRejectDonation({ type, id, setCurrentDonation }) {
                   ></path>
                 </svg>
                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Are you sure you want to {type === "Remove" ? "Cancle" : type}{" "}
-                  this donation?
+                  {type === "COLLECTED" && "Mark this donation  as collected"}
+                  {type === "REJECTED" &&
+                    "Are you sure you want to reject this donation?"}
+                  {type === "Remove" &&
+                    "Are you sure you want to Remove this donation"}
                 </h3>
                 <div className="flex  gap-5    flex-wrap  justify-center items-center">
                   <button
                     type="button"
-                    className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                    className={
+                      type === "COLLECTED"
+                        ? "text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                        : "text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                    }
                     onClick={() => {
                       if (type === "Remove") handleRemoveDonation();
                       if (type === "REJECTED" || type === "DELIVERED") {

@@ -161,8 +161,8 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
               </svg>
               <span className="sr-only">Close modal</span>
             </button>
-            <div className="p-6 ">
-              <div className="md:w-[50rem]">
+            <div className=" md:p-6   p-1">
+              <div className="md:w-[50rem] md:mt-0 mt-4 ">
                 {type === "ADDRESS" ? (
                   <p className=" text-gray-700 dark:text-white font-semibold">
                     Address :{" "}
@@ -175,13 +175,13 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
                     <p className=" text-gray-700 dark:text-white font-semibold">
                       From :
                       <span className=" font-medium   text-gray-600 dark:text-gray-300">
-                        {data}
+                        {to}
                       </span>
                     </p>
                     <p className=" text-gray-700 dark:text-white font-semibold">
-                      To :{" "}
+                      To :
                       <span className=" font-medium   text-gray-600 dark:text-gray-300">
-                        {to}
+                        {data}
                       </span>
                     </p>{" "}
                     <p className=" text-gray-700 dark:text-white font-semibold">
@@ -201,7 +201,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
               </div>
 
               {/* map */}
-              <div className=" my-8 md:w-[50rem] w-full relative ">
+              <div className=" md:my-8  my-4 md:w-[50rem] w-full relative ">
                 {!isLoaded ? (
                   <div className="flex items-center justify-center ">
                     <img src={loadingSvg} alt="loading" className="h-40 w-40" />
@@ -242,7 +242,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
                         }
                       >
                         {/* search  */}
-                        <div className="flex items-center   absolute  top-0 left-0 bg-white rounded-br-lg  dark:bg-gray-700 p-1">
+                        <div className="flex items-center     absolute  top-0 left-0 bg-white rounded-br-lg  dark:bg-gray-700 p-1">
                           <label htmlFor="simple-search" className="sr-only">
                             Search
                           </label>

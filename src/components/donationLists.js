@@ -1,24 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
-import useFetchData from "../../customHooks/useFetchData";
-import { GlobalContex } from "../../context/contex";
-import loadingSvg from "../../asset/loading.svg";
-import DonationListConponent from "../../components/DonationListComonent.js";
-import Filter from "../../components/popUp/Filter.js";
+import useFetchData from "../customHooks/useFetchData.js";
+import { GlobalContex } from "../context/contex.js";
+import loadingSvg from "../asset/loading.svg";
+import DonationListConponent from "../components/DonationListComonent.js";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import PaginationComponent from "../../components/PaginationComponent";
+import PaginationComponent from "../components/PaginationComponent";
 
-function DonationList({ setCurrentDonation }) {
+function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
   const [donationData, setDonationData] = useState({ donations: [] });
   const navigate = useNavigate();
   const { notify } = useContext(GlobalContex);
-  const URL = process.env.REACT_APP_URL;
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
   const [page, setPage] = useState(currentPage ? Number(currentPage) : 1);
-
-  const url = (page) =>
-    URL + `/api/donations?status=PENDING&page=${page}&limit=10`;
+  const url = (page) => donationsUrl + `&page=${page}&limit=10`;
 
   const { loading, data, error, fetchData } = useFetchData();
 
@@ -32,16 +28,15 @@ function DonationList({ setCurrentDonation }) {
 
   useEffect(() => {
     fetchData(url(page));
-    if (currentPage) navigate("/requests");
+    if (currentPage) navigate(baseUrl);
   }, [page]);
 
   return (
     <>
       <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center   border-blue-300  dark:border-gray-500 ">
         <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
-          Requests
+          {PageType}
         </h1>
-        <Filter />
       </header>
       <div className="px-4">
         <table className="   w-full  mt-4">
@@ -70,7 +65,7 @@ function DonationList({ setCurrentDonation }) {
                     key={donation._id}
                     donation={donation}
                     setCurrentDonation={setCurrentDonation}
-                    path="/requests"
+                    path={baseUrl}
                     page={page}
                   />
                 ))}

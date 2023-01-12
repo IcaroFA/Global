@@ -47,14 +47,22 @@ function SelectAgent({
         method: "put",
         url: URL + "/api/donation/" + id,
         withCredentials: true,
-        data: { status: "ACCEPTED" }
+        data: { status: "ACCEPTED", agentId: selectedAgent._id }
       });
       /// update current donation
       if (response.data.success) {
         setCurrentDonation((preVal) => {
           return {
             ...preVal,
-            donation: { ...preVal.donation, status: "ACCEPTED" }
+            donation: {
+              ...preVal.donation,
+              status: "ACCEPTED",
+              agentId: selectedAgent._id,
+              agentName: selectedAgent.firstName + " " + selectedAgent.lastName,
+              agentEmail: selectedAgent.email,
+              agentPhoneNo: selectedAgent.phoneNo,
+              agentImage: selectedAgent.profileImage?.url
+            }
           };
         });
 

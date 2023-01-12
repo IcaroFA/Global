@@ -3,7 +3,7 @@ import { GlobalContex } from "../context/contex";
 import { useNavigate, useLocation } from "react-router-dom";
 
 // conponent
-import RemoveRejectDonation from "./popUp/Remove.Reject.delivered.Donation.js";
+import RemoveRejectDonation from "./popUp/Remove.Reject.collected.Donation.js";
 import Accept from "./popUp/AcceptDonation/Accept.js";
 
 function DonationStatus({ item, setDonationData }) {
@@ -178,7 +178,7 @@ function DonationStatus({ item, setDonationData }) {
                   type="button"
                   className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                   onClick={() => {
-                    navigate("/donation?edit=" + item._id);
+                    navigate("/donate?edit=" + item._id);
                   }}
                 >
                   Edit
@@ -187,6 +187,7 @@ function DonationStatus({ item, setDonationData }) {
                   id={item._id}
                   setDonationData={setDonationData}
                   type="Remove"
+                  redirectPath="/status"
                 />
               </>
             ) : null}

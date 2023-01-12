@@ -85,7 +85,7 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
           }
           onClick={() =>
             setSelectedAgent((preVal) =>
-              preVal && preVal === agent._id ? null : agent._id
+              preVal && preVal._id === agent._id ? null : agent
             )
           }
         >
@@ -98,7 +98,7 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
           {/* Address */}
 
           <p className="text-gray-900 truncate dark:text-white  mx-4 md:px-8 ">
-            Delivered : {agent.delivered}
+            collected : {agent.collected}
           </p>
           <p className="text-gray-900 truncate dark:text-white  mx-4 md:px-8">
             Assigned : {agent.accepted}

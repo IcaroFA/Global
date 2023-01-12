@@ -4,7 +4,7 @@ import useFetchData from "../customHooks/useFetchData";
 import { GlobalContex } from "../context/contex";
 import loadingSvg from "../asset/loading.svg";
 import Address from "./popUp/Address.js";
-import RemoveRejectDonation from "./popUp/Remove.Reject.delivered.Donation.js";
+import RemoveRejectDonation from "./popUp/Remove.Reject.collected.Donation.js";
 import Accept from "./popUp/AcceptDonation/Accept.js";
 function DonationInfo({ currentDonation, setCurrentDonation, path }) {
   const navigate = useNavigate();
@@ -23,7 +23,10 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
   useEffect(() => {
     if (!loading && Object.keys(currentDonation.donation).length < 1) {
       setCurrentDonation((preVal) => {
-        return { ...preVal, donation: data };
+        return {
+          ...preVal,
+          donation: data
+        };
       });
     }
   }, [loading]);
@@ -55,50 +58,107 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
           <>
             {/* daonation info */}
             <div className="md:p-6  p-2  bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-              <div className="flex  flex-col  md:flex-row md:gap-10  gap-5">
-                <div className="flex items-center     gap-5">
-                  {/* image */}
-                  {currentDonation.donation.donorImage ? (
-                    <img
-                      src={currentDonation.donation.donorImage}
-                      className="h-20 w-20 rounded-full object-cover"
-                      alt=""
-                    />
-                  ) : (
-                    <svg
-                      className="w-14 h-14 text-gray-200 dark:text-gray-700"
-                      aria-hidden="true"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  )}
-                  {/* image end */}
-                  <span>
-                    <p className="  text-lg  font-semibold  dark:text-white text-gray-800">
-                      {currentDonation.donation.donorName}
-                    </p>
-                    <p className="font-semibold  dark:text-gray-400 text-gray-700">
-                      {currentDonation.donation.donorEmail}
-                    </p>
-                    <p className="font-semibold  dark:text-gray-400 text-gray-700">
-                      {new Date(
-                        currentDonation.donation.createdAt
-                      ).toDateString()}
-                    </p>
-                  </span>
+              <div className="flex   md:flex-row flex-col ">
+                {/* donor details */}
+                <div className="flex  flex-col  md:flex-row md:gap-10  gap-5">
+                  <div className="flex items-center     gap-5">
+                    {/* image */}
+                    {currentDonation.donation.donorImage ? (
+                      <img
+                        src={currentDonation.donation.donorImage}
+                        className="h-20 w-20 rounded-full object-cover"
+                        alt=""
+                      />
+                    ) : (
+                      <svg
+                        className="w-14 h-14 text-gray-200 dark:text-gray-700"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    )}
+                    {/* image end */}
+                    <span>
+                      <p className="  text-lg  font-semibold  dark:text-white text-gray-800">
+                        {currentDonation.donation.donorName}
+                      </p>
+                      <p className="font-semibold  dark:text-gray-400 text-gray-700">
+                        {currentDonation.donation.donorEmail}
+                      </p>
+                      <p className="font-semibold  dark:text-gray-400 text-gray-700 text-sm">
+                        {currentDonation.donation.donorPhoneNo}
+                      </p>
+                      <p className="font-semibold  dark:text-gray-400 text-gray-700 text-sm">
+                        {new Date(
+                          currentDonation.donation.createdAt
+                        ).toDateString()}
+                      </p>
+                    </span>
+                  </div>
+                  <p className="text-white ">
+                    {currentDonation.donation.message}
+                  </p>
                 </div>
-                <p className="text-white ">
-                  {currentDonation.donation.message}
-                </p>
+                {/* donor details */}
+
+                {/* agent details */}
+                {userData.role !== "AGENT" &&
+                (currentDonation.donation.status === "ACCEPTED" ||
+                  currentDonation.donation.status === "ACCEPTED") ? (
+                  <div className="mt-4">
+                    <h1 className="text-lg  font-semibold  dark:text-white text-gray-800">
+                      Agent Details
+                    </h1>
+                    <div className="flex items-center  mt-2 gap-3">
+                      <div>
+                        {currentDonation.donation.agentImage ? (
+                          <img
+                            src={currentDonation.donation.agentImage}
+                            className="h-20 w-20 rounded-full object-cover"
+                            alt=""
+                          />
+                        ) : (
+                          <svg
+                            className="w-14 h-14 text-gray-200 dark:text-gray-700"
+                            aria-hidden="true"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                        )}
+                      </div>
+                      <div>
+                        <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
+                          {currentDonation.donation.agentName}
+                        </p>
+                        <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
+                          {currentDonation.donation.agentEmail}
+                        </p>
+                        <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
+                          {currentDonation.donation.agentPhoneNo}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+                {/* agentDetail end */}
               </div>
+
               <div className=" mt-4   flex flex-col gap-3">
+                {/* donation status */}
                 <p
                   className={`${
                     (currentDonation.donation.status === "PENDING" &&
@@ -106,13 +166,20 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     (currentDonation.donation.status === "ACCEPTED" &&
                       "text-green-500") ||
                     (currentDonation.donation.status === "REJECTED" &&
-                      "text-red-500")
+                      "text-red-500") ||
+                    (currentDonation.donation.status === "COLLECTED" &&
+                      "text-blue-500")
                   }
                    font-bold
                   `}
                 >
-                  {currentDonation.donation.status}
+                  {currentDonation.donation.status === "ACCEPTED" &&
+                  (userData.role === "ADMIN" || userData.role === "AGENT")
+                    ? "ASSIGNED"
+                    : currentDonation.donation.status}
                 </p>
+                {/* donation status end */}
+
                 {/* pick up address */}
                 <span className="flex items-center">
                   <p className=" text-md font-semibold  dark:text-white text-gray-800">
@@ -153,6 +220,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     </div>
                   </span>
                 ) : null}
+
                 {/* functionals buttons */}
                 <div className="w-full   flex items-center justify-end">
                   {userData.role === "DONOR" &&
@@ -163,7 +231,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                         className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                         onClick={() => {
                           navigate(
-                            "/donation?edit=" + currentDonation.donation._id
+                            "/donate?edit=" + currentDonation.donation._id
                           );
                         }}
                       >
@@ -173,6 +241,9 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                         id={currentDonation.donation._id}
                         setDonationData={setCurrentDonation}
                         type="Remove"
+                        redirectPath={`/${path.toLowerCase()}?page=${
+                          currentDonation.page
+                        }`}
                       />
                     </>
                   ) : null}
@@ -202,7 +273,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     <RemoveRejectDonation
                       id={currentDonation.donation._id}
                       setCurrentDonation={setCurrentDonation}
-                      type="DELIVERED"
+                      type="COLLECTED"
                     />
                   ) : null}
                 </div>

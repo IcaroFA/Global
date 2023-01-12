@@ -338,7 +338,7 @@ function Profile() {
         ) : (
           // userInfo
           <div>
-            <div className="relative flex justify-center items-center flex-col">
+            <div className="relative flex justify-center items-center flex-col md:mt-4">
               {/* edit butotn */}
               <div
                 className="absolute   right-8  md:top-6  top-3   h-9 w-9 rounded-full cursor-pointer  hover:shadow-2xl hover:bg-[#98858526] flex items-center  justify-center"
@@ -403,20 +403,20 @@ function Profile() {
               {/* name email end */}
             </div>
 
-            <div className="mt-12">
-              <h1 className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white">
+            <div className="mt-12  max-w-3xl">
+              <h1 className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white flex gap-2">
                 PhoneNo :{" "}
                 <span className="text-lg  font-semibold text-gray-500">
                   {userData.phoneNo}
                 </span>
               </h1>
-              <div className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white flex">
-                Address :{" "}
+              <div className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white flex item gap-2 ">
+                Address:{" "}
                 <span className="text-lg  font-semibold text-gray-500">
                   {userData.address}
                 </span>
               </div>
-              <h1 className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white">
+              <h1 className="text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white gap-2 flex">
                 Password :
                 <span className="text-lg  font-semibold text-gray-500">
                   {" "}

@@ -72,6 +72,7 @@ function App() {
                 <Route path="/donations/:donationId" element={<Donations />} />
                 <Route path="/donate" element={<Donate />} />
                 <Route path="/status" element={<Status />} />
+                <Route path="/status/:donationId" element={<Status />} />
                 <Route path="/requests" element={<Requests />} />
                 <Route path="/requests/:donationId" element={<Requests />} />
                 <Route path="/profile" element={<Profile />} />

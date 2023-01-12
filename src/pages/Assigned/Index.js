@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../components/Sidebar";
 import { useParams } from "react-router-dom";
-import AssignedDonationList from "./AssignedDonationList";
 import DonationInfo from "../../components/DonationInfo";
+import DonationList from "../../components/donationLists";
+import { GlobalContex } from "../../context/contex";
 
 function Index() {
+  const { userData } = useContext(GlobalContex);
   const { donationId } = useParams();
   const [currentDonation, setCurrentDonation] = useState({
     page: 1,
     donation: {}
   });
+  const URL = process.env.REACT_APP_URL;
+  const donationsUrl = `${URL}/api/donations?agentId=${userData._id}&status=ACCEPTED`;
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -22,7 +26,12 @@ function Index() {
             path="Assigned"
           />
         ) : (
-          <AssignedDonationList setCurrentDonation={setCurrentDonation} />
+          <DonationList
+            setCurrentDonation={setCurrentDonation}
+            donationsUrl={donationsUrl}
+            PageType="Assigned"
+            baseUrl="/assigned"
+          />
         )}
       </div>
     </div>

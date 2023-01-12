@@ -9,7 +9,7 @@ function Accept({ setDonationData, id, setCurrentDonation }) {
   return (
     <>
       <button
-        className="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-3    py-2.5 text-center mr-2"
+        className=" mx-2   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         onClick={() => setShowPopUp((preVal) => !preVal)}
       >
         Accepte ✅
