@@ -2,14 +2,18 @@ import React, { useContext } from "react";
 import { GlobalContex } from "../context/contex";
 import { useNavigate } from "react-router-dom";
 
-function DonationListComponentMobile({ donation, redirectPath }) {
+function DonationListComponentMobile({
+  donation,
+  redirectPath,
+  setCurrentDonation = ""
+}) {
   const navigate = useNavigate();
   const { userData } = useContext(GlobalContex);
   const donorDetail = (
     <div className="flex  items-center justify-center   gap-2">
       {donation.donorImage ? (
         <img
-          className="   rounded-full w-11 h-11 m-1 "
+          className="   rounded-full w-11 h-11 m-1  object-cover"
           src={donation.donorImage}
           alt="img"
         />
@@ -45,7 +49,13 @@ function DonationListComponentMobile({ donation, redirectPath }) {
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <caption
           className="  md:p-5  p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
-          onClick={() => navigate(redirectPath + "/" + donation._id)}
+          onClick={() => {
+            setCurrentDonation &&
+              setCurrentDonation((preVal) => {
+                return { ...preVal, donation: donation };
+              });
+            navigate(redirectPath + "/" + donation._id);
+          }}
         >
           <div className=" flex-col  md:flex-row  flex   md:gap-14 md-4">
             <div className="flex  md:flex-col  md:items-start items-center   gap-4 justify-between ">

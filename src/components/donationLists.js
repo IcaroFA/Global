@@ -86,6 +86,7 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
                   key={donation._id}
                   donation={donation}
                   redirectPath={baseUrl}
+                  setCurrentDonation={setCurrentDonation}
                 />
               ))}
         </div>

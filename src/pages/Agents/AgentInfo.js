@@ -174,6 +174,7 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
                   donationData.donations.map((donation) => (
                     <DonationListComponentMobile
                       donation={donation}
+                      key={donation.key}
                       redirectPath="/donations"
                     />
                   ))}

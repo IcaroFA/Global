@@ -94,6 +94,7 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
                   key={agent._id}
                   agent={agent}
                   redirectPath="/agents"
+                  setCurrentAgent={setCurrentAgent}
                 />
               ))}
         </div>

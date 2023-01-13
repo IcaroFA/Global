@@ -1,19 +1,25 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function AgentListComponentmobile({ agent, redirectPath }) {
+function AgentListComponentmobile({ agent, redirectPath, setCurrentAgent }) {
   const navigate = useNavigate();
+
   return (
     <div className="overflow-x-auto  shadow-2xl rounded-lg  mb-4 ">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <caption
           className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
-          onClick={() => navigate(redirectPath + "/" + agent._id)}
+          onClick={() => {
+            setCurrentAgent((preVal) => {
+              return { ...preVal, agent: agent };
+            });
+            navigate(redirectPath + "/" + agent._id);
+          }}
         >
           <div className="flex  items-center    gap-2">
             {agent.profileImage?.url ? (
               <img
-                className="   rounded-full w-11 h-11 m-1 "
+                className="   rounded-full w-11 h-11 m-1  object-cover"
                 src={agent.profileImage.url}
                 alt="img"
               />

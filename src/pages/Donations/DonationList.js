@@ -105,6 +105,7 @@ function DonationList({ setCurrentDonation }) {
                   key={donation._id}
                   donation={donation}
                   redirectPath="/donations"
+                  setCurrentDonation={setCurrentDonation}
                 />
               ))}
         </div>

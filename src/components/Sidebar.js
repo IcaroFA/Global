@@ -15,7 +15,7 @@ function Sidebar() {
       {showSideBar ? (
         <div className="relative h-full">
           <aside
-            className="w-64  h-full shadow-3xl   md:relative     md:top-0    absolute  z-50 left-0 top-0   md:z-0  "
+            className="w-64  h-full shadow-3xl   md:relative     md:top-0    fixed  z-50 left-0 top-20   md:z-0  "
             aria-label="Sidebar     "
           >
             <div className="overflow-y-auto h-full py-4 px-3 bg-gray-50   dark:bg-gray-800">

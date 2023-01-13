@@ -1,11 +1,10 @@
-import React, { useState, useContext, useRef } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { GlobalContex } from "../../context/contex";
 function Filter() {
-  const { filter, setfilter } = useContext(GlobalContex);
+  const { filter, setfilter, userData } = useContext(GlobalContex);
   const [donationFilter, setDonationFilter] = useState(filter);
   const [showFilterPopUp, setShowFilterPopUp] = useState(false);
   const [dateRange, setDateRange] = useState([filter.from, filter.to]);
@@ -31,7 +30,6 @@ function Filter() {
     });
     setShowFilterPopUp(false);
   }
-
   function checkFilteredApplied() {
     if (
       filter.to === "" &&
@@ -178,7 +176,7 @@ function Filter() {
                           })
                         }
                         name="colored-radio"
-                        className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
                         htmlFor="red-radio"
@@ -191,6 +189,7 @@ function Filter() {
                       <input
                         id="yellow-radio"
                         type="radio"
+                        className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         defaultChecked={
                           donationFilter.status == "ACCEPTED" ? true : false
                         }
@@ -200,7 +199,6 @@ function Filter() {
                           })
                         }
                         name="colored-radio"
-                        className="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
                         htmlFor="yellow-radio"
@@ -208,27 +206,53 @@ function Filter() {
                       >
                         Accepted
                       </label>
-                    </div>
+                    </div>{" "}
+                    {/* rejected  */}
+                    {userData.role === "AGENT" ? null : (
+                      <div className="flex items-center mr-4 mt-2">
+                        <input
+                          id="yellow-radio"
+                          type="radio"
+                          className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          defaultChecked={
+                            donationFilter.status == "REJECTED" ? true : false
+                          }
+                          onChange={(e) =>
+                            setDonationFilter((preVal) => {
+                              return { ...preVal, status: "REJECTED" };
+                            })
+                          }
+                          name="colored-radio"
+                        />
+                        <label
+                          htmlFor="yellow-radio"
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Rejected
+                        </label>
+                      </div>
+                    )}
+                    {/* rejected end */}
                     <div className="flex items-center mr-4 mt-2">
                       <input
                         id="green-radio"
                         type="radio"
                         defaultChecked={
-                          donationFilter.status == "DONATED" ? true : false
+                          donationFilter.status == "COLLECTED" ? true : false
                         }
                         onChange={(e) =>
                           setDonationFilter((preVal) => {
-                            return { ...preVal, status: "DONATED" };
+                            return { ...preVal, status: "COLLECTED" };
                           })
                         }
                         name="colored-radio"
-                        className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
                         htmlFor="green-radio"
                         className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
-                        Donated
+                        collected
                       </label>
                     </div>
                     <div className="flex items-center mr-4 mt-2">

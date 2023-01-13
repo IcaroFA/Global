@@ -10,7 +10,7 @@ function AgentListComponent({ agent, setCurrentAgent, page }) {
       >
         {agent.profileImage && agent.profileImage.url ? (
           <img
-            className="w-12 h-12 rounded-full"
+            className="w-12 h-12 rounded-full object-cover"
             src={agent.profileImage.url}
             alt="img"
           />
