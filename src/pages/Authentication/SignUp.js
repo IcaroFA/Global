@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { GlobalContex } from "../../context/contex.js";
 import { useNavigate } from "react-router-dom";
-
+import Sidebar from "../../components/Sidebar.js";
 function SignUp() {
   const navigate = useNavigate();
   const { notify } = useContext(GlobalContex);
@@ -33,6 +33,9 @@ function SignUp() {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
+      <div className="md:hidden bolck h-full">
+        <Sidebar />
+      </div>
       {/* <!-- Modal content --> */}
       <div className="rounded-lg shadow-xl h-fit  m-4  w-full md:w-[25rem] p-4 bg-white border border-gray-200 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-2 py-2 lg:px-2">

@@ -51,7 +51,7 @@ function App() {
   }
 
   return (
-    <div className="App h-[100vh]">
+    <div className="scroll App h-[100vh]   ">
       {userLoading ? (
         <div className="hero-particles   h-full w-full"></div>
       ) : (
@@ -61,11 +61,11 @@ function App() {
             <Routes>
               <Route path="/sign_in" element={<SignIn />} />
               <Route path="/sign_up" element={<SignUp />} />
+              <Route path="/forgot_password" element={<FogotPassword />} />
               <Route
                 path="/reset_password/:resetPasswordToken"
                 element={<ResetPassword />}
               />
-              <Route path="/forgot_password" element={<FogotPassword />} />
               <Route path="/" element={<Home />} />
               <Route element={<ProtectedRoutes />}>
                 <Route path="/donations" element={<Donations />} />
@@ -81,7 +81,6 @@ function App() {
                 <Route path="/assigned" element={<Assigned />} />
                 <Route path="/assigned/:donationId" element={<Assigned />} />
                 <Route path="/add_agent" element={<AddAgent />} />
-                <Route />
               </Route>
             </Routes>
           </div>

@@ -46,7 +46,9 @@ function AgentListComponent({ agent, setCurrentAgent, page }) {
           to={`/agents/` + agent._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentAgent({ page, agent })}>more Info</div>
+          <div onClick={() => setCurrentAgent({ page: page, agent: agent })}>
+            more Info
+          </div>
         </Link>
       </td>
     </tr>

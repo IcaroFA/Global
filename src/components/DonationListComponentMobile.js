@@ -44,11 +44,11 @@ function DonationListComponentMobile({ donation, redirectPath }) {
     <div className="overflow-x-auto  shadow-2xl rounded-lg  mb-4 ">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <caption
-          className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
+          className="  md:p-5  p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
           onClick={() => navigate(redirectPath + "/" + donation._id)}
         >
           <div className=" flex-col  md:flex-row  flex   md:gap-14 md-4">
-            <div className="flex  md:flex-col  md:items-start items-center  gap-4 ">
+            <div className="flex  md:flex-col  md:items-start items-center   gap-4 justify-between ">
               {userData.role === "DONOR" ? (
                 <h1>{new Date(donation.createdAt).toDateString()}</h1>
               ) : (
@@ -59,10 +59,12 @@ function DonationListComponentMobile({ donation, redirectPath }) {
 
               <p
                 className={
-                  (donation.status === "PENDING" && " text-yellow-400") ||
-                  (donation.status === "ACCEPTED" && "text-green-500") ||
-                  (donation.status === "REJECTED" && "text-red-500") ||
-                  (donation.status === "COLLECTED" && "text-blue-500")
+                  `${
+                    (donation.status === "PENDING" && " text-yellow-400") ||
+                    (donation.status === "ACCEPTED" && "text-green-500") ||
+                    (donation.status === "REJECTED" && "text-red-500") ||
+                    (donation.status === "COLLECTED" && "text-blue-500")
+                  }` + "     md:text-lg  text-sm mr-4"
                 }
               >
                 {donation.status}

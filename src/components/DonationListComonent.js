@@ -56,7 +56,11 @@ function DonationListComonent({ donation, setCurrentDonation, path, page }) {
           to={path + "/" + donation._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentDonation({ page, donation })}>
+          <div
+            onClick={() =>
+              setCurrentDonation({ page: page, donation: donation })
+            }
+          >
             more Info
           </div>
         </Link>

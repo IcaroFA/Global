@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContex } from "../../context/contex.js";
 import axios from "axios";
+import Sidebar from "../../components/Sidebar.js";
 
 function FogotPassword() {
   const URL = process.env.REACT_APP_URL;
@@ -30,6 +31,9 @@ function FogotPassword() {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
+      <div className="md:hidden bolck h-full">
+        <Sidebar />
+      </div>
       {/* <!-- Modal content --> */}
       <div className="rounded-lg shadow-xl h-fit  w-full md:w-[25rem]   mx-4 p-4 bg-white border border-gray-200 sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-2 py-2 lg:px-2">

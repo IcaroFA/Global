@@ -91,8 +91,8 @@ function Profile() {
   return (
     <div className="flex  h-full md:gap-1">
       <Sidebar />
-      <div className="scroll h-full relative flex-1 p-4 bg-blue-50  dark:bg-gray-800 overflow-scroll">
-        <header className="md:block    hidden   border-b-4    border-blue-300  dark:border-gray-500 ">
+      <div className="scroll h-full relative flex-1  bg-blue-50  dark:bg-gray-800 overflow-scroll">
+        <header className="md:block   sticky top-0 left-0  hidden  pt-4  px-4 border-b-4    border-blue-300  dark:border-gray-500  bg-blue-50  dark:bg-gray-800 z-10">
           <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
             Profile
           </h1>
@@ -100,187 +100,189 @@ function Profile() {
         {/* profile body */}
         {isEdit ? (
           <>
-            <form onSubmit={(e) => handleEdit(e)}>
-              <div className="flex  pt-4   md:gap-10    md:flex-row         flex-col items-center ">
-                {/* profile image */}
-                <div className="relative">
-                  {inputImage.base64 ? (
-                    <img
-                      src={inputImage.base64}
-                      className="w-44 h-44 rounded-full object-cover"
-                      alt="img"
-                    />
-                  ) : (
-                    <svg
-                      className="w-48 h-48 text-gray-200 dark:text-gray-700"
-                      aria-hidden="true"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  )}
-                  {/* edit button */}
-                  <div
-                    onClick={() => imageInputRef.current.click()}
-                    className="absolute text-sm bottom-5 left-[8rem]  h-9 w-9 rounded-full cursor-pointer  hover:shadow-2xl    bg-blue-200  hover:bg-blue-100 dark:bg-[#9885855d] dark:hover:bg-[#98858526] flex items-center  justify-center"
-                  >
-                    <svg
-                      className="w-6 h-6 text-blue-500   dark:text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      ></path>
-                    </svg>
-                  </div>
-                  {/* edit button end */}
-                </div>
-                {/* profile image  end*/}
-                <div className="md:w-fit w-full    md:mt-0   mt-8 ">
-                  {/* first name */}
-                  <div className="mb-3  flex  md:block">
-                    <label
-                      htmlFor="firstName"
-                      className="md:block  mb-2   md:mr-0 mr-4 md:text-sm  text-lg font-semibold text-gray-800 dark:text-white flex items-center"
-                    >
-                      firstName
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="name@flowbite.com"
-                      required
-                      defaultValue={userData.firstName}
-                      onChange={(e) =>
-                        setEditedData((preVal) => {
-                          return { ...preVal, firstName: e.target.value };
-                        })
-                      }
-                    />
-                  </div>
-                  {/* firstname end */}
-                  {/* lastName */}
-                  <div className="mb-3  flex  md:block">
-                    <label
-                      htmlFor="lastname"
-                      className="md:block   md:mr-0 mr-4  flex items-center  mb-2 md:text-sm  text-lg font-semibold text-gray-800 dark:text-white"
-                    >
-                      LastName
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      defaultValue={userData.lastName}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      onChange={(e) =>
-                        setEditedData((preVal) => {
-                          return { ...preVal, lastName: e.target.value };
-                        })
-                      }
-                    />
-                  </div>
-                  {/* lastName end */}
-                </div>
-              </div>
-
-              <div className="  md:mt-10 mt-0   md:ml-8    ">
-                {/* phone no */}
-                <div className="mb-3 flex items-center gap-4  ">
-                  <label
-                    htmlFor="phoneNo"
-                    className="block   mb-2 text-lg font-semibold text-gray-800 dark:text-white"
-                  >
-                    PhoneNo
-                  </label>
-                  <input
-                    type="tel"
-                    pattern="[0-9]{10}"
-                    placeholder="0000000000"
-                    id="phoneNo"
-                    className="md:w-fit  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                    defaultValue={userData.phoneNo}
-                    onChange={(e) =>
-                      setEditedData((preVal) => {
-                        return { ...preVal, phoneNo: e.target.value };
-                      })
-                    }
-                  />
-                </div>
-                {/* phone no  end */}
-                {/* address  */}
-                <div className="mb-3 flex items-center gap-4">
-                  <label
-                    htmlFor="address"
-                    className="block   mb-2 text-lg font-semibold text-gray-800 dark:text-white"
-                  >
-                    Address
-                  </label>
-                  <textarea
-                    type="text"
-                    id="address"
-                    value={editedData.address}
-                    onChange={() => {}}
-                    className="  md:max-w-lg  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                    onClick={() => setShowAddress(true)}
-                  />
-                </div>
-                {/* address end */}
-                {/* password  reset password */}
-                <div className="mb-3 flex items-center gap-4  ">
-                  <label
-                    htmlFor="lastname"
-                    className="md:block   md:mr-0 mr-4  flex items-center  mb-2 md:text-sm  text-lg font-semibold text-gray-800 dark:text-white"
-                  >
-                    reset Password
-                  </label>
-                  <button
-                    type="button"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => forgot()}
-                  >
-                    resetPassword
-                    {reset.loading ? (
-                      <svg
-                        aria-hidden="true"
-                        role="status"
-                        className="inline ml-3 w-4 h-4 text-white animate-spin"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                          fill="#E5E7EB"
+            <form onSubmit={(e) => handleEdit(e)} className="p-4">
+              <div className=" items-center flex   flex-col justify-center ">
+                <div>
+                  <div className="flex  pt-4   md:gap-10         flex-col items-center ">
+                    {/* profile image */}
+                    <div className="relative">
+                      {inputImage.base64 ? (
+                        <img
+                          src={inputImage.base64}
+                          className="w-44 h-44 rounded-full object-cover"
+                          alt="img"
                         />
-                        <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      ) : (
+                        <svg
+                          className="w-48 h-48 text-gray-200 dark:text-gray-700"
+                          aria-hidden="true"
                           fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      )}
+                      {/* edit button */}
+                      <div
+                        onClick={() => imageInputRef.current.click()}
+                        className="absolute text-sm bottom-5 left-[8rem]  h-9 w-9 rounded-full cursor-pointer  hover:shadow-2xl    bg-blue-200  hover:bg-blue-100 dark:bg-[#9885855d] dark:hover:bg-[#98858526] flex items-center  justify-center"
+                      >
+                        <svg
+                          className="w-6 h-6 text-blue-500   dark:text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                          ></path>
+                        </svg>
+                      </div>
+                      {/* edit button end */}
+                    </div>
+                    {/* profile image  end*/}
+                    <div className="md:w-fit w-full  flex  md:gap-4  gap-2  md:mt-0   mt-8 ">
+                      {/* first name */}
+                      <div className="mb-3    md:block">
+                        <label
+                          htmlFor="firstName"
+                          className="md:block  mb-2   md:mr-0 mr-4 text-sm     font-semibold text-gray-800 dark:text-white flex items-center"
+                        >
+                          firstName
+                        </label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="name@flowbite.com"
+                          required
+                          defaultValue={userData.firstName}
+                          onChange={(e) =>
+                            setEditedData((preVal) => {
+                              return { ...preVal, firstName: e.target.value };
+                            })
+                          }
                         />
-                      </svg>
-                    ) : null}
-                  </button>
-                </div>
-                {/* password  reset password */}
-              </div>
+                      </div>
+                      {/* firstname end */}
+                      {/* lastName */}
+                      <div className="mb-3    md:block">
+                        <label
+                          htmlFor="lastname"
+                          className="md:block   md:mr-0 mr-4  flex items-center  mb-2 text-sm  font-semibold text-gray-800 dark:text-white"
+                        >
+                          LastName
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          defaultValue={userData.lastName}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          required
+                          onChange={(e) =>
+                            setEditedData((preVal) => {
+                              return { ...preVal, lastName: e.target.value };
+                            })
+                          }
+                        />
+                      </div>
+                      {/* lastName end */}
+                    </div>
+                  </div>
 
+                  {/* phone no */}
+                  <div className="mb-3    ">
+                    <label
+                      htmlFor="phoneNo"
+                      className="block   mb-2 text-sm    font-semibold text-gray-800 dark:text-white"
+                    >
+                      PhoneNo
+                    </label>
+                    <input
+                      type="tel"
+                      pattern="[0-9]{10}"
+                      placeholder="0000000000"
+                      id="phoneNo"
+                      className="md:w-fit  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      defaultValue={userData.phoneNo}
+                      onChange={(e) =>
+                        setEditedData((preVal) => {
+                          return { ...preVal, phoneNo: e.target.value };
+                        })
+                      }
+                    />
+                  </div>
+                  {/* phone no  end */}
+                  {/* address  */}
+                  <div className="mb-3  ">
+                    <label
+                      htmlFor="address"
+                      className="block   mb-2 text-sm     font-semibold text-gray-800 dark:text-white"
+                    >
+                      Address
+                    </label>
+                    <textarea
+                      type="text"
+                      id="address"
+                      value={editedData.address}
+                      onChange={() => {}}
+                      className="  md:max-w-lg  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      onClick={() => setShowAddress(true)}
+                    />
+                  </div>
+                  {/* address end */}
+                </div>
+              </div>
+              {/* password  reset password */}
+              <div className="mb-3 flex items-center gap-4  flex-col ">
+                <label
+                  htmlFor="lastname"
+                  className="md:block   md:mr-0 mr-4  flex items-center  mb-2 text-sm  md:text-lg font-semibold text-gray-800 dark:text-white"
+                >
+                  click here to send the reset password instructions on your
+                  email
+                </label>
+                <button
+                  type="button"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  onClick={() => forgot()}
+                >
+                  resetPassword
+                  {reset.loading ? (
+                    <svg
+                      aria-hidden="true"
+                      role="status"
+                      className="inline ml-3 w-4 h-4 text-white animate-spin"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="#E5E7EB"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  ) : null}
+                </button>
+              </div>
+              {/* password  reset password */}
               {/* cancle  save button  */}
-              <div>
+              <div className=" flex  w-full justify-end mt-4  md:mt-20">
                 <button
                   type="button"
                   className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
@@ -338,8 +340,8 @@ function Profile() {
           </>
         ) : (
           // userInfo
-          <div>
-            <div className="relative flex justify-center items-center flex-col md:mt-4">
+          <div className="p-4">
+            <div className="relative flex justify-center items-center flex-col md:mt-4 ">
               {/* edit butotn */}
               <div
                 className="absolute   right-8  md:top-6  top-3   h-9 w-9 rounded-full cursor-pointer  hover:shadow-2xl hover:bg-[#98858526] flex items-center  justify-center"
@@ -367,7 +369,7 @@ function Profile() {
                 {userData.profileImage?.url ? (
                   <img
                     src={userData.profileImage.url}
-                    className="w-44 h-44 rounded-full"
+                    className="w-44 h-44 rounded-full object-cover"
                     alt="img"
                   />
                 ) : (

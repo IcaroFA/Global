@@ -57,7 +57,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
         ) : (
           <>
             {/* daonation info */}
-            <div className="md:p-6  p-2  bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <div className="md:p-6  p-4  bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
               <div className="flex   md:flex-row flex-col md:gap-20  gap-5 ">
                 {/* donor details */}
                 <div className="flex  flex-col  md:flex-row ">
@@ -160,7 +160,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                   <p className=" text-md font-semibold  dark:text-white text-gray-800">
                     message:
                   </p>
-                  <p className="text-white ">
+                  <p className="dark:text-white text-gray-800 ">
                     {currentDonation.donation.message}
                   </p>
                 </span>
