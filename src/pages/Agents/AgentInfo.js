@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GlobalContex } from "../../context/contex";
 import loadingSvg from "../../asset/loading.svg";
 import useFetchData from "../../customHooks/useFetchData";
@@ -10,6 +10,7 @@ import DonationListComponentMobile from "../../components/DonationListComponentM
 import { Link } from "react-router-dom";
 import AgentProfileInfoComponent from "../../components/AgentProfileInfoComponent";
 function AgentInfo({ currentAgent, setCurrentAgent }) {
+  const navigate = useNavigate();
   const donationHeader = useRef(null);
   const [showShadow, setShowShaDow] = useState(false);
   const { notify } = useContext(GlobalContex);
@@ -41,6 +42,7 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
       })
       .catch((error) => {
         setAgentLoading(false);
+        navigate("/agents?page=" + currentAgent.page);
         notify(error.response.data.message, "error");
       });
   }
@@ -50,7 +52,10 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
   };
 
   useEffect(() => {
-    notify(error, "error");
+    if (error) {
+      navigate("/agents?page=" + currentAgent.page);
+      notify(error, "error");
+    }
   }, [error]);
 
   function handleSearch() {

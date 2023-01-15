@@ -204,7 +204,7 @@ function Filter() {
                         htmlFor="yellow-radio"
                         className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
-                        Accepted
+                        {userData.role === "DONOR" ? "  Accepted" : "Assigned"}
                       </label>
                     </div>{" "}
                     {/* rejected  */}

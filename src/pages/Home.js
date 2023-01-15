@@ -193,9 +193,9 @@ function Home() {
         <footer className="p-4 bg-white sm:p-6 dark:bg-gray-900  w-full flex items-center justify-center">
           <div className="container">
             <div className=" md:flex md:justify-between ">
-              <div className="mb-6 md:mb-0">
+              <div className="mb-6 md:mb-0 ">
                 <img src={logo} className="h-8 mr-3" alt="FlowBite Logo" />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                <span className="self-center text-2xl font-semibold whitespace-nowrap text-gray-700 dark:text-white">
                   Food Donation
                 </span>
               </div>

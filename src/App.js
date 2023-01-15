@@ -25,6 +25,8 @@ import Agents from "./pages/Agents/Index.js";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import Assigned from "./pages/Assigned/Index";
 import AddAgent from "./pages/AddAgent";
+import PageNotFound from "./PageNotFound";
+
 function App() {
   const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
     useContext(GlobalContex);
@@ -82,6 +84,7 @@ function App() {
                 <Route path="/assigned/:donationId" element={<Assigned />} />
                 <Route path="/add_agent" element={<AddAgent />} />
               </Route>
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>
 

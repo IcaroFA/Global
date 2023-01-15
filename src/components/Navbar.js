@@ -3,13 +3,13 @@ import logo from "../asset/icon.jpg";
 import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContex } from "../context/contex.js";
-import Sidebar from "./Sidebar";
 
 // component
 import DarkModeToggleButton from "./DarkModeToggleButton.js";
 function Navbar() {
   const { userData, userLoading, setShowSideBar } = useContext(GlobalContex);
   const location = useLocation();
+
   return (
     <>
       <nav className=" flex items-center  fixed top-0 left-0 w-full h-20 bg-white border-gray-200 px-2 sm:px-4 py-2.5  dark:bg-gray-900 shadow   z-10 ">
@@ -91,19 +91,27 @@ function Navbar() {
               </div>
             ) : (
               <div className="flex items-center  space-x-3   cursor-pointer ">
-                <svg
-                  className="w-14 h-14 text-gray-200 dark:text-gray-700"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                {userData.profileImage && userData.profileImage.url ? (
+                  <img
+                    src={userData.profileImage.url}
+                    alt="image"
+                    className="  h-12 w-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <svg
+                    className="w-14 h-14 text-gray-200 dark:text-gray-700"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                )}
                 <div>
                   <p className="dark:text-white text-gray-800 font-semibold text-lg">
                     {userData.firstName} {userData.lastName[0].toUpperCase()}

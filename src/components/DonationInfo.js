@@ -31,8 +31,11 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
     }
   }, [loading]);
 
-  useState(() => {
-    notify(error, "error");
+  useEffect(() => {
+    if (error) {
+      navigate("/donations?page=" + currentDonation.page);
+      notify(error, "error");
+    }
   }, [error]);
 
   return (

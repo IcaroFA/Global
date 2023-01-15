@@ -23,7 +23,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
     lng: 77.1025
   });
   const [address, setAddress] = useState(data ? data : "");
-  const [to, setTo] = useState("");
+  const [from, setFrom] = useState("");
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_URL_GOOGLE_API_KEY,
@@ -75,7 +75,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
     // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
-      origin: to,
+      origin: from,
       destination: data,
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING
@@ -120,7 +120,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
       // eslint-disable-next-line no-undef
       if (status == google.maps.GeocoderStatus.OK) {
         setAddress(results[0].formatted_address); // if address found, pass to processing function
-        setTo(results[0].formatted_address);
+        setFrom(results[0].formatted_address);
       } else {
         alert("Geocode failure: " + status); // alert any other error(s)
         return false;
@@ -137,6 +137,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
       >
         <div className="relative    w-full md:w-fit  md:h-auto shadow-2xl">
           <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            {/* popuo close button */}
             <button
               type="button"
               className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
@@ -161,7 +162,10 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
               </svg>
               <span className="sr-only">Close modal</span>
             </button>
+            {/* popuo close button  end*/}
+
             <div className=" md:p-6   p-1">
+              {/* address  display */}
               <div className="md:w-[50rem] md:mt-0 mt-4 ">
                 {type === "ADDRESS" ? (
                   <p className=" text-gray-700 dark:text-white font-semibold">
@@ -175,7 +179,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
                     <p className=" text-gray-700 dark:text-white font-semibold">
                       From :
                       <span className=" font-medium   text-gray-600 dark:text-gray-300">
-                        {to}
+                        {from}
                       </span>
                     </p>
                     <p className=" text-gray-700 dark:text-white font-semibold">
@@ -199,7 +203,7 @@ function Address({ setShowAddress, data, setData = "", type = "" }) {
                   </>
                 )}
               </div>
-
+              {/* address display end */}
               {/* map */}
               <div className=" md:my-8  my-4 md:w-[50rem] w-full relative ">
                 {!isLoaded ? (
