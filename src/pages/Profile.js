@@ -433,10 +433,10 @@ function Profile() {
                   xxxxxxxx
                 </span>
               </h1>
-              <h1 className=" md:hidden text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white">
+              {/* <h1 className=" md:hidden text-xl md:text-xl mb-3 font-semibold  text-blue-500   dark:text-white">
                 Theme :
                 <DarkModeToggleButton />
-              </h1>
+              </h1> */}
             </div>
           </div>
           // userInfo end
