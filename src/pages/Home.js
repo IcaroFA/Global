@@ -153,9 +153,10 @@ function Home() {
             direction="left"
             behavior="alternate"
           >
-            Geeks for &nbsp; &nbsp; Geeks &nbsp; Geeks for &nbsp; Geeks &nbsp;
-            &nbsp; for for Geeks Geeks &nbsp; &nbsp; Geeks Geeks for &nbsp;
-            &nbsp; Geeks Geeks Geeks for &nbsp; &nbsp; Geeks &nbsp; &nbsp;
+            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
+            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
+            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
+            &nbsp;jhon deo
           </marquee>{" "}
           <marquee
             className="text-3xl 
@@ -163,9 +164,10 @@ function Home() {
             direction="right"
             behavior="alternate"
           >
-            Geeks for &nbsp; &nbsp; Geeks &nbsp; Geeks for &nbsp; Geeks &nbsp;
-            &nbsp; for for Geeks Geeks &nbsp; &nbsp; Geeks Geeks for &nbsp;
-            &nbsp; Geeks Geeks Geeks for &nbsp; &nbsp; Geeks &nbsp; &nbsp;
+            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
+            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
+            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
+            &nbsp;jhon deo
           </marquee>{" "}
           <marquee
             className="text-3xl 
@@ -173,9 +175,10 @@ function Home() {
             direction="left"
             behavior="alternate"
           >
-            Geeks for &nbsp; &nbsp; Geeks &nbsp; Geeks for &nbsp; Geeks &nbsp;
-            &nbsp; for for Geeks Geeks &nbsp; &nbsp; Geeks Geeks for &nbsp;
-            &nbsp; Geeks Geeks Geeks for &nbsp; &nbsp; Geeks &nbsp; &nbsp;
+            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
+            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
+            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
+            &nbsp;jhon deo
           </marquee>
           <marquee
             className="text-3xl 
@@ -183,9 +186,10 @@ function Home() {
             direction="right"
             behavior="alternate"
           >
-            Geeks for &nbsp; &nbsp; Geeks &nbsp; Geeks for &nbsp; Geeks &nbsp;
-            &nbsp; for for Geeks Geeks &nbsp; &nbsp; Geeks Geeks for Geeks Geeks
-            Geeks for &nbsp; &nbsp; Geeks &nbsp; &nbsp;
+            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
+            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
+            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
+            &nbsp;jhon deo
           </marquee>{" "}
         </div>
         {/* section fout */}
@@ -198,79 +202,6 @@ function Home() {
                 <span className="self-center text-2xl font-semibold whitespace-nowrap text-gray-700 dark:text-white">
                   Food Donation
                 </span>
-              </div>
-              <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-                <div>
-                  <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                    Resources
-                  </h2>
-                  <ul className="text-gray-600 dark:text-gray-400">
-                    <li className="mb-4">
-                      <a
-                        href="https://flowbite.com/"
-                        className="hover:underline"
-                      >
-                        Flowbite
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://tailwindcss.com/"
-                        className="hover:underline"
-                      >
-                        Tailwind CSS
-                      </a>
-                    </li>{" "}
-                    <li>
-                      <a
-                        href="https://tailwindcss.com/"
-                        className="hover:underline"
-                      >
-                        cloudinery
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                    Follow us
-                  </h2>
-                  <ul className="text-gray-600 dark:text-gray-400">
-                    <li className="mb-4">
-                      <a
-                        href="https://github.com/MangeshThakre/food-donation-backend-FSJS"
-                        className="hover:underline "
-                      >
-                        Github
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.linkedin.com/in/mangesh-thakre-a55b13217/"
-                        className="hover:underline"
-                      >
-                        Linkedin
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                    Legal
-                  </h2>
-                  <ul className="text-gray-600 dark:text-gray-400">
-                    <li className="mb-4">
-                      <a href="#" className="hover:underline">
-                        Privacy Policy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="hover:underline">
-                        Terms &amp; Conditions
-                      </a>
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
             <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />

@@ -19,6 +19,7 @@ function Logout() {
         setShowLogoutPopUp(false);
         navigate("/");
         setUserData({});
+        setUserData({});
       }
       setLoading(false);
     } catch (error) {
