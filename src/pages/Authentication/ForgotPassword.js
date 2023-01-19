@@ -30,7 +30,7 @@ function FogotPassword() {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center bg-blue-50  dark:bg-gray-800">
       <div className="md:hidden bolck h-full">
         <Sidebar />
       </div>
