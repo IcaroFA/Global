@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { GlobalContex } from "../context/contex";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import PageNotFound from "../PageNotFound";
@@ -21,6 +21,7 @@ function ProtectedRoutes() {
     "profile",
     "requests"
   ];
+
   const agentRoutes = ["donations", "assigned", "profile"];
   const donorRoutes = ["donations", "donate", "status", "profile"];
   if (!isAuthenticated) {

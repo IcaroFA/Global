@@ -25,8 +25,15 @@ function SignIn() {
         setUserData(response.data.data);
         setSignUpLoading(false);
       }
+
+      const sessionObject = JSON.stringify({
+        expirydate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+        token: response.data.token
+      });
+      sessionStorage.setItem("token", sessionObject);
     } catch (error) {
       setSignUpLoading(false);
+      console.log(error);
       notify(error.response.data.message, "error");
     }
   }

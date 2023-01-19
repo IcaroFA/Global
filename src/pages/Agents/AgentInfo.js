@@ -33,7 +33,7 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
   // fetch agent info if current agent info in not present
   function fetchCurrentAgent() {
     setAgentLoading(true);
-    axios(`${URL}/api/auth/user?userId=${agentId}`, { withCredentials: true })
+    axios(`${URL}/api/user?userId=${agentId}`, { withCredentials: true })
       .then((response) => {
         setCurrentAgent((preVal) => {
           return { ...preVal, agent: response.data.data };
@@ -145,13 +145,13 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
                       <th scope="col" className="px-6 py-3  text-start  ">
                         Donor
                       </th>
-                      <th scope="col" className="px-6 py-3 ">
+                      <th scope="col" className="px-6 py-3 text-center ">
                         date
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Status
                       </th>
-                      <th scope="col" className="px-6 py-3 ">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Action
                       </th>
                     </tr>
@@ -179,7 +179,7 @@ function AgentInfo({ currentAgent, setCurrentAgent }) {
                   donationData.donations.map((donation) => (
                     <DonationListComponentMobile
                       donation={donation}
-                      key={donation.key}
+                      key={donation._id}
                       redirectPath="/donations"
                     />
                   ))}

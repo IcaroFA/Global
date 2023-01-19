@@ -43,22 +43,25 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
         {/* destop view */}
         <div className="hidden md:block mt-4">
           <table className="   w-full  mt-4">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-              <tr>
-                <th scope="col" className="px-6 py-3  text-start  ">
-                  Donor
-                </th>
-                <th scope="col" className="px-6 py-3 ">
-                  date
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 ">
-                  Action
-                </th>
-              </tr>
-            </thead>
+            {donationData.donations &&
+            Object.keys(donationData.donations).length > 1 ? (
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+                <tr>
+                  <th scope="col" className="px-6 py-3  text-start  ">
+                    Donor
+                  </th>
+                  <th scope="col" className="px-6 py-3 ">
+                    date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3 ">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+            ) : null}
             <tbody className="w-full">
               {loading
                 ? null
@@ -74,6 +77,16 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
                   ))}
             </tbody>
           </table>
+
+          {!loading &&
+          donationData.donations &&
+          Object.keys(donationData.donations).length < 1 ? (
+            <div className=" w-full text-center mt-6">
+              <p className="   text-blue-500  opacity-50   font-bold text-4xl">
+                Donate Food
+              </p>
+            </div>
+          ) : null}
         </div>
         {/* desk top view end */}
         {/* mobile view  */}

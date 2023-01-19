@@ -91,6 +91,7 @@ function Navbar() {
               </div>
             ) : (
               <div className="flex items-center  space-x-3   cursor-pointer ">
+                {/* <DarkModeToggleButton /> */}
                 {userData.profileImage && userData.profileImage.url ? (
                   <img
                     src={userData.profileImage.url}

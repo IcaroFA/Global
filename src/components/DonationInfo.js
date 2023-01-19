@@ -111,7 +111,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                 {/* agent details */}
                 {userData.role !== "AGENT" &&
                 (currentDonation.donation.status === "ACCEPTED" ||
-                  currentDonation.donation.status === "ACCEPTED") ? (
+                  currentDonation.donation.status === "COLLECTED") ? (
                   <div className="mt-4">
                     <h1 className="text-lg  font-semibold  dark:text-white text-gray-800">
                       Agent Details

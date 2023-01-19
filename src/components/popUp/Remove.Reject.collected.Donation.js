@@ -137,7 +137,7 @@ function RemoveRejectDonation({
                     }
                     onClick={() => {
                       if (type === "Remove") handleRemoveDonation();
-                      if (type === "REJECTED" || type === "DELIVERED") {
+                      if (type === "REJECTED" || type === "COLLECTED") {
                         handleRejectDonaiton(type);
                       }
                     }}

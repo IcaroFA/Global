@@ -42,7 +42,7 @@ function AddAgent() {
 
     try {
       const response = await axios({
-        url: URL + "/api/agent",
+        url: URL + "/api/user",
         method: "post",
         withCredentials: true,
         data: formData

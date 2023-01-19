@@ -17,7 +17,7 @@ function AgentList({ setCurrentAgent, search, setSearch }) {
   const URL = process.env.REACT_APP_URL;
   const [agentData, setAgentData] = useState({ agents: [] });
   const url = (page, search = "") =>
-    URL + `/api/auth/users?role=AGENT&search=${search}&page=${page}&limit=10`;
+    URL + `/api/users?role=AGENT&search=${search}&page=${page}&limit=10`;
   const { loading, data, error, fetchData } = useFetchData();
 
   useEffect(() => {

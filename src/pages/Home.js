@@ -19,7 +19,7 @@ function Home() {
       <div className=" w-full flex items-center  flex-col     bg-[#F5F5F5]   ">
         <div className="max-w-[100vw]">
           {/* section one */}
-          <section className="    relative  h-fit">
+          <section className="     relative  h-fit">
             <img
               src={one}
               alt="image"

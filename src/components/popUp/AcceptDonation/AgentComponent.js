@@ -12,7 +12,7 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
           <div className="flex-shrink-0">
             {agent.profileImage?.url ? (
               <img
-                className=" md:w-12 md:h-12   w-8 h-8 rounded-full"
+                className=" md:w-12 md:h-12   w-8 h-8 rounded-full object-cover object-center "
                 src={agent.profileImage?.url}
                 alt="Neil image"
               />
@@ -79,13 +79,13 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
         <button
           type="button"
           className={
-            selectedAgent === agent._id
+            selectedAgent._id === agent._id
               ? "px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:green-blue-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
               : "px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           }
           onClick={() =>
             setSelectedAgent((preVal) =>
-              preVal && preVal._id === agent._id ? null : agent
+              preVal && preVal._id === agent._id ? { _id: "" } : agent
             )
           }
         >
@@ -106,11 +106,11 @@ function AgentComponent({ agent, selectedAgent, setSelectedAgent }) {
           <div className="  md:px-8">
             {agent.address ? (
               <span className="flex  mx-4     ">
-                <p className="w-[9rem]  font-semibold text-gray-700 truncate dark:text-white">
-                  Address :
+                <p className=" text-start font-semibold text-gray-700  dark:text-white ">
+                  Address:
                 </p>
-                <p className="  text-sm text-gray-700  dark:text-white">
-                  {agent.address}
+                <p className="  text-sm text-gray-700 text-start  dark:text-white ">
+                  &nbsp; {agent.address}
                 </p>
               </span>
             ) : null}

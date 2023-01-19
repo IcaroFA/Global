@@ -18,12 +18,12 @@ function SelectAgent({
   const { notify } = useContext(GlobalContex);
   const [agentsData, setAgentsData] = useState({});
   const [conformLoading, setConformLoading] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [selectedAgent, setSelectedAgent] = useState({ _id: "" });
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const URL = process.env.REACT_APP_URL;
   const url = (page, search = "") =>
-    URL + `/api/auth/users?role=AGENT&page=${page}&limit=3&search=${search}`;
+    URL + `/api/users?role=AGENT&page=${page}&limit=10&search=${search}`;
   const { data, loading, error, fetchData } = useFetchData(url(page));
   if (error) notify(error, "error");
 
@@ -134,7 +134,7 @@ function SelectAgent({
               )}
             </div>
 
-            <div className="flex    sticky w-full bottom-0      left-0   flex-wrap-reverse   gap-2   items-center  md:justify-between ">
+            <div className="flex    sticky w-full bottom-0      left-0   flex-wrap-reverse   gap-2   items-center  md:justify-between pt-4 ">
               <div className="   w-full md:w-fit  flex items-center justify-center gap-4 ">
                 <button
                   data-modal-toggle="popup-modal"
@@ -183,7 +183,7 @@ function SelectAgent({
                 </button>
               </div>
               {/* page  */}
-              <div className="   absolute    right-5 flex gap-5   items-center h-11   justify-center  w-40">
+              <div className="   absolute    right-5 flex gap-5   items-center h-11   justify-center   w-40">
                 <button
                   type="button"
                   onClick={() => setPage((preVal) => preVal - 1)}

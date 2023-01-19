@@ -51,7 +51,7 @@ function DonationList({ setCurrentDonation }) {
 
   return (
     <>
-      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center bg-blue-50  dark:bg-gray-800   border-blue-300  dark:border-gray-500 ">
+      <header className="  top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center bg-blue-50  dark:bg-gray-800   border-blue-300  dark:border-gray-500 ">
         <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
           Donations
         </h1>
@@ -59,24 +59,27 @@ function DonationList({ setCurrentDonation }) {
       </header>
       <div className="px-4">
         {/* destack view */}
-        <div className="hidden md:block mt-4">
+        <div className="hidden md:block mt-4 mb-16">
           <table className="   w-full   ">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
-              <tr>
-                <th scope="col" className="px-6 py-3  text-start  ">
-                  Donor
-                </th>
-                <th scope="col" className="px-6 py-3 ">
-                  date
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 ">
-                  Action
-                </th>
-              </tr>
-            </thead>
+            {donationData.donations &&
+            Object.keys(donationData.donations).length > 0 ? (
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
+                <tr>
+                  <th scope="col" className="px-6 py-3  text-start  ">
+                    Donor
+                  </th>
+                  <th scope="col" className="px-6 py-3 ">
+                    date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3 ">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+            ) : null}
             <tbody className="w-full">
               {loading
                 ? null
@@ -92,6 +95,15 @@ function DonationList({ setCurrentDonation }) {
                   ))}
             </tbody>
           </table>
+          {!loading &&
+          donationData.donations &&
+          Object.keys(donationData.donations).length < 1 ? (
+            <div className=" w-full text-center mt-6">
+              <p className="   text-blue-500  opacity-50   font-bold text-4xl">
+                Donate Food
+              </p>
+            </div>
+          ) : null}
         </div>
         {/* destack view  end*/}
 

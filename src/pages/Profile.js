@@ -72,7 +72,7 @@ function Profile() {
       setEditLoading(true);
       const response = await axios({
         method: "patch",
-        url: URL + "/api/auth/user",
+        url: URL + "/api/user",
         withCredentials: true,
         data: formData
       });
@@ -83,8 +83,7 @@ function Profile() {
       setEditLoading(false);
     } catch (error) {
       setEditLoading(false);
-      console.log(error);
-      // notify(error.response.data.message, "error");
+      notify(error.response.data.message, "error");
     }
   }
 

@@ -36,11 +36,13 @@ function App() {
   }, []);
 
   async function getUser() {
+    const tokenObj = JSON.parse(sessionStorage.getItem("token"));
+    console.log(tokenObj);
     setUserLoading(true);
     try {
       const response = await axios({
         method: "get",
-        url: URL + "/api/auth/user",
+        url: URL + "/api/user",
         withCredentials: true
       });
       if (response.data.success) {
