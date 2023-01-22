@@ -40,7 +40,7 @@ function App() {
   useEffect(() => {
     if (sessionStorage.getItem("Token")) {
       const isTokenexpired = new Date(TOKEN.expirydate) < new Date();
-      if (isTokenexpired) setTOKEN({ Token: "", expirydate: new Date() });
+      if (isTokenexpired) setTOKEN({ token: "", expirydate: new Date() });
     }
     getUser();
   }, []);

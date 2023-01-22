@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useContext } from "react";
 import { GlobalContex } from "../context/contex";
 
 import axios from "axios";
 function useForgotPassword(email) {
-  const { TOKEN } = useCallback(GlobalContex);
+  const { TOKEN } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const URL = process.env.REACT_APP_URL;
+
   async function forgot() {
     try {
       setLoading(true);

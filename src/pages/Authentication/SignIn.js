@@ -23,21 +23,15 @@ function SignIn() {
       });
       if (response.data.success) {
         const option = {
-          Token: response.data.token,
+          token: response.data.token,
           expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         };
         setUserData(response.data.data);
-        sessionStorage.setItem("Token", JSON.stringify(option));
+        sessionStorage.setItem("token", JSON.stringify(option));
         setTOKEN(option);
         navigate("/");
         setSignUpLoading(false);
       }
-
-      const sessionObject = JSON.stringify({
-        expirydate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
-        token: response.data.token
-      });
-      sessionStorage.setItem("Token", sessionObject);
     } catch (error) {
       setSignUpLoading(false);
       console.log(error);
