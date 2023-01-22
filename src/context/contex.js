@@ -8,6 +8,11 @@ const Contex = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
+  const [TOKEN, setTOKEN] = useState(
+    sessionStorage.getItem("Token")
+      ? JSON.parse(sessionStorage.getItem("Token"))
+      : { Token: "", expiryDate: new Date() }
+  );
   const [filter, setfilter] = useState({
     from: "",
     to: "",
@@ -45,6 +50,8 @@ const Contex = ({ children }) => {
         setShowLogoutPopUp,
         currentDonation,
         setCurrentDonation,
+        TOKEN,
+        setTOKEN,
         filter,
         setfilter
       }}

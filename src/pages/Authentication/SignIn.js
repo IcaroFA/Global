@@ -6,13 +6,14 @@ import Sidebar from "../../components/Sidebar";
 
 function SignIn() {
   const navigate = useNavigate();
-  const { notify, setUserData } = useContext(GlobalContex);
+  const { notify, setUserData, setTOKEN } = useContext(GlobalContex);
   const [signInLoading, setSignUpLoading] = useState(false);
   const [signData, setsigninData] = useState({});
   const URL = process.env.REACT_APP_URL;
   async function handleSignSubmit(e) {
     e.preventDefault();
     setSignUpLoading(true);
+
     try {
       const response = await axios({
         method: "post",
@@ -21,8 +22,14 @@ function SignIn() {
         data: signData
       });
       if (response.data.success) {
-        navigate("/");
+        const option = {
+          Token: response.data.token,
+          expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        };
         setUserData(response.data.data);
+        sessionStorage.setItem("Token", JSON.stringify(option));
+        setTOKEN(option);
+        navigate("/");
         setSignUpLoading(false);
       }
 
@@ -30,7 +37,7 @@ function SignIn() {
         expirydate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
         token: response.data.token
       });
-      sessionStorage.setItem("token", sessionObject);
+      sessionStorage.setItem("Token", sessionObject);
     } catch (error) {
       setSignUpLoading(false);
       console.log(error);

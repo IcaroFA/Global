@@ -10,7 +10,7 @@ function RemoveRejectDonation({
   redirectPath = "/donations"
 }) {
   const navigate = useNavigate();
-  const { notify } = useContext(GlobalContex);
+  const { notify, TOKEN } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
@@ -20,7 +20,10 @@ function RemoveRejectDonation({
       const response = await axios({
         method: "delete",
         url: URL + "/api/donation/" + id,
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        }
       });
       if (response.data.success) {
         navigate(redirectPath);
@@ -33,13 +36,16 @@ function RemoveRejectDonation({
     }
   }
 
-  async function handleRejectDonaiton(type) {
+  async function handleRejecRemoveCollectDonaiton(type) {
     setLoading(true);
     try {
       const response = await axios({
         method: "put",
         url: URL + "/api/donation/" + id,
         withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         data: { status: type }
       });
       if (response.data.success) {
@@ -138,7 +144,7 @@ function RemoveRejectDonation({
                     onClick={() => {
                       if (type === "Remove") handleRemoveDonation();
                       if (type === "REJECTED" || type === "COLLECTED") {
-                        handleRejectDonaiton(type);
+                        handleRejecRemoveCollectDonaiton(type);
                       }
                     }}
                   >

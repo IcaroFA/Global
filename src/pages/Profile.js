@@ -12,7 +12,7 @@ function Profile() {
   const URL = process.env.REACT_APP_URL;
   const imageInputRef = useRef(null);
   const navigate = useNavigate();
-  const { notify, userData, setUserData } = useContext(GlobalContex);
+  const { notify, userData, setUserData, TOKEN } = useContext(GlobalContex);
   const [isEdit, setIsEdit] = useState(false);
   const [editedData, setEditedData] = useState({
     address: userData.address ? userData.address : ""
@@ -74,6 +74,9 @@ function Profile() {
         method: "patch",
         url: URL + "/api/user",
         withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         data: formData
       });
       if (response.data.success) {

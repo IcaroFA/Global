@@ -8,7 +8,7 @@ import axios from "axios";
 function AddAgent() {
   const navigate = useNavigate();
   const URL = process.env.REACT_APP_URL;
-  const { notify } = useContext(GlobalContex);
+  const { notify, TOKEN } = useContext(GlobalContex);
   const [address, setAddress] = useState("");
   const [addAgentLoading, setAddAgentLoading] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
@@ -45,6 +45,9 @@ function AddAgent() {
         url: URL + "/api/user",
         method: "post",
         withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         data: formData
       });
       if (response.data.success) {

@@ -1,11 +1,10 @@
 import "./App.css";
-// import "flowbite";
+import { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { GlobalContex } from "./context/contex";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { GlobalContex } from "./context/contex";
-import { useEffect, useContext } from "react";
 
 // components
 import Navbar from "./components/Navbar.js";
@@ -28,21 +27,33 @@ import AddAgent from "./pages/AddAgent";
 import PageNotFound from "./PageNotFound";
 
 function App() {
-  const { setUserData, userLoading, showLogoutPopUp, setUserLoading } =
-    useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
+  const {
+    setUserData,
+    userLoading,
+    showLogoutPopUp,
+    setUserLoading,
+    setTOKEN,
+    TOKEN
+  } = useContext(GlobalContex);
+
   useEffect(() => {
+    if (sessionStorage.getItem("Token")) {
+      const isTokenexpired = new Date(TOKEN.expirydate) < new Date();
+      if (isTokenexpired) setTOKEN({ Token: "", expirydate: new Date() });
+    }
     getUser();
   }, []);
 
   async function getUser() {
-    const tokenObj = JSON.parse(sessionStorage.getItem("token"));
-    console.log(tokenObj);
     setUserLoading(true);
     try {
       const response = await axios({
         method: "get",
         url: URL + "/api/user",
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         withCredentials: true
       });
       if (response.data.success) {
@@ -55,7 +66,7 @@ function App() {
   }
 
   return (
-    <div className="scroll App h-[100vh]   ">
+    <div className="scroll App h-[100vh]">
       {userLoading ? (
         <div className="hero-particles   h-full w-full"></div>
       ) : (

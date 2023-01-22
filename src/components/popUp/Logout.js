@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 function Logout() {
   const navigate = useNavigate();
   const URL = process.env.REACT_APP_URL;
-  const { notify, setShowLogoutPopUp, setUserData } = useContext(GlobalContex);
+  const { notify, setShowLogoutPopUp, setUserData, TOKEN } =
+    useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   async function handleLogout() {
     setLoading(true);
@@ -13,6 +14,9 @@ function Logout() {
       const response = await axios({
         method: "get",
         withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         url: URL + "/api/auth/logout"
       });
       if (response.data.success) {

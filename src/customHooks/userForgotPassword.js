@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { GlobalContex } from "../context/contex";
+
 import axios from "axios";
 function useForgotPassword(email) {
+  const { TOKEN } = useCallback(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -11,6 +14,9 @@ function useForgotPassword(email) {
       const response = await axios({
         method: "post",
         url: URL + "/api/auth/forgot_password",
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         data: { email }
       });
       setData(response.data);

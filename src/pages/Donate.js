@@ -12,9 +12,9 @@ function Donate() {
   const navigate = useNavigate();
   const location = useLocation();
   const URL = process.env.REACT_APP_URL;
-  const [showAddress, setShowAddress] = useState(false);
   const urlQuery = new URLSearchParams(location.search);
-  const { userData, notify } = useContext(GlobalContex);
+  const { userData, notify, TOKEN } = useContext(GlobalContex);
+  const [showAddress, setShowAddress] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
   const [isSameAddress, setIsSameAddress] = useState(false);
@@ -25,6 +25,7 @@ function Donate() {
     { _id: uuidv4(), unit: "Kilogram", item: "", quantity: 1 }
   ]);
 
+  // cneck if deit donation on pade load
   useEffect(() => {
     if (urlQuery.get("edit")) {
       handleEditState(urlQuery.get("edit"));
@@ -93,13 +94,19 @@ function Donate() {
           method: "put",
           url: URL + "/api/donation/" + urlQuery.get("edit"),
           withCredentials: true,
-          data: donationInfo
+          data: donationInfo,
+          headers: {
+            Authorization: "Bearer " + TOKEN.Token
+          }
         }
       : {
           method: "post",
           url: URL + "/api/donation",
           withCredentials: true,
-          data: donationInfo
+          data: donationInfo,
+          headers: {
+            Authorization: "Bearer " + TOKEN.Token
+          }
         };
   }
 

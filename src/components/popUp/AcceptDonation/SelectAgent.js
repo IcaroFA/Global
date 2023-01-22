@@ -15,7 +15,7 @@ function SelectAgent({
   id,
   setCurrentDonation
 }) {
-  const { notify } = useContext(GlobalContex);
+  const { notify, TOKEN } = useContext(GlobalContex);
   const [agentsData, setAgentsData] = useState({});
   const [conformLoading, setConformLoading] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState({ _id: "" });
@@ -47,6 +47,9 @@ function SelectAgent({
         method: "put",
         url: URL + "/api/donation/" + id,
         withCredentials: true,
+        headers: {
+          Authorization: "Bearer " + TOKEN.token
+        },
         data: { status: "ACCEPTED", agentId: selectedAgent._id }
       });
       /// update current donation
