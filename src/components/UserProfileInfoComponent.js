@@ -1,12 +1,12 @@
 import React from "react";
 
-function AgentProfileInfoComponent({ agent }) {
+function AgentProfileInfoComponent({ user }) {
   return (
     <div className=" p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
       <div className="flex gap-4">
-        {agent.profileImage ? (
+        {user.profileImage ? (
           <img
-            src={agent.profileImage.url}
+            src={user.profileImage.url}
             className="h-20 w-20 rounded-full  object-cover object-center"
             alt=""
           />
@@ -28,13 +28,13 @@ function AgentProfileInfoComponent({ agent }) {
 
         <div>
           <p className="text-lg  font-semibold  dark:text-white text-gray-800">
-            {agent.firstName + " " + agent.lastName}
+            {user.firstName + " " + user.lastName}
           </p>
           <p className="font-semibold  dark:text-gray-400 text-gray-700">
-            {agent.email}
+            {user.email}
           </p>
           <p className="font-semibold  dark:text-gray-400 text-gray-700">
-            {agent.phoneNo}
+            {user.phoneNo}
           </p>
         </div>
       </div>
@@ -45,7 +45,7 @@ function AgentProfileInfoComponent({ agent }) {
             role :{" "}
           </p>
           <p className=" text-md   dark:text-gray-400 text-gray-700">
-            {agent.role}
+            {user.role}
           </p>
         </span>
         {/* role  end*/}
@@ -56,7 +56,7 @@ function AgentProfileInfoComponent({ agent }) {
           </p>
           <p className="text-md   dark:text-gray-400 text-gray-700">
             {" "}
-            {agent.collected}
+            {user.collected}
           </p>
         </span>
         {/* delivered  end*/}
@@ -66,10 +66,37 @@ function AgentProfileInfoComponent({ agent }) {
             Assigned :{" "}
           </p>
           <p className="text-md   dark:text-gray-400 text-gray-700">
-            {agent.accepted}
+            {user.accepted}
           </p>
         </span>
         {/* assinged */}
+        {/* rejected */}
+        {user.role === "DONOR" ? (
+          <span className="flex gap-3 items-center">
+            <p className="text-md font-semibold   dark:text-white text-gray-800">
+              Pending :{" "}
+            </p>
+            <p className="text-md   dark:text-gray-400 text-gray-700">
+              {" "}
+              {user.pending}
+            </p>
+          </span>
+        ) : null}
+        {/* rejected */}
+        {/* rejected */}
+        {user.role === "DONOR" ? (
+          <span className="flex gap-3 items-center">
+            <p className="text-md font-semibold   dark:text-white text-gray-800">
+              Rejected :{" "}
+            </p>
+            <p className="text-md   dark:text-gray-400 text-gray-700">
+              {" "}
+              {user.rejected}
+            </p>
+          </span>
+        ) : null}
+
+        {/* rejected */}
         {/*  */}
         <span className="flex gap-3   items-start">
           <p className="text-md   font-semibold  dark:text-white text-gray-800  ">
@@ -77,7 +104,7 @@ function AgentProfileInfoComponent({ agent }) {
           </p>
           <p className="text-md  dark:text-gray-400 text-gray-700 ">
             {" "}
-            {new Date(agent.createdAt).toDateString()}
+            {new Date(user.createdAt).toDateString()}
           </p>
         </span>
         {/*  */}
@@ -88,7 +115,7 @@ function AgentProfileInfoComponent({ agent }) {
           </p>
           <p className="text-md  dark:text-gray-400 text-gray-700 ">
             {" "}
-            {agent.address}
+            {user.address}
           </p>
         </span>
         {/* address end */}

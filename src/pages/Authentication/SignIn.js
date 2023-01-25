@@ -34,7 +34,6 @@ function SignIn() {
       }
     } catch (error) {
       setSignUpLoading(false);
-      console.log(error);
       notify(error.response.data.message, "error");
     }
   }

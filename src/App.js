@@ -1,10 +1,9 @@
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalContex } from "./context/contex";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 
 // components
 import Navbar from "./components/Navbar.js";
@@ -21,13 +20,31 @@ import Status from "./pages/Status";
 import Profile from "./pages/Profile";
 import Requests from "./pages/requests/Index.js";
 import Agents from "./pages/Agents/Index.js";
+import Donors from "./pages/Donors";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import Assigned from "./pages/Assigned/Index";
 import AddAgent from "./pages/AddAgent";
 import PageNotFound from "./PageNotFound";
+import NotificationComponent from "./components/NotificationComponent.js";
+
+// npm package
+import { io } from "socket.io-client";
+import axios from "axios";
 
 function App() {
+  const { setSocketInstance, showNotificationComponent } =
+    useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
+  const socket = io(URL);
+
+  socket.on("connect_error", (error) => {
+    console.log(error);
+  });
+
+  socket.on("private_notification", (data) => {
+    console.log(data);
+  });
+
   const {
     setUserData,
     userLoading,
@@ -56,9 +73,17 @@ function App() {
         },
         withCredentials: true
       });
+      const user = response.data.data;
       if (response.data.success) {
-        setUserData(response.data.data);
+        setUserData(user);
         setUserLoading(false);
+        setSocketInstance(socket);
+        socket.emit("register", {
+          role: user.role,
+          id: user._id,
+          name: user.firstName + " " + user.lastName,
+          email: user.email
+        });
       }
     } catch (error) {
       setUserLoading(false);
@@ -92,7 +117,9 @@ function App() {
                 <Route path="/requests/:donationId" element={<Requests />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/agents" element={<Agents />} />
-                <Route path="/agents/:agentId" element={<Agents />} />
+                <Route path="/agents/:userId" element={<Agents />} />
+                <Route path="/donors" element={<Donors />} />
+                <Route path="/donors/:userId" element={<Donors />} />
                 <Route path="/assigned" element={<Assigned />} />
                 <Route path="/assigned/:donationId" element={<Assigned />} />
                 <Route path="/add_agent" element={<AddAgent />} />
@@ -100,11 +127,12 @@ function App() {
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>
-
           {/* // logout popup */}
           {showLogoutPopUp ? <Logout /> : null}
           {/* // tostify */}
           <ToastContainer />
+          {/* showNotificationComponent */}
+          {showNotificationComponent ? <NotificationComponent /> : null}
         </>
       )}
     </div>

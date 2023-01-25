@@ -1,25 +1,30 @@
 import React, { useState, useContext, useEffect } from "react";
-import useFetchData from "../../customHooks/useFetchData";
-import { GlobalContex } from "../../context/contex";
-import UserListComponent from "../../components/UserListComponent.js";
-import loadingSvg from "../../asset/loading.svg";
-import Search from "../../components/Search";
+import { GlobalContex } from "../context/contex";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import AgentListComponentmobile from "../../components/AgentListComponentmobile.js";
 
-function AgentList({ setCurrentUser, search, setSearch, role }) {
+// assets
+import loadingSvg from "../asset/loading.svg";
+// custom hook
+import useFetchData from "../customHooks/useFetchData";
+// components
+import Search from "../components/Search.js";
+import UserListComponent from "./UserListComponent.js";
+import AgentListComponentmobile from "../components/AgentListComponentmobile.js";
+
+function UserList({ setCurrentUser, search, setSearch, role, userUrl }) {
   const navigate = useNavigate();
   const { notify } = useContext(GlobalContex);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
   const [page, setPage] = useState(currentPage ? Number(currentPage) : 1);
-  const URL = process.env.REACT_APP_URL;
-  const [userData, setUserData] = useState({ users: [] });
-  const url = (page, search = "") =>
-    URL + `/api/users?role=${role}&search=${search}&page=${page}&limit=10`;
-  const { loading, data, error, fetchData } = useFetchData();
 
+  const [userData, setUserData] = useState({ users: [] });
+  const url = (page, search = "") => {
+    return `${userUrl}&search=${search}&page=${page}&limit=10`;
+  };
+
+  const { loading, data, error, fetchData } = useFetchData();
   useEffect(() => {
     if (currentPage) {
       fetchData(url(page, search));
@@ -42,7 +47,7 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
     <>
       <header className="   border-b-4   p-4  shadow-xl bg-blue-50  dark:bg-gray-800  border-blue-300  dark:border-gray-500   sticky top-0 left-0 ">
         <div className="   text-xl md:text-2xl  font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
-          <h1>Agents</h1>
+          <h1 className="first-letter:uppercase">{role.toLowerCase() + "s"}</h1>
           <Search
             setSearch={setSearch}
             search={search}
@@ -74,10 +79,10 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
               {loading
                 ? null
                 : userData.users &&
-                  userData.users.map((agent) => (
+                  userData.users.map((user) => (
                     <UserListComponent
-                      key={agent._id}
-                      agent={agent}
+                      key={user._id}
+                      user={user}
                       page={page}
                       setCurrentUser={setCurrentUser}
                     />
@@ -89,11 +94,11 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
           {loading
             ? null
             : userData.users &&
-              userData.users.map((agent) => (
+              userData.users.map((user) => (
                 <AgentListComponentmobile
-                  key={agent._id}
-                  agent={agent}
-                  redirectPath="/users"
+                  key={user._id}
+                  agent={user}
+                  redirectPath="/agents"
                   setCurrentUser={setCurrentUser}
                 />
               ))}
@@ -109,7 +114,7 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
         <button
           type="button"
           onClick={() => {
-            currentPage && navigate("/users");
+            currentPage && navigate("/agents");
             !loading && fetchData(url(page - 1));
             setPage((preVal) => preVal - 1);
           }}
@@ -160,7 +165,7 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
         </div>
         <button
           onClick={() => {
-            currentPage && navigate("/users");
+            currentPage && navigate("/agents");
             !loading && fetchData(url(page + 1));
             setPage((preVal) => preVal + 1);
           }}
@@ -193,4 +198,4 @@ function AgentList({ setCurrentUser, search, setSearch, role }) {
   );
 }
 
-export default AgentList;
+export default UserList;

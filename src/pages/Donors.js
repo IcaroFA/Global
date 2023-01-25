@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import Sidebar from "../../components/Sidebar.js";
+import Sidebar from "../components/Sidebar";
+import UserList from "../components/UserList";
+import UserInfo from "../components/UserInfo";
 import { useParams } from "react-router-dom";
-import UserInfo from "../../components/UserInfo.js";
-import UserList from "../../components/UserList.js";
 
-function Agents() {
+function Donors() {
   const [currentAgent, setCurrentAgent] = useState({ page: 1, user: {} });
   const [search, setSearch] = useState("");
   const { userId } = useParams();
-  const URL = process.env.REACT_APP_URL;
 
-  const userUrl = `${URL}/api/users?role=AGENT`;
+  const URL = process.env.REACT_APP_URL;
+  const userUrl = `${URL}/api/users?role=DONOR`;
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -20,14 +20,14 @@ function Agents() {
           <UserInfo
             currentUser={currentAgent}
             setCurrentUser={setCurrentAgent}
-            role="AGENT"
+            role="DONOR"
           />
         ) : (
           <UserList
-            role="AGENT"
+            role="DONOR"
             search={search}
-            setSearch={setSearch}
             userUrl={userUrl}
+            setSearch={setSearch}
             setCurrentUser={setCurrentAgent}
           />
         )}
@@ -36,4 +36,4 @@ function Agents() {
   );
 }
 
-export default Agents;
+export default Donors;

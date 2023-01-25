@@ -1,48 +1,61 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { GlobalContex } from "../../context/contex";
-import loadingSvg from "../../asset/loading.svg";
-import useFetchData from "../../customHooks/useFetchData";
-import axios from "axios";
-import DonationListConponent from "../../components/DonationListComonent.js";
-import DonationListComponentMobile from "../../components/DonationListComponentMobile.js";
-
+import { GlobalContex } from "../context/contex.js";
 import { Link } from "react-router-dom";
-import AgentProfileInfoComponent from "../../components/UserProfileInfoComponent";
-function AgentInfo({ currentUser, setCurrentUser }) {
+
+// assets
+import loadingSvg from "../asset/loading.svg";
+// custom hook
+import useFetchData from "../customHooks/useFetchData.js";
+// npm package
+import axios from "axios";
+// components
+import DonationListConponent from "./DonationListComonent.js";
+import DonationListComponentMobile from "./DonationListComponentMobile.js";
+import UserProfileInfoComponent from "./UserProfileInfoComponent.js";
+
+function UserInfo({ currentUser, setCurrentUser, role }) {
   const navigate = useNavigate();
-  const donationHeader = useRef(null);
-  const [showShadow, setShowShaDow] = useState(false);
   const { notify } = useContext(GlobalContex);
   const { userId } = useParams();
 
+  const URL = process.env.REACT_APP_URL;
+  const donationHeader = useRef(null);
+
+  const [showShadow, setShowShaDow] = useState(false);
   const [page, setPage] = useState(1);
   const [currentDonation, setCurrentDonation] = useState({});
   const [donationData, setDonationsData] = useState({ donations: [] });
   const [agentLoading, setAgentLoading] = useState(false);
-  const URL = process.env.REACT_APP_URL;
 
-  const DonationsUrl = (page) =>
-    `${URL}/api/donations?userId=${userId}&page=${page}&limit=10`;
+  const DonationsUrl = (page) => {
+    if (role === "AGENT") {
+      return `${URL}/api/donations?agentId=${userId}&page=${page}&limit=10`;
+    }
+    if (role === "DONOR") {
+      return `${URL}/api/donations?donorId=${userId}&page=${page}&limit=10`;
+    }
+  };
+
   const { loading, data, error, fetchData } = useFetchData(DonationsUrl(page));
 
   useEffect(() => {
-    if (Object.keys(currentUser.agent).length < 1) fetchCurrentAgent();
+    if (Object.keys(currentUser.user).length < 1) fetchCurrentAgent();
   }, []);
 
-  // fetch agent info if current agent info in not present
+  // fetch user info if current user info in not present
   function fetchCurrentAgent() {
     setAgentLoading(true);
     axios(`${URL}/api/user?userId=${userId}`, { withCredentials: true })
       .then((response) => {
-        setCurrent((preVal) => {
-          return { ...preVal, agent: response.data.data };
+        setCurrentUser((preVal) => {
+          return { ...preVal, user: response.data.data };
         });
         setAgentLoading(false);
       })
       .catch((error) => {
         setAgentLoading(false);
-        navigate("/agents?page=" + currentUser.page);
+        navigate(`/${role.toLowerCase() + "s"}?page= + currentUser.page`);
         notify(error.response.data.message, "error");
       });
   }
@@ -53,7 +66,7 @@ function AgentInfo({ currentUser, setCurrentUser }) {
 
   useEffect(() => {
     if (error) {
-      navigate("/agents?page=" + currentUser.page);
+      navigate(`/${role.toLowerCase() + "s"}?page=${currentUser.page}`);
       notify(error, "error");
     }
   }, [error]);
@@ -73,6 +86,7 @@ function AgentInfo({ currentUser, setCurrentUser }) {
   if (donationHeader.current) {
     observer.observe(donationHeader.current);
   }
+  ////
 
   return (
     <div>
@@ -83,41 +97,42 @@ function AgentInfo({ currentUser, setCurrentUser }) {
         }   border-blue-300  dark:border-gray-500 px-4 pt-4 shadow-xl `}
       >
         <div className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white   flex  md:gap-0 gap-2 md:flex-row flex-col  md:items-center md:justify-between   ">
-          <div>
+          <div className="flex flex-wrap">
             <Link
-              className=" hover:text-blue-500"
-              to={"/agents?page=" + currentUser.page}
+              className="hover:text-blue-500"
+              to={`/${role.toLowerCase() + "s"}?page=${currentUser.page}`}
             >
-              Agents
+              <h1 className="first-letter:uppercase">
+                {role.toLowerCase() + "s"}
+              </h1>
             </Link>
             {userId ? (
-              <Link to={"/agents/" + userId} className=" hover:text-blue-500">
+              <p className=" hover:text-blue-500">
                 {agentLoading
                   ? null
                   : " / " +
-                    currentUser.agent.firstName +
+                    currentUser.user.firstName +
                     " " +
-                    currentUser.agent.lastName}
-              </Link>
+                    currentUser.user.lastName}
+              </p>
             ) : null}
           </div>
         </div>
       </header>
       {/* header end */}
 
-      {/*  agent info  */}
+      {/*  user info  */}
       {agentLoading
         ? null
-        : Object.keys(currentUser.agent).length > 0 && (
+        : Object.keys(currentUser.user).length > 0 && (
             <div className="p-4">
-              <AgentProfileInfoComponent agent={currentUser.agent} />
+              <UserProfileInfoComponent user={currentUser.user} />
             </div>
           )}
-      {/*  agent info end */}
+      {/*  user info end */}
       {/*  shadow  */}
       <div ref={donationHeader}></div>
       {/*  shodow */}
-
       {/* assigned donations */}
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">
@@ -132,11 +147,14 @@ function AgentInfo({ currentUser, setCurrentUser }) {
                 : "sticky  md:px-4 py-2 md:top-[4rem]  left-0  z-10 text-xl md:text-2xl mb-3 font-semibold  flex   justify-between  text-blue-500   dark:text-white  bg-blue-50  dark:bg-gray-800"
             }
           >
-            <p>Assigned Donations</p>
+            <p>
+              {role === "AGENTS" && "Assigned Donations"}
+              {role === "DONOR" && "Donations"}
+            </p>
           </div>
           <div className="p-4 ">
             {/* dasktop view */}
-            {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block ">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 {donationData.donations && donationData.donations.length > 0 ? (
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -168,10 +186,10 @@ function AgentInfo({ currentUser, setCurrentUser }) {
                     ))}
                 </tbody>
               </table>
-            </div> */}
+            </div>
             {/* dasktop view  end*/}
             {/* mobile view  */}
-            {/* <div className=" block md:hidden mt-4">
+            <div className=" block md:hidden mt-4">
               {loading
                 ? null
                 : donationData.donations &&
@@ -182,7 +200,7 @@ function AgentInfo({ currentUser, setCurrentUser }) {
                       redirectPath="/donations"
                     />
                   ))}
-            </div> */}
+            </div>
             {/* mobile view  end */}
           </div>
         </>
@@ -278,4 +296,4 @@ function AgentInfo({ currentUser, setCurrentUser }) {
     </div>
   );
 }
-export default AgentInfo;
+export default UserInfo;

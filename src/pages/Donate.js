@@ -13,7 +13,7 @@ function Donate() {
   const location = useLocation();
   const URL = process.env.REACT_APP_URL;
   const urlQuery = new URLSearchParams(location.search);
-  const { userData, notify, TOKEN } = useContext(GlobalContex);
+  const { userData, notify, TOKEN, socketInstance } = useContext(GlobalContex);
   const [showAddress, setShowAddress] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
@@ -96,7 +96,7 @@ function Donate() {
           withCredentials: true,
           data: donationInfo,
           headers: {
-            Authorization: "Bearer " + TOKEN.Token
+            Authorization: "Bearer " + TOKEN.token
           }
         }
       : {
@@ -105,7 +105,7 @@ function Donate() {
           withCredentials: true,
           data: donationInfo,
           headers: {
-            Authorization: "Bearer " + TOKEN.Token
+            Authorization: "Bearer " + TOKEN.token
           }
         };
   }
@@ -119,6 +119,26 @@ function Donate() {
       if (response.data.success) {
         notify("successfuly", "success");
         navigate("/donations/" + response.data.data._id);
+
+        if (!urlQuery.get("edit")) {
+          // if new donation created send notification to admin
+          socketInstance.emit(
+            "notification",
+            [
+              {
+                donorName: userData.firstName + " " + userData.lastName,
+                donationId: response.data.data._id,
+                donationStatus: "PENDING",
+                role: "ADMIN"
+              }
+            ],
+            function (data) {
+              if (!data.succes) {
+                notify(data.message, "error");
+              }
+            }
+          );
+        }
       }
       setSubmitLoading(false);
     } catch (error) {
@@ -302,15 +322,15 @@ function Donate() {
                   />
                   {userData.address ? (
                     <div>
-                      <label class="relative inline-flex items-center cursor-pointer">
+                      <label className="relative inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
                           value=""
-                          class="sr-only peer"
+                          className="sr-only peer"
                           onChange={() => setIsSameAddress((preVal) => !preVal)}
                         />
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span class="ml-3 text-sm   font-semibold text-gray-800 dark:text-gray-300 ">
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span className="ml-3 text-sm   font-semibold text-gray-800 dark:text-gray-300 ">
                           your Address
                         </span>
                       </label>

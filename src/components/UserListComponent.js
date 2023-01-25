@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function AgentListComponent({ agent, setCurrentAgent, page }) {
+function UserListComponent({ user, setCurrentUser, page }) {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th
         scope="row"
         className="flex  items-center gap-2   px-2 py-1 md:px-6 md:py-4   font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
-        {agent.profileImage && agent.profileImage.url ? (
+        {user.profileImage && user.profileImage.url ? (
           <img
             className="w-12 h-12 rounded-full object-cover"
-            src={agent.profileImage.url}
+            src={user.profileImage.url}
             alt="img"
           />
         ) : (
@@ -30,23 +30,23 @@ function AgentListComponent({ agent, setCurrentAgent, page }) {
           </svg>
         )}
         <div className="text-base font-semibold">
-          {agent.firstName + " " + agent.lastName}
+          {user.firstName + " " + user.lastName}
         </div>
       </th>
       <td className="px-6 py-4 text-center dark:text-gray-200 text-gray-700     ">
-        {agent.phoneNo}
+        {user.phoneNo}
       </td>
       <td className="px-6 py-4  ">
         <div className="flex items-center justify-center dark:text-gray-200 text-gray-700">
-          {agent.email}
+          {user.email}
         </div>
       </td>
       <td className="px-6 py-4  text-center">
         <Link
-          to={`/agents/` + agent._id}
+          to={`/${user.role.toLowerCase() + "s"}/` + user._id}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
-          <div onClick={() => setCurrentAgent({ page: page, agent: agent })}>
+          <div onClick={() => setCurrentUser({ page: page, user: user })}>
             more Info
           </div>
         </Link>
@@ -55,4 +55,4 @@ function AgentListComponent({ agent, setCurrentAgent, page }) {
   );
 }
 
-export default AgentListComponent;
+export default UserListComponent;

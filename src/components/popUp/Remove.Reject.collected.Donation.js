@@ -7,10 +7,11 @@ function RemoveRejectDonation({
   type,
   id,
   setCurrentDonation,
-  redirectPath = "/donations"
+  redirectPath = "/donations",
+  currentDonation
 }) {
   const navigate = useNavigate();
-  const { notify, TOKEN } = useContext(GlobalContex);
+  const { notify, TOKEN, socketInstance, userData } = useContext(GlobalContex);
   const [loading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
@@ -36,7 +37,7 @@ function RemoveRejectDonation({
     }
   }
 
-  async function handleRejecRemoveCollectDonaiton(type) {
+  async function handleRejecCollectDonaiton(type) {
     setLoading(true);
     try {
       const response = await axios({
@@ -48,6 +49,7 @@ function RemoveRejectDonation({
         },
         data: { status: type }
       });
+      const data = response.data.data;
       if (response.data.success) {
         setCurrentDonation((preVal) => {
           return {
@@ -57,11 +59,63 @@ function RemoveRejectDonation({
         });
         notify(`you just ${type} one  donation`, "success");
         setShowPopUp(false);
+        sendNotification(data, type);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
       notify(error.response.data.message, "error");
+    }
+  }
+
+  /// send notificaiton
+
+  function sendNotification(data, type) {
+    /// send notification to admin and donor of agent mark donation as collected
+    if (type === "COLLECTED") {
+      socketInstance.emit(
+        "notification",
+        [
+          {
+            agentName: userData.firstName + " " + userData.lastName,
+            donorName: currentDonation.donation.donorName,
+            donationId: currentDonation.donation._id,
+            donationStatus: "COLLECTED",
+            role: "AGENT"
+          },
+          {
+            donorId: currentDonation.donation.donorId, // send notification to this user
+            agentName: data.agentName,
+            donationId: currentDonation.donation._id,
+            donationStatus: "COLLECTED",
+            role: "DONOR"
+          }
+        ],
+        function (data) {
+          if (!data.succes) {
+            notify(data.message, "error");
+          }
+        }
+      );
+    }
+    // send notification to donor if admin rejected the donation
+    if (type === "REJECTED") {
+      socketInstance.emit(
+        "notification",
+        [
+          {
+            donorId: currentDonation.donation.donorId, // send notification to this user
+            donationId: currentDonation.donation._id,
+            donationStatus: "REJECTED",
+            role: "DONOR"
+          }
+        ],
+        function (data) {
+          if (!data.succes) {
+            notify(data.message, "error");
+          }
+        }
+      );
     }
   }
 
@@ -144,7 +198,7 @@ function RemoveRejectDonation({
                     onClick={() => {
                       if (type === "Remove") handleRemoveDonation();
                       if (type === "REJECTED" || type === "COLLECTED") {
-                        handleRejecRemoveCollectDonaiton(type);
+                        handleRejecCollectDonaiton(type);
                       }
                     }}
                   >

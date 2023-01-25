@@ -11,11 +11,10 @@ import AgentComponent from "./AgentComponent.js";
 function SelectAgent({
   setShowPopUp,
   setComponent,
-  setDonationData,
-  id,
+  currentDonation,
   setCurrentDonation
 }) {
-  const { notify, TOKEN } = useContext(GlobalContex);
+  const { notify, TOKEN, socketInstance } = useContext(GlobalContex);
   const [agentsData, setAgentsData] = useState({});
   const [conformLoading, setConformLoading] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState({ _id: "" });
@@ -42,10 +41,11 @@ function SelectAgent({
 
   async function handleConform() {
     setConformLoading(true);
+
     try {
       const response = await axios({
         method: "put",
-        url: URL + "/api/donation/" + id,
+        url: URL + "/api/donation/" + currentDonation._id,
         withCredentials: true,
         headers: {
           Authorization: "Bearer " + TOKEN.token
@@ -69,6 +69,7 @@ function SelectAgent({
           };
         });
 
+        sendNorification(); // send notification to agent and donor if donation accepted
         notify("Donation Accepted", "success");
         setShowPopUp(false);
         setComponent("ACCEPT");
@@ -78,6 +79,34 @@ function SelectAgent({
       setConformLoading(false);
       notify(error.response.data.message, "error");
     }
+  }
+
+  /// send notificaiton
+  function sendNorification() {
+    socketInstance.emit(
+      "notification",
+      [
+        {
+          agentId: currentDonation.donation.agentName, // send norificationt ot this agent
+          donorName: currentDonation.donation.donorName,
+          donationId: currentDonation.donation._id,
+          donationStatus: "ACCEPTED",
+          role: "AGENT"
+        },
+        {
+          donorId: currentDonation.donation.donorId, // send notification to this donor
+          agentName: currentDonation.donation.agentName,
+          donationId: currentDonation.donation._id,
+          donationStatus: "ACCEPTED",
+          role: "DONOR"
+        }
+      ],
+      function (data) {
+        if (!data.succes) {
+          notify(data.message, "error");
+        }
+      }
+    );
   }
 
   return (

@@ -255,6 +255,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                         redirectPath={`/${path.toLowerCase()}?page=${
                           currentDonation.page
                         }`}
+                        currentDonation={currentDonation}
                       />
                     </>
                   ) : null}
@@ -264,12 +265,13 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     <>
                       {/* accept donation */}
                       <Accept
-                        id={currentDonation.donation._id}
+                        currentDonation={currentDonation}
                         setCurrentDonation={setCurrentDonation}
                       />
                       {/* accept donation  end*/}
                       {/* reject donation */}
                       <RemoveRejectDonation
+                        currentDonation={currentDonation}
                         id={currentDonation.donation._id}
                         setCurrentDonation={setCurrentDonation}
                         type="REJECTED"
@@ -282,6 +284,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                   {userData.role === "AGENT" &&
                   currentDonation.donation.status === "ACCEPTED" ? (
                     <RemoveRejectDonation
+                      currentDonation={currentDonation}
                       id={currentDonation.donation._id}
                       setCurrentDonation={setCurrentDonation}
                       type="COLLECTED"

@@ -17,6 +17,7 @@ function ProtectedRoutes() {
   const adminRouts = [
     "donations",
     "agents",
+    "donors",
     "add_agent",
     "profile",
     "requests"

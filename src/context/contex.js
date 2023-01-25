@@ -8,6 +8,9 @@ const Contex = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
+  const [socketInstance, setSocketInstance] = useState(null);
+  const [showNotificationComponent, setShowNotificationComponent] =
+    useState(false);
   const [TOKEN, setTOKEN] = useState(
     sessionStorage.getItem("Token")
       ? JSON.parse(sessionStorage.getItem("Token"))
@@ -40,6 +43,10 @@ const Contex = ({ children }) => {
     <GlobalContex.Provider
       value={{
         notify,
+        TOKEN,
+        setTOKEN,
+        filter,
+        setfilter,
         userData,
         setUserData,
         userLoading,
@@ -48,12 +55,12 @@ const Contex = ({ children }) => {
         setShowSideBar,
         showLogoutPopUp,
         setShowLogoutPopUp,
+        socketInstance,
+        setSocketInstance,
         currentDonation,
         setCurrentDonation,
-        TOKEN,
-        setTOKEN,
-        filter,
-        setfilter
+        showNotificationComponent,
+        setShowNotificationComponent
       }}
     >
       {children}
