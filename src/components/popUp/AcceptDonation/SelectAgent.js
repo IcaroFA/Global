@@ -41,11 +41,11 @@ function SelectAgent({
 
   async function handleConform() {
     setConformLoading(true);
-
+    console.log(currentDonation);
     try {
       const response = await axios({
         method: "put",
-        url: URL + "/api/donation/" + currentDonation._id,
+        url: URL + "/api/donation/" + currentDonation.donation._id,
         withCredentials: true,
         headers: {
           Authorization: "Bearer " + TOKEN.token
@@ -87,7 +87,7 @@ function SelectAgent({
       "notification",
       [
         {
-          agentId: currentDonation.donation.agentName, // send norificationt ot this agent
+          agentId: selectedAgent._id, // send norificationt ot this agent
           donorName: currentDonation.donation.donorName,
           donationId: currentDonation.donation._id,
           donationStatus: "ACCEPTED",
@@ -95,7 +95,7 @@ function SelectAgent({
         },
         {
           donorId: currentDonation.donation.donorId, // send notification to this donor
-          agentName: currentDonation.donation.agentName,
+          agentName: selectedAgent.firstName + " " + selectedAgent.lastName,
           donationId: currentDonation.donation._id,
           donationStatus: "ACCEPTED",
           role: "DONOR"

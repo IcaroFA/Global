@@ -15,6 +15,7 @@ function useForgotPassword(email) {
       const response = await axios({
         method: "post",
         url: URL + "/api/auth/forgot_password",
+        withCredentials: true,
         headers: {
           Authorization: "Bearer " + TOKEN.token
         },
