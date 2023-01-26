@@ -39,6 +39,7 @@ function RemoveRejectDonation({
 
   async function handleRejecCollectDonaiton(type) {
     setLoading(true);
+
     try {
       const response = await axios({
         method: "put",
@@ -71,6 +72,7 @@ function RemoveRejectDonation({
   /// send notificaiton
 
   function sendNotification(data, type) {
+    console.log(type);
     /// send notification to admin and donor of agent mark donation as collected
     if (type === "COLLECTED") {
       socketInstance.emit(
@@ -81,10 +83,10 @@ function RemoveRejectDonation({
             donorName: currentDonation.donation.donorName,
             donationId: currentDonation.donation._id,
             donationStatus: "COLLECTED",
-            role: "AGENT"
+            role: "ADMIN"
           },
           {
-            donorId: currentDonation.donation.donorId, // send notification to this user
+            donorId: currentDonation.donation.donorId, // send notification to this user(donor)
             agentName: data.agentName,
             donationId: currentDonation.donation._id,
             donationStatus: "COLLECTED",

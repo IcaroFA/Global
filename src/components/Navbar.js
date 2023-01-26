@@ -1,20 +1,37 @@
 import React from "react";
 import logo from "../asset/icon.jpg";
 import { Link, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GlobalContex } from "../context/contex.js";
-
+import axios from "axios";
 // component
 import DarkModeToggleButton from "./DarkModeToggleButton.js";
+import useFetchData from "../customHooks/useFetchData";
 function Navbar() {
   const {
+    notify,
     userData,
     userLoading,
     setShowSideBar,
     setShowNotificationComponent,
-    showNotificationComponent
+    showNotificationComponent,
+    notificationData,
+    setNotificationData
   } = useContext(GlobalContex);
   const location = useLocation();
+
+  const { error, data, loading, fetchData } = useFetchData();
+
+  useEffect(() => {
+    fetchData(process.env.REACT_APP_URL + "/api/notifications");
+  }, []);
+
+  useEffect(() => {
+    if (!loading) setNotificationData(data);
+  }, [loading]);
+  useEffect(() => {
+    notify(error, "error");
+  }, [error]);
 
   return (
     <>
@@ -105,7 +122,7 @@ function Navbar() {
                     onClick={() =>
                       setShowNotificationComponent((preval) => !preval)
                     }
-                    className=" h-8  p-1 w-8   dark:text-blue-500  dark:hover:bg-gray-800  hover:bg-gray-100  rounded-full flex items-center justify-center"
+                    className=" md:mr-8  mr-4 h-8 relative  p-1 w-8   dark:text-blue-500  dark:hover:bg-gray-800  hover:bg-gray-100  rounded-full flex items-center justify-center"
                   >
                     {showNotificationComponent ? (
                       <svg
@@ -136,6 +153,13 @@ function Navbar() {
                         ></path>
                       </svg>
                     )}
+
+                    {/* red ball */}
+                    {notificationData.notifications &&
+                    notificationData.notifications.length > 0 ? (
+                      <div className="absolute w-2 h-2  rounded-full bg-red-600   bottom-1 right-1"></div>
+                    ) : null}
+                    {/* red ball end */}
                   </div>
                 ) : null}
 

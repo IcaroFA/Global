@@ -1,21 +1,29 @@
 import React, { useContext } from "react";
 import { GlobalContex } from "../context/contex";
-
+import NotificationListComponent from "./NotificationListComponent";
 function NotificationComponent() {
-  const { setShowNotificationComponent } = useContext(GlobalContex);
+  const { setShowNotificationComponent, notificationData } =
+    useContext(GlobalContex);
+
   return (
-    <div className="absolute top-24 right-4  flex flex-col gap-3">
+    <div className="absolute top-24 right-4  flex flex-col gap-3 z-10">
       {/* card */}
-      <div className=" max-w-md md:h-auto  shadow-2xl">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 p-2">
-          <h1 className="dark:text-white text-gray-600 font-bold text-xl">
-            Collected
-          </h1>
-          <p className="dark:text-white text-gray-600 font-bold">
-            Donation collected by agent Name{" "}
-          </p>
+
+      {notificationData.notifications &&
+      notificationData.notifications.length < 1 ? (
+        <div className="md:w-[20rem] md:h-20  shadow-2xl bg-white rounded-lg flex items-center justify-center  dark:bg-gray-700 p-2">
+          <p className=" font-bold text-xl   text-blue-500">No notifications</p>
         </div>
-      </div>
+      ) : (
+        notificationData.notifications &&
+        notificationData.notifications.map((notification) => (
+          <NotificationListComponent
+            key={notification._id}
+            notification={notification}
+          />
+        ))
+      )}
+      {/* card end */}
     </div>
   );
 }

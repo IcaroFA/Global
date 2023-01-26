@@ -9,8 +9,12 @@ const Contex = ({ children }) => {
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const [currentDonation, setCurrentDonation] = useState({});
   const [socketInstance, setSocketInstance] = useState(null);
+  const [notificationData, setNotificationData] = useState({
+    notification: []
+  });
   const [showNotificationComponent, setShowNotificationComponent] =
     useState(false);
+
   const [TOKEN, setTOKEN] = useState(
     sessionStorage.getItem("Token")
       ? JSON.parse(sessionStorage.getItem("Token"))
@@ -58,6 +62,8 @@ const Contex = ({ children }) => {
         socketInstance,
         setSocketInstance,
         currentDonation,
+        notificationData,
+        setNotificationData,
         setCurrentDonation,
         showNotificationComponent,
         setShowNotificationComponent

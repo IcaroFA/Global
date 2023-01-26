@@ -32,8 +32,12 @@ import { io } from "socket.io-client";
 import axios from "axios";
 
 function App() {
-  const { setSocketInstance, showNotificationComponent } =
-    useContext(GlobalContex);
+  const {
+    setSocketInstance,
+    notify,
+    showNotificationComponent,
+    setNotificationData
+  } = useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
   const socket = io(URL);
 
@@ -43,6 +47,9 @@ function App() {
 
   socket.on("private_notification", (data) => {
     console.log(data);
+    setNotificationData((preVal) => {
+      return { ...preVal, notifications: [data, ...preVal.notifications] };
+    });
   });
 
   const {
@@ -87,6 +94,7 @@ function App() {
       }
     } catch (error) {
       setUserLoading(false);
+      notify(error.response.data.message);
     }
   }
 
