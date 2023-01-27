@@ -7,6 +7,7 @@ function NotificationListComponent({ notification }) {
 
   const { setShowNotificationComponent, setNotificationData, notify } =
     useContext(GlobalContex);
+
   const { loading, error, data, removeNotification } =
     useRemoveNotificationHook();
 
@@ -17,7 +18,6 @@ function NotificationListComponent({ notification }) {
   useEffect(() => {
     if (!loading && data) {
       navigate("/donations/" + notification.donationId);
-      setShowNotificationComponent(false);
       setNotificationData((preVal) => {
         return {
           ...preVal,
@@ -26,12 +26,9 @@ function NotificationListComponent({ notification }) {
           )
         };
       });
+      setShowNotificationComponent(false);
     }
   }, [loading]);
-
-  useEffect(() => {
-    notify(error, "error");
-  }, [error]);
 
   return (
     <div

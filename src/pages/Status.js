@@ -11,10 +11,7 @@ function Status() {
   const { donationId } = useParams();
   const URL = process.env.REACT_APP_URL;
   const donationsUrl = `${URL}/api/donations?donorId=${userData._id}&status=PENDING+ACCEPTED`;
-  const [currentDonation, setCurrentDonation] = useState({
-    page: 1,
-    donations: {}
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -22,16 +19,17 @@ function Status() {
       <div className="scroll h-full relative flex-1  bg-blue-50  dark:bg-gray-800 overflow-scroll">
         {donationId ? (
           <DonationInfo
-            currentDonation={currentDonation}
-            setCurrentDonation={setCurrentDonation}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
             path="Status"
           />
         ) : (
           <DonationList
-            setCurrentDonation={setCurrentDonation}
+            setCurrentPage={setCurrentPage}
             donationsUrl={donationsUrl}
             PageType="Status"
             baseUrl="/status"
+            PAGE="STATUS"
           />
         )}
       </div>

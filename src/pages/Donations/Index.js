@@ -6,10 +6,7 @@ import DonationList from "./DonationList";
 
 function Index() {
   const { donationId } = useParams();
-  const [currentDonation, setCurrentDonation] = useState({
-    page: 1,
-    donation: {}
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div className="flex  h-full md:gap-1">
@@ -17,12 +14,12 @@ function Index() {
       <div className="scroll h-full relative flex-1  bg-blue-50  dark:bg-gray-800 overflow-scroll">
         {donationId ? (
           <DonationInfo
-            currentDonation={currentDonation}
-            setCurrentDonation={setCurrentDonation}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
             path="Donations"
           />
         ) : (
-          <DonationList setCurrentDonation={setCurrentDonation} />
+          <DonationList setCurrentPage={setCurrentPage} />
         )}
       </div>
     </div>

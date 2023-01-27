@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 function RemoveRejectDonation({
   type,
   id,
-  setCurrentDonation,
-  redirectPath = "/donations",
-  currentDonation
+  setDonation,
+  donation,
+  redirectPath = "/donations"
 }) {
   const navigate = useNavigate();
   const { notify, TOKEN, socketInstance, userData } = useContext(GlobalContex);
@@ -38,8 +38,9 @@ function RemoveRejectDonation({
   }
 
   async function handleRejecCollectDonaiton(type) {
+    // sendNotification({ agentName: "agentNAme" }, type);
+    // setShowPopUp(false);
     setLoading(true);
-
     try {
       const response = await axios({
         method: "put",
@@ -52,11 +53,8 @@ function RemoveRejectDonation({
       });
       const data = response.data.data;
       if (response.data.success) {
-        setCurrentDonation((preVal) => {
-          return {
-            ...preVal,
-            donation: { ...preVal.donation, status: type }
-          };
+        setDonation((preVal) => {
+          return { ...preVal, status: type };
         });
         notify(`you just ${type} one  donation`, "success");
         setShowPopUp(false);
@@ -72,7 +70,6 @@ function RemoveRejectDonation({
   /// send notificaiton
 
   function sendNotification(data, type) {
-    console.log(type);
     /// send notification to admin and donor of agent mark donation as collected
     if (type === "COLLECTED") {
       socketInstance.emit(
@@ -80,15 +77,15 @@ function RemoveRejectDonation({
         [
           {
             agentName: userData.firstName + " " + userData.lastName,
-            donorName: currentDonation.donation.donorName,
-            donationId: currentDonation.donation._id,
+            donorName: donation.donorName,
+            donationId: donation._id,
             donationStatus: "COLLECTED",
             role: "ADMIN"
           },
           {
-            donorId: currentDonation.donation.donorId, // send notification to this user(donor)
+            donorId: donation.donorId, // send notification to this user(donor)
             agentName: data.agentName,
-            donationId: currentDonation.donation._id,
+            donationId: donation._id,
             donationStatus: "COLLECTED",
             role: "DONOR"
           }
@@ -106,8 +103,8 @@ function RemoveRejectDonation({
         "notification",
         [
           {
-            donorId: currentDonation.donation.donorId, // send notification to this user
-            donationId: currentDonation.donation._id,
+            donorId: donation.donorId, // send notification to this user
+            donationId: donation._id,
             donationStatus: "REJECTED",
             role: "DONOR"
           }

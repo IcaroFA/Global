@@ -6,34 +6,30 @@ import loadingSvg from "../asset/loading.svg";
 import Address from "./popUp/Address.js";
 import RemoveRejectDonation from "./popUp/Remove.Reject.collected.Donation.js";
 import Accept from "./popUp/AcceptDonation/Accept.js";
-function DonationInfo({ currentDonation, setCurrentDonation, path }) {
+function DonationInfo({ currentPage, path }) {
   const navigate = useNavigate();
   const { notify, userData } = useContext(GlobalContex);
   const { donationId } = useParams();
   const [showAddress, setShowAddress] = useState(false);
+  const [donation, setDonation] = useState({});
 
   const URL = process.env.REACT_APP_URL;
   const { loading, error, data, fetchData } = useFetchData();
   const url = `${URL}/api/donation/${donationId}`;
-
   useState(() => {
-    if (Object.keys(currentDonation.donation).length < 1) fetchData(url);
+    fetchData(url);
   }, []);
 
   useEffect(() => {
-    if (!loading && Object.keys(currentDonation.donation).length < 1) {
-      setCurrentDonation((preVal) => {
-        return {
-          ...preVal,
-          donation: data
-        };
-      });
+    if (!loading && Object.keys(donation).length < 1) {
+      setDonation(data);
     }
   }, [loading]);
 
+  //// error
   useEffect(() => {
     if (error) {
-      navigate("/donations?page=" + currentDonation.page);
+      navigate("/donations?page=" + currentPage);
       notify(error, "error");
     }
   }, [error]);
@@ -43,7 +39,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
       <header className="  px-4 pt-4    border-b-4    border-blue-300  dark:border-gray-500 ">
         <h1 className="    text-lg md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
           <Link
-            to={`/${path.toLowerCase()}?page=${currentDonation.page}`}
+            to={`/${path.toLowerCase()}?page=${currentPage}`}
             className=" hover:text-blue-500"
           >
             {path}
@@ -66,9 +62,9 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                 <div className="flex  flex-col  md:flex-row ">
                   {/* image */}
                   <div className="flex items-center     gap-5">
-                    {currentDonation.donation.donorImage ? (
+                    {donation.donorImage ? (
                       <img
-                        src={currentDonation.donation.donorImage}
+                        src={donation.donorImage}
                         className="h-20 w-20 rounded-full object-cover"
                         alt=""
                       />
@@ -90,18 +86,16 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     {/* image end */}
                     <span>
                       <p className="  text-lg  font-semibold  dark:text-white text-gray-800">
-                        {currentDonation.donation.donorName}
+                        {donation.donorName}
                       </p>
                       <p className="font-semibold  dark:text-gray-400 text-gray-700">
-                        {currentDonation.donation.donorEmail}
+                        {donation.donorEmail}
                       </p>
                       <p className="font-semibold  dark:text-gray-400 text-gray-700 text-sm">
-                        {currentDonation.donation.donorPhoneNo}
+                        {donation.donorPhoneNo}
                       </p>
                       <p className="font-semibold  dark:text-gray-400 text-gray-700 text-sm">
-                        {new Date(
-                          currentDonation.donation.createdAt
-                        ).toDateString()}
+                        {new Date(donation.createdAt).toDateString()}
                       </p>
                     </span>
                   </div>
@@ -110,17 +104,17 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
 
                 {/* agent details */}
                 {userData.role !== "AGENT" &&
-                (currentDonation.donation.status === "ACCEPTED" ||
-                  currentDonation.donation.status === "COLLECTED") ? (
+                (donation.status === "ACCEPTED" ||
+                  donation.status === "COLLECTED") ? (
                   <div className="mt-4">
                     <h1 className="text-lg  font-semibold  dark:text-white text-gray-800">
                       Agent Details
                     </h1>
                     <div className="flex items-center  mt-2 gap-3">
                       <div>
-                        {currentDonation.donation.agentImage ? (
+                        {donation.agentImage ? (
                           <img
-                            src={currentDonation.donation.agentImage}
+                            src={donation.agentImage}
                             className="h-20 w-20 rounded-full object-cover"
                             alt=""
                           />
@@ -142,13 +136,13 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                       </div>
                       <div>
                         <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
-                          {currentDonation.donation.agentName}
+                          {donation.agentName}
                         </p>
                         <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
-                          {currentDonation.donation.agentEmail}
+                          {donation.agentEmail}
                         </p>
                         <p className="ml-4 font-semibold  dark:text-gray-400 text-gray-700 text-sm">
-                          {currentDonation.donation.agentPhoneNo}
+                          {donation.agentPhoneNo}
                         </p>
                       </div>
                     </div>
@@ -164,7 +158,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                     message:
                   </p>
                   <p className="dark:text-white text-gray-800 ">
-                    {currentDonation.donation.message}
+                    {donation.message}
                   </p>
                 </span>
 
@@ -172,22 +166,18 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                 {/* donation status */}
                 <p
                   className={`${
-                    (currentDonation.donation.status === "PENDING" &&
-                      "text-yellow-400") ||
-                    (currentDonation.donation.status === "ACCEPTED" &&
-                      "text-green-500") ||
-                    (currentDonation.donation.status === "REJECTED" &&
-                      "text-red-500") ||
-                    (currentDonation.donation.status === "COLLECTED" &&
-                      "text-blue-500")
+                    (donation.status === "PENDING" && "text-yellow-400") ||
+                    (donation.status === "ACCEPTED" && "text-green-500") ||
+                    (donation.status === "REJECTED" && "text-red-500") ||
+                    (donation.status === "COLLECTED" && "text-blue-500")
                   }
                    font-bold
                   `}
                 >
-                  {currentDonation.donation.status === "ACCEPTED" &&
+                  {donation.status === "ACCEPTED" &&
                   (userData.role === "ADMIN" || userData.role === "AGENT")
                     ? "ASSIGNED"
-                    : currentDonation.donation.status}
+                    : donation.status}
                 </p>
                 {/* donation status end */}
 
@@ -199,7 +189,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                   </p>
                   <p className=" ml-2  text-md font-medium  dark:text-gray-400 text-gray-700">
                     {" "}
-                    {currentDonation.donation.pickUpAddress}
+                    {donation.pickUpAddress}
                   </p>
                 </span>
                 {/* pick up address  end*/}
@@ -235,45 +225,38 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                 {/* functionals buttons */}
                 <div className="w-full   flex items-center justify-end">
                   {userData.role === "DONOR" &&
-                  currentDonation.donation.status === "PENDING" ? (
+                  donation.status === "PENDING" ? (
                     <>
                       <button
                         type="button"
                         className="   py-2 px-3 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                         onClick={() => {
-                          navigate(
-                            "/donate?edit=" + currentDonation.donation._id
-                          );
+                          navigate("/donate?edit=" + donation._id);
                         }}
                       >
                         Edit
                       </button>
                       <RemoveRejectDonation
-                        id={currentDonation.donation._id}
-                        setDonationData={setCurrentDonation}
+                        id={donation._id}
+                        // setDonationData={setCurrentDonation}
                         type="Remove"
-                        redirectPath={`/${path.toLowerCase()}?page=${
-                          currentDonation.page
-                        }`}
-                        currentDonation={currentDonation}
+                        redirectPath={`/${path.toLowerCase()}?page=${currentPage}`}
+                        donation={donation}
                       />
                     </>
                   ) : null}
                   {/* reject ,accept button form admin */}
                   {userData.role === "ADMIN" &&
-                  currentDonation.donation.status === "PENDING" ? (
+                  donation.status === "PENDING" ? (
                     <>
                       {/* accept donation */}
-                      <Accept
-                        currentDonation={currentDonation}
-                        setCurrentDonation={setCurrentDonation}
-                      />
+                      <Accept donation={donation} setDonation={setDonation} />
                       {/* accept donation  end*/}
                       {/* reject donation */}
                       <RemoveRejectDonation
-                        currentDonation={currentDonation}
-                        id={currentDonation.donation._id}
-                        setCurrentDonation={setCurrentDonation}
+                        donation={donation}
+                        id={donation._id}
+                        setDonation={setDonation}
                         type="REJECTED"
                       />
                       {/* reject donation end */}
@@ -282,11 +265,11 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                   {/* reject accept button form admin  end*/}
 
                   {userData.role === "AGENT" &&
-                  currentDonation.donation.status === "ACCEPTED" ? (
+                  donation.status === "ACCEPTED" ? (
                     <RemoveRejectDonation
-                      currentDonation={currentDonation}
-                      id={currentDonation.donation._id}
-                      setCurrentDonation={setCurrentDonation}
+                      donation={donation}
+                      id={donation._id}
+                      setDonation={setDonation}
                       type="COLLECTED"
                     />
                   ) : null}
@@ -315,8 +298,8 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(currentDonation.donation).length > 0 &&
-                    currentDonation.donation.items.map((e, i) => {
+                  {Object.keys(donation).length > 0 &&
+                    donation.items.map((e, i) => {
                       return (
                         <tr
                           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
@@ -344,7 +327,7 @@ function DonationInfo({ currentDonation, setCurrentDonation, path }) {
       {showAddress ? (
         <Address
           setShowAddress={setShowAddress}
-          data={currentDonation.donation.pickUpAddress}
+          data={donation.pickUpAddress}
           type="DIRECTION"
         />
       ) : null}

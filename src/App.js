@@ -94,7 +94,7 @@ function App() {
       }
     } catch (error) {
       setUserLoading(false);
-      notify(error.response.data.message);
+      // notify(error.response.data.message, "error");
     }
   }
 

@@ -5,10 +5,7 @@ import DonationInfo from "../../components/DonationInfo.js";
 import DonationList from "../../components/donationLists";
 function Index() {
   const { donationId } = useParams();
-  const [currentDonation, setCurrentDonation] = useState({
-    page: 1,
-    donation: {}
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const URL = process.env.REACT_APP_URL;
   const donationsUrl = URL + "/api/donations?status=PENDING";
@@ -19,13 +16,13 @@ function Index() {
       <div className="scroll h-full relative flex-1  bg-blue-50  dark:bg-gray-800 overflow-scroll">
         {donationId ? (
           <DonationInfo
-            currentDonation={currentDonation}
-            setCurrentDonation={setCurrentDonation}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
             path="Requests"
           />
         ) : (
           <DonationList
-            setCurrentDonation={setCurrentDonation}
+            setCurrentPage={setCurrentPage}
             donationsUrl={donationsUrl}
             PageType="Requests"
             baseUrl="/requests"

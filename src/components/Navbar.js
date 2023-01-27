@@ -3,7 +3,6 @@ import logo from "../asset/icon.jpg";
 import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { GlobalContex } from "../context/contex.js";
-import axios from "axios";
 // component
 import DarkModeToggleButton from "./DarkModeToggleButton.js";
 import useFetchData from "../customHooks/useFetchData";
@@ -23,7 +22,7 @@ function Navbar() {
   const { error, data, loading, fetchData } = useFetchData();
 
   useEffect(() => {
-    fetchData(process.env.REACT_APP_URL + "/api/notifications");
+    fetchData(process.env.REACT_APP_URL + "/api/notifications?limit=50");
   }, []);
 
   useEffect(() => {

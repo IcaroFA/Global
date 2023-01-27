@@ -8,12 +8,7 @@ import Search from "../../Search";
 // component
 import AgentComponent from "./AgentComponent.js";
 
-function SelectAgent({
-  setShowPopUp,
-  setComponent,
-  currentDonation,
-  setCurrentDonation
-}) {
+function SelectAgent({ setShowPopUp, setComponent, donation, setDonation }) {
   const { notify, TOKEN, socketInstance } = useContext(GlobalContex);
   const [agentsData, setAgentsData] = useState({});
   const [conformLoading, setConformLoading] = useState(false);
@@ -41,11 +36,11 @@ function SelectAgent({
 
   async function handleConform() {
     setConformLoading(true);
-    console.log(currentDonation);
+
     try {
       const response = await axios({
         method: "put",
-        url: URL + "/api/donation/" + currentDonation.donation._id,
+        url: URL + "/api/donation/" + donation._id,
         withCredentials: true,
         headers: {
           Authorization: "Bearer " + TOKEN.token
@@ -54,18 +49,15 @@ function SelectAgent({
       });
       /// update current donation
       if (response.data.success) {
-        setCurrentDonation((preVal) => {
+        setDonation((preVal) => {
           return {
             ...preVal,
-            donation: {
-              ...preVal.donation,
-              status: "ACCEPTED",
-              agentId: selectedAgent._id,
-              agentName: selectedAgent.firstName + " " + selectedAgent.lastName,
-              agentEmail: selectedAgent.email,
-              agentPhoneNo: selectedAgent.phoneNo,
-              agentImage: selectedAgent.profileImage?.url
-            }
+            status: "ACCEPTED",
+            agentId: selectedAgent._id,
+            agentName: selectedAgent.firstName + " " + selectedAgent.lastName,
+            agentEmail: selectedAgent.email,
+            agentPhoneNo: selectedAgent.phoneNo,
+            agentImage: selectedAgent.profileImage?.url
           };
         });
 
@@ -88,15 +80,15 @@ function SelectAgent({
       [
         {
           agentId: selectedAgent._id, // send norificationt ot this agent
-          donorName: currentDonation.donation.donorName,
-          donationId: currentDonation.donation._id,
+          donorName: donation.donorName,
+          donationId: donation._id,
           donationStatus: "ACCEPTED",
           role: "AGENT"
         },
         {
-          donorId: currentDonation.donation.donorId, // send notification to this donor
+          donorId: donation.donorId, // send notification to this donor
           agentName: selectedAgent.firstName + " " + selectedAgent.lastName,
-          donationId: currentDonation.donation._id,
+          donationId: donation._id,
           donationStatus: "ACCEPTED",
           role: "DONOR"
         }

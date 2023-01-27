@@ -6,7 +6,7 @@ function NotificationComponent() {
     useContext(GlobalContex);
 
   return (
-    <div className="absolute top-24 right-4  flex flex-col gap-3 z-10">
+    <div className="scroll absolute top-24 right-4  flex flex-col gap-3 z-10  max-w-md   overflow-scroll  max-h-[70vh]  px-4 py-2 rounded-xl">
       {/* card */}
 
       {notificationData.notifications &&

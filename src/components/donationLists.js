@@ -7,17 +7,18 @@ import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import PaginationComponent from "../components/PaginationComponent";
 import DonationListComponentMobile from "../components/DonationListComponentMobile.js";
+import useUpdateDonationStatus from "../customHooks/useUpdateDonationStatus.js";
 
-function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
-  const [donationData, setDonationData] = useState({ donations: [] });
+function DonationList({ setCurrentPage, donationsUrl, PageType, baseUrl }) {
   const navigate = useNavigate();
-  const { notify } = useContext(GlobalContex);
+  const { notify, notificationData } = useContext(GlobalContex);
+  const [donationData, setDonationData] = useState({ donations: [] });
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
   const [page, setPage] = useState(currentPage ? Number(currentPage) : 1);
-  const url = (page) => donationsUrl + `&page=${page}&limit=10`;
-
   const { loading, data, error, fetchData } = useFetchData();
+  const updateDonationStatus = useUpdateDonationStatus();
+  const url = (page) => donationsUrl + `&page=${page}&limit=10`;
 
   useEffect(() => {
     if (!loading) setDonationData(data);
@@ -31,6 +32,21 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
     fetchData(url(page));
     if (currentPage) navigate(baseUrl);
   }, [page]);
+
+  //// only form status page
+  //// if we got notification and the in the notificationdata
+  //// the present donationData donation exist then chande the status of the donation
+  useEffect(() => {
+    if (donationData.donations) {
+      setDonationData((preVal) => {
+        return {
+          ...preVal,
+          donations: updateDonationStatus(donationData.donations, PageType)
+        };
+      });
+    }
+  }, [notificationData]);
+  //// only form donaiton list
 
   return (
     <>
@@ -70,9 +86,9 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
                     <DonationListConponent
                       key={donation._id}
                       donation={donation}
-                      setCurrentDonation={setCurrentDonation}
-                      path={baseUrl}
+                      setCurrentPage={setCurrentPage}
                       page={page}
+                      path={baseUrl}
                     />
                   ))}
             </tbody>
@@ -99,7 +115,8 @@ function DonationList({ setCurrentDonation, donationsUrl, PageType, baseUrl }) {
                   key={donation._id}
                   donation={donation}
                   redirectPath={baseUrl}
-                  setCurrentDonation={setCurrentDonation}
+                  setCurrentPage={setCurrentPage}
+                  page={page}
                 />
               ))}
         </div>

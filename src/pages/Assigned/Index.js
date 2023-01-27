@@ -8,10 +8,7 @@ import { GlobalContex } from "../../context/contex";
 function Index() {
   const { userData } = useContext(GlobalContex);
   const { donationId } = useParams();
-  const [currentDonation, setCurrentDonation] = useState({
-    page: 1,
-    donation: {}
-  });
+  const [currentPage, setCurrentPage] = useState(1);
   const URL = process.env.REACT_APP_URL;
   const donationsUrl = `${URL}/api/donations?agentId=${userData._id}&status=ACCEPTED`;
 
@@ -21,13 +18,13 @@ function Index() {
       <div className="scroll h-full relative flex-1  bg-blue-50  dark:bg-gray-800 overflow-scroll">
         {donationId ? (
           <DonationInfo
-            currentDonation={currentDonation}
-            setCurrentDonation={setCurrentDonation}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
             path="Assigned"
           />
         ) : (
           <DonationList
-            setCurrentDonation={setCurrentDonation}
+            setCurrentPage={setCurrentPage}
             donationsUrl={donationsUrl}
             PageType="Assigned"
             baseUrl="/assigned"

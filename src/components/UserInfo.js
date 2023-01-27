@@ -13,10 +13,11 @@ import axios from "axios";
 import DonationListConponent from "./DonationListComonent.js";
 import DonationListComponentMobile from "./DonationListComponentMobile.js";
 import UserProfileInfoComponent from "./UserProfileInfoComponent.js";
+import useUpdateDonationStatus from "../customHooks/useUpdateDonationStatus.js";
 
 function UserInfo({ currentUser, setCurrentUser, role }) {
   const navigate = useNavigate();
-  const { notify } = useContext(GlobalContex);
+  const { notify, notificationData } = useContext(GlobalContex);
   const { userId } = useParams();
 
   const URL = process.env.REACT_APP_URL;
@@ -36,7 +37,8 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
       return `${URL}/api/donations?donorId=${userId}&page=${page}&limit=10`;
     }
   };
-
+  // costom hooks
+  const updateDonationStatus = useUpdateDonationStatus();
   const { loading, data, error, fetchData } = useFetchData(DonationsUrl(page));
 
   useEffect(() => {
@@ -60,10 +62,6 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
       });
   }
 
-  handleSearch = () => {
-    if (!loading) fetchData(DonationsUrl(1));
-  };
-
   useEffect(() => {
     if (error) {
       navigate(`/${role.toLowerCase() + "s"}?page=${currentUser.page}`);
@@ -71,14 +69,24 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
     }
   }, [error]);
 
-  function handleSearch() {
-    if (!loading) fetchData(DonationsUrl(1));
-  }
   useEffect(() => {
     if (!loading) setDonationsData(data);
   }, [loading]);
 
-  // ///// intersection observer
+  //// if we got notification and the in the notificationdata
+  //// the present donationData donation exist then chande the status of the donation
+  useEffect(() => {
+    if (donationData.donations) {
+      setDonationsData((preVal) => {
+        return {
+          ...preVal,
+          donations: updateDonationStatus(donationData.donations)
+        };
+      });
+    }
+  }, [notificationData]);
+
+  /////// intersection observer
   const observer = new IntersectionObserver((e) => {
     setShowShaDow(!e[0].isIntersecting);
   });
@@ -86,7 +94,6 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
   if (donationHeader.current) {
     observer.observe(donationHeader.current);
   }
-  ////
 
   return (
     <div>
@@ -130,10 +137,12 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
             </div>
           )}
       {/*  user info end */}
+
       {/*  shadow  */}
       <div ref={donationHeader}></div>
       {/*  shodow */}
-      {/* assigned donations */}
+
+      {/*  donations */}
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">
           <img src={loadingSvg} />
@@ -148,11 +157,12 @@ function UserInfo({ currentUser, setCurrentUser, role }) {
             }
           >
             <p>
-              {role === "AGENTS" && "Assigned Donations"}
+              {role === "AGENT" && "Assigned Donations"}
               {role === "DONOR" && "Donations"}
             </p>
           </div>
-          <div className="p-4 ">
+
+          <div className="p-4  mb-14 ">
             {/* dasktop view */}
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block ">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

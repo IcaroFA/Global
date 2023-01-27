@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 function DonationListComponentMobile({
   donation,
   redirectPath,
-  setCurrentDonation = ""
+  setCurrentPage,
+  page
 }) {
   const navigate = useNavigate();
   const { userData } = useContext(GlobalContex);
@@ -50,10 +51,7 @@ function DonationListComponentMobile({
         <caption
           className="  md:p-5  p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:bg-gray-800  dark:text-white  cursor-pointer "
           onClick={() => {
-            setCurrentDonation &&
-              setCurrentDonation((preVal) => {
-                return { ...preVal, donation: donation };
-              });
+            setCurrentPage(page);
             navigate(redirectPath + "/" + donation._id);
           }}
         >

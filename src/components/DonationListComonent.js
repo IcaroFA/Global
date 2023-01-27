@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContex } from "../context/contex";
 
-function DonationListComonent({ donation, setCurrentDonation, path, page }) {
+function DonationListComonent({ donation, setCurrentPage, path, page }) {
   const { userData } = useContext(GlobalContex);
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -57,9 +57,9 @@ function DonationListComonent({ donation, setCurrentDonation, path, page }) {
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
           <div
-            onClick={() =>
-              setCurrentDonation({ page: page, donation: donation })
-            }
+            onClick={() => {
+              setCurrentPage(page);
+            }}
           >
             more Info
           </div>

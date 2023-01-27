@@ -56,7 +56,8 @@ function UserList({ setCurrentUser, search, setSearch, role, userUrl }) {
         </div>
       </header>
 
-      <div className="px-4">
+      <div className="px-4  mb-20">
+        {/*  list desktop */}
         <div className="hidden md:block mt-4">
           <table className="   w-full  mt-4">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
@@ -90,6 +91,8 @@ function UserList({ setCurrentUser, search, setSearch, role, userUrl }) {
             </tbody>
           </table>
         </div>
+        {/* list desktop end */}
+        {/* list mobild */}
         <div className=" block md:hidden mt-4">
           {loading
             ? null
@@ -103,12 +106,16 @@ function UserList({ setCurrentUser, search, setSearch, role, userUrl }) {
                 />
               ))}
         </div>
+        {/* list mobile */}
       </div>
+
+      {/* loading image */}
       {loading ? (
         <div className="  top-0   left-0  absolute w-full  items-center flex justify-center  h-full">
           <img src={loadingSvg} />
         </div>
       ) : null}
+      {/* loading image */}
       {/* page  */}
       <div className="  fixed bottom-5   right-5 flex gap-5   items-center h-11   justify-center  w-40">
         <button

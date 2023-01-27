@@ -7,12 +7,15 @@ import DonationListComponentMobile from "../../components/DonationListComponentM
 import Filter from "../../components/popUp/Filter.js";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useUpdateDonationStatus from "../../customHooks/useUpdateDonationStatus";
 
-function DonationList({ setCurrentDonation }) {
+function DonationList({ setCurrentPage }) {
   const [donationData, setDonationData] = useState({ donations: [] });
   const navigate = useNavigate();
-  const { notify, filter, setfilter, userData } = useContext(GlobalContex);
+  const { notify, filter, setfilter, userData, notificationData } =
+    useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
+  const updateDonationStatus = useUpdateDonationStatus();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
@@ -36,6 +39,8 @@ function DonationList({ setCurrentDonation }) {
     notify(error, "error");
   }, [error]);
 
+  ////  if  pagen no is presend tin query the fetch the data base on thet page no.
+  //// else fetch on the base of filter.page , on component load first time
   useEffect(() => {
     if (currentPage) {
       fetchData(url(currentPage));
@@ -45,21 +50,39 @@ function DonationList({ setCurrentDonation }) {
     } else fetchData(url(filter.page));
   }, []);
 
+  ////  fetch the data base on filter
   useEffect(() => {
     fetchData(url(filter.page));
   }, [filter]);
 
+  //// if we got notification and the in the notificationdata
+  //// the present donationData donation exist then chande the status of the donation
+  useEffect(() => {
+    if (donationData.donations) {
+      setDonationData((preVal) => {
+        return {
+          ...preVal,
+          donations: updateDonationStatus(donationData.donations)
+        };
+      });
+    }
+  }, [notificationData]);
+
+  // console.log("donations", donationData.donations);
+
   return (
     <>
+      {/* header */}
       <header className="  top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center bg-blue-50  dark:bg-gray-800   border-blue-300  dark:border-gray-500 ">
         <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
           Donations
         </h1>
         <Filter />
       </header>
-      <div className="px-4">
+      {/* header end */}
+      <div className="px-4 mb-20">
         {/* destack view */}
-        <div className="hidden md:block mt-4 mb-16">
+        <div className="hidden md:block mt-4 ">
           <table className="   w-full   ">
             {donationData.donations &&
             Object.keys(donationData.donations).length > 0 ? (
@@ -88,9 +111,9 @@ function DonationList({ setCurrentDonation }) {
                     <DonationListConponent
                       key={donation._id}
                       donation={donation}
-                      setCurrentDonation={setCurrentDonation}
-                      path="/donations"
+                      setCurrentPage={setCurrentPage}
                       page={filter.page}
+                      path="/donations"
                     />
                   ))}
             </tbody>
@@ -117,7 +140,8 @@ function DonationList({ setCurrentDonation }) {
                   key={donation._id}
                   donation={donation}
                   redirectPath="/donations"
-                  setCurrentDonation={setCurrentDonation}
+                  setCurrentPage={setCurrentPage}
+                  page={filter.page}
                 />
               ))}
         </div>
