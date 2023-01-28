@@ -63,13 +63,13 @@ function UserList({ setCurrentUser, search, setSearch, role, userUrl }) {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full shadow-xl">
               <tr>
                 <th scope="col" className="px-6 py-3  text-start  ">
-                  Name
+                  {`${role} Name`}
                 </th>
                 <th scope="col" className="px-6 py-3 ">
-                  Position
+                  PhoneNo
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Status
+                  Email
                 </th>
                 <th scope="col" className="px-6 py-3 ">
                   Action

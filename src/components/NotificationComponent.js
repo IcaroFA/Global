@@ -1,12 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { GlobalContex } from "../context/contex";
 import NotificationListComponent from "./NotificationListComponent";
 function NotificationComponent() {
   const { setShowNotificationComponent, notificationData } =
     useContext(GlobalContex);
+  const naveBarComponentRef = useRef(null);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (
+      naveBarComponentRef.current &&
+      !naveBarComponentRef.current.contains(event.target)
+    ) {
+      setShowNotificationComponent(false);
+    }
+  };
 
   return (
-    <div className="scroll absolute top-24 right-4  flex flex-col gap-3 z-10  max-w-md   overflow-scroll  max-h-[70vh]  px-4 py-2 rounded-xl">
+    <div
+      className="  scroll absolute top-24 right-4  flex flex-col gap-3 z-10  max-w-md   overflow-scroll  max-h-[70vh]  px-4 py-2 rounded-xl"
+      ref={naveBarComponentRef}
+    >
       {/* card */}
 
       {notificationData.notifications &&

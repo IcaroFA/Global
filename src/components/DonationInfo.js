@@ -8,7 +8,7 @@ import RemoveRejectDonation from "./popUp/Remove.Reject.collected.Donation.js";
 import Accept from "./popUp/AcceptDonation/Accept.js";
 function DonationInfo({ currentPage, path }) {
   const navigate = useNavigate();
-  const { notify, userData } = useContext(GlobalContex);
+  const { notify, userData, notificationData } = useContext(GlobalContex);
   const { donationId } = useParams();
   const [showAddress, setShowAddress] = useState(false);
   const [donation, setDonation] = useState({});
@@ -33,6 +33,26 @@ function DonationInfo({ currentPage, path }) {
       notify(error, "error");
     }
   }, [error]);
+
+  /// check if the current donation have notification ,
+  /// if notification.donationId  matches the curent donaiton.id then
+  /// change the donation status as notification.donationId
+  useEffect(() => {
+    if (notificationData.notifications) {
+      const notificationForCurrentDonation =
+        notificationData.notifications.find(
+          (notification) => notification.donationId === donationId
+        );
+      if (notificationForCurrentDonation) {
+        setDonation((preVal) => {
+          return {
+            ...preVal,
+            status: notificationForCurrentDonation.donationStatus
+          };
+        });
+      }
+    }
+  }, [notificationData]);
 
   return (
     <>
