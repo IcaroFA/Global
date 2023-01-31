@@ -39,7 +39,9 @@ function App() {
     setNotificationData
   } = useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
-  const socket = io(URL);
+
+  const socket = io({ path: URL, transports: ["websocket"] });
+  // const socket = io.connect("https://food-donation.vercel.app/");
 
   socket.on("connect_error", (error) => {
     console.log(error);

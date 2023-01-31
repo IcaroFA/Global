@@ -32,7 +32,7 @@ function NotificationListComponent({ notification }) {
 
   return (
     <div
-      className=" max-w-md md:h-auto rounded-lg cursor-pointer"
+      className="notificationListComponent max-w-md md:h-auto rounded-lg cursor-pointer"
       style={{ boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px" }}
       onClick={() => {
         handleNotification();

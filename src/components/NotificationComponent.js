@@ -7,24 +7,24 @@ function NotificationComponent() {
   const naveBarComponentRef = useRef(null);
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
+    document.addEventListener("click", (e) => handleClickOutside(e), true);
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
   }, []);
 
-  const handleClickOutside = (event) => {
-    if (
-      naveBarComponentRef.current &&
-      !naveBarComponentRef.current.contains(event.target)
-    ) {
-      setShowNotificationComponent(false);
+  const handleClickOutside = (e) => {
+    if (e.target.closest(".notificationButton")) {
+      return setShowNotificationComponent((preVal) => (preVal ? false : true));
     }
+    if (e.target.closest(".notificationComponent")) return;
+    if (e.target.closest(".notificationListComponent")) return;
+    setShowNotificationComponent(false);
   };
 
   return (
     <div
-      className="  scroll absolute top-24 right-4  flex flex-col gap-3 z-10  max-w-md   overflow-scroll  max-h-[70vh]  px-4 py-2 rounded-xl"
+      className="notificationComponent  scroll absolute top-24 right-4  flex flex-col gap-3 z-10  max-w-md   overflow-scroll  max-h-[70vh]  px-4 py-2 rounded-xl"
       ref={naveBarComponentRef}
     >
       {/* card */}

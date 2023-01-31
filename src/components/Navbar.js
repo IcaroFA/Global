@@ -121,7 +121,7 @@ function Navbar() {
                     onClick={() =>
                       setShowNotificationComponent((preval) => !preval)
                     }
-                    className=" md:mr-8  mr-4 h-8 relative  p-1 w-8   dark:text-blue-500  dark:hover:bg-gray-800  hover:bg-gray-100  rounded-full flex items-center justify-center"
+                    className="notificationButton md:mr-8  mr-4 h-8 relative  p-1 w-8   dark:text-blue-500  dark:hover:bg-gray-800  hover:bg-gray-100  rounded-full flex items-center justify-center"
                   >
                     {showNotificationComponent ? (
                       <svg
