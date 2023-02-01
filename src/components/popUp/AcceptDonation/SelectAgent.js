@@ -61,7 +61,7 @@ function SelectAgent({ setShowPopUp, setComponent, donation, setDonation }) {
           };
         });
 
-        sendNorification(); // send notification to agent and donor if donation accepted
+        // sendNorification(); // send notification to agent and donor if donation accepted
         notify("Donation Accepted", "success");
         setShowPopUp(false);
         setComponent("ACCEPT");

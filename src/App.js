@@ -40,19 +40,20 @@ function App() {
   } = useContext(GlobalContex);
   const URL = process.env.REACT_APP_URL;
 
-  const socket = io({ path: URL, transports: ["websocket"] });
+  // sockets  code
+
   // const socket = io(URL);
 
-  socket.on("connect_error", (error) => {
-    console.log(error);
-  });
+  // socket.on("connect_error", (error) => {
+  //   console.log(error);
+  // });
 
-  socket.on("private_notification", (data) => {
-    console.log(data);
-    setNotificationData((preVal) => {
-      return { ...preVal, notifications: [data, ...preVal.notifications] };
-    });
-  });
+  // socket.on("private_notification", (data) => {
+  //   console.log(data);
+  //   setNotificationData((preVal) => {
+  //     return { ...preVal, notifications: [data, ...preVal.notifications] };
+  //   });
+  // });
 
   const {
     setUserData,
@@ -86,13 +87,13 @@ function App() {
       if (response.data.success) {
         setUserData(user);
         setUserLoading(false);
-        setSocketInstance(socket);
-        socket.emit("register", {
-          role: user.role,
-          id: user._id,
-          name: user.firstName + " " + user.lastName,
-          email: user.email
-        });
+        // setSocketInstance(socket);
+        // socket.emit("register", {
+        //   role: user.role,
+        //   id: user._id,
+        //   name: user.firstName + " " + user.lastName,
+        //   email: user.email
+        // });
       }
     } catch (error) {
       setUserLoading(false);

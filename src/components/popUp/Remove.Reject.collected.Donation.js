@@ -58,7 +58,7 @@ function RemoveRejectDonation({
         });
         notify(`you just ${type} one  donation`, "success");
         setShowPopUp(false);
-        sendNotification(data, type);
+        // sendNotification(data, type);
       }
       setLoading(false);
     } catch (error) {
@@ -68,7 +68,6 @@ function RemoveRejectDonation({
   }
 
   /// send notificaiton
-
   function sendNotification(data, type) {
     /// send notification to admin and donor of agent mark donation as collected
     if (type === "COLLECTED") {
