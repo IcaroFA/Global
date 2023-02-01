@@ -27,7 +27,7 @@ function SignIn() {
           expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         };
         setUserData(response.data.data);
-        sessionStorage.setItem("token", JSON.stringify(option));
+        sessionStorage.setItem("Token", JSON.stringify(option));
         setTOKEN(option);
         navigate("/");
         setSignUpLoading(false);

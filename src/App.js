@@ -28,7 +28,7 @@ import PageNotFound from "./PageNotFound";
 import NotificationComponent from "./components/NotificationComponent.js";
 
 // npm package
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import axios from "axios";
 
 function App() {
@@ -87,6 +87,7 @@ function App() {
       if (response.data.success) {
         setUserData(user);
         setUserLoading(false);
+
         // setSocketInstance(socket);
         // socket.emit("register", {
         //   role: user.role,
