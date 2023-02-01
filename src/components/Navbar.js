@@ -113,8 +113,6 @@ function Navbar() {
               </div>
             ) : (
               <div className="flex items-center  space-x-3   cursor-pointer ">
-                {/* <DarkModeToggleButton /> */}
-
                 {/* notification */}
                 {Object.keys(userData).length > 0 ? (
                   <div

@@ -41,7 +41,7 @@ function App() {
   const URL = process.env.REACT_APP_URL;
 
   const socket = io({ path: URL, transports: ["websocket"] });
-  // const socket = io.connect("https://food-donation.vercel.app/");
+  // const socket = io(URL);
 
   socket.on("connect_error", (error) => {
     console.log(error);
