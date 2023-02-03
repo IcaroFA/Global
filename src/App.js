@@ -49,7 +49,6 @@ function App() {
   // });
 
   // socket.on("private_notification", (data) => {
-  //   console.log(data);
   //   setNotificationData((preVal) => {
   //     return { ...preVal, notifications: [data, ...preVal.notifications] };
   //   });

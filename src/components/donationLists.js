@@ -50,7 +50,7 @@ function DonationList({ setCurrentPage, donationsUrl, PageType, baseUrl }) {
 
   return (
     <>
-      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center   border-blue-300  dark:border-gray-500 ">
+      <header className=" sticky top-0  left-0 pt-4  px-4 shadow-xl   border-b-4  flex justify-between items-center  bg-blue-50  dark:bg-gray-800  border-blue-300    dark:border-gray-500 ">
         <h1 className="   text-xl md:text-2xl mb-3 font-semibold  text-blue-500   dark:text-white">
           {PageType}
         </h1>
