@@ -22,7 +22,9 @@ function Navbar() {
   const { error, data, loading, fetchData } = useFetchData();
 
   useEffect(() => {
-    fetchData(process.env.REACT_APP_URL + "/api/notifications?limit=50");
+    if (Object.values(userData).length > 0) {
+      fetchData(process.env.REACT_APP_URL + "/api/notifications?limit=50");
+    }
   }, []);
 
   useEffect(() => {
@@ -113,15 +115,17 @@ function Navbar() {
               </div>
             ) : (
               <div className="flex items-center  space-x-3   cursor-pointer ">
+                {/* uncomment the notification component , when you wnat use sockeit.io */}
+
                 {/* notification */}
-                {Object.keys(userData).length > 0 ? (
+                {/* {Object.keys(userData).length > 0 ? (
                   <div
                     onClick={() =>
                       setShowNotificationComponent((preval) => !preval)
                     }
                     className="notificationButton md:mr-8  mr-4 h-8 relative  p-1 w-8   dark:text-blue-500  dark:hover:bg-gray-800  hover:bg-gray-100  rounded-full flex items-center justify-center"
-                  >
-                    {showNotificationComponent ? (
+                  > */}
+                {/* {showNotificationComponent ? (
                       <svg
                         aria-hidden="true"
                         fill="currentColor"
@@ -149,18 +153,18 @@ function Navbar() {
                           strokeLinejoin="round"
                         ></path>
                       </svg>
-                    )}
+                    )} */}
 
-                    {/* red ball */}
-                    {notificationData.notifications &&
+                {/* red ball */}
+                {/* {notificationData.notifications &&
                     notificationData.notifications.length > 0 ? (
                       <div className="absolute w-2 h-2  rounded-full bg-red-600   bottom-1 right-1"></div>
-                    ) : null}
-                    {/* red ball end */}
-                  </div>
-                ) : null}
+                    ) : null} */}
+                {/* red ball end */}
+                {/* </div>
+                ) : null} */}
 
-                {/* notificaton  */}
+                {/* notificaton  end */}
                 {userData.profileImage && userData.profileImage.url ? (
                   <img
                     src={userData.profileImage.url}

@@ -41,9 +41,7 @@ function App() {
   const URL = process.env.REACT_APP_URL;
 
   // sockets  code
-
   // const socket = io(URL);
-
   // socket.on("connect_error", (error) => {
   //   console.log(error);
   // });

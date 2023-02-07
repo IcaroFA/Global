@@ -28,7 +28,6 @@ function NotificationComponent() {
       ref={naveBarComponentRef}
     >
       {/* card */}
-
       {notificationData.notifications &&
       notificationData.notifications.length < 1 ? (
         <div className="md:w-[20rem] md:h-20  shadow-2xl bg-white rounded-lg flex items-center justify-center  dark:bg-gray-700 p-2">
