@@ -17,6 +17,7 @@ function SignIn() {
     try {
       const response = await axios({
         method: "post",
+        crossDomain: true,
         withCredentials: true,
         url: URL + "/api/auth/signin",
         data: signData

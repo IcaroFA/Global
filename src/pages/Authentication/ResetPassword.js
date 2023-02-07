@@ -24,6 +24,7 @@ function ResetPassword() {
         method: "post",
         url: URL + "/api/auth/reset_password/" + resetPasswordToken,
         withCredentials: true,
+        crossDomain: true,
         data: {
           password: resetPasswordDate.password,
           confirmPassword: resetPasswordDate.confirmPassword

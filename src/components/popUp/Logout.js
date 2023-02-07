@@ -24,6 +24,7 @@ function Logout() {
         navigate("/");
         setUserData({});
         setUserData({});
+        sessionStorage.removeItem("Token");
       }
       setLoading(false);
     } catch (error) {

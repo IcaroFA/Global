@@ -19,20 +19,22 @@ function Navbar() {
   } = useContext(GlobalContex);
   const location = useLocation();
 
-  const { error, data, loading, fetchData } = useFetchData();
+  // uncomment when use when use sockit
 
-  useEffect(() => {
-    if (Object.values(userData).length > 0) {
-      fetchData(process.env.REACT_APP_URL + "/api/notifications?limit=50");
-    }
-  }, []);
+  // const { error, data, loading, fetchData } = useFetchData();
 
-  useEffect(() => {
-    if (!loading) setNotificationData(data);
-  }, [loading]);
-  useEffect(() => {
-    notify(error, "error");
-  }, [error]);
+  // useEffect(() => {
+  //   if (Object.values(userData).length > 0) {
+  //     fetchData(process.env.REACT_APP_URL + "/api/notifications?limit=50");
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!loading) setNotificationData(data);
+  // }, [loading]);
+  // useEffect(() => {
+  //   notify(error, "error");
+  // }, [error]);
 
   return (
     <>
