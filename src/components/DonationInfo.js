@@ -322,7 +322,7 @@ function DonationInfo({ currentPage, path }) {
                     donation.items.map((e, i) => {
                       return (
                         <tr
-                          key={donation._id}
+                          key={donation._id + i}
                           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                         >
                           <th

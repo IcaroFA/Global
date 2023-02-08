@@ -23,8 +23,8 @@ function ResetPassword() {
       const response = await axios({
         method: "post",
         url: URL + "/api/auth/reset_password/" + resetPasswordToken,
+        // mode: "cors",
         withCredentials: true,
-        crossDomain: true,
         data: {
           password: resetPasswordDate.password,
           confirmPassword: resetPasswordDate.confirmPassword

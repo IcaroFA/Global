@@ -27,7 +27,7 @@ function Sidebar() {
                       <Link
                         to="/donations"
                         className={
-                          location.pathname === "/donations"
+                          location.pathname.includes("/donations")
                             ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                             : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                         }
@@ -52,7 +52,7 @@ function Sidebar() {
                         <Link
                           to="/assigned"
                           className={
-                            location.pathname === "/assigned"
+                            location.pathname.includes("/assigned")
                               ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                               : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                           }
@@ -108,7 +108,7 @@ function Sidebar() {
                         <Link
                           to="/agents"
                           className={
-                            location.pathname === "/agents"
+                            location.pathname.includes("/agents")
                               ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                               : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                           }
@@ -136,7 +136,7 @@ function Sidebar() {
                         <Link
                           to="/donors"
                           className={
-                            location.pathname === "/donors"
+                            location.pathname.includes("/donors")
                               ? "flex items-center p-2 text-base font-normal text-blue-600 rounded-lg dark:text-white bg-blue-100 dark:bg-gray-700"
                               : "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                           }
@@ -305,7 +305,7 @@ function Sidebar() {
                   </>
                 ) : (
                   <>
-                    {/* logout */}
+                    {/* sign in */}
                     <li>
                       <Link
                         to="/sign_in"
@@ -333,6 +333,8 @@ function Sidebar() {
                         </span>
                       </Link>
                     </li>{" "}
+                    {/* sing in end */}
+                    {/* sing up*/}
                     <li>
                       <Link
                         to="/sign_up"
@@ -360,7 +362,7 @@ function Sidebar() {
                         </span>
                       </Link>
                     </li>
-                    {/* logout end */}
+                    {/* signup out */}
                   </>
                 )}
               </ul>

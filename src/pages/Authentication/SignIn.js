@@ -17,9 +17,9 @@ function SignIn() {
     try {
       const response = await axios({
         method: "post",
-        crossDomain: true,
-        withCredentials: true,
         url: URL + "/api/auth/signin",
+        mode: "cors",
+        withCredentials: true,
         data: signData
       });
       if (response.data.success) {
