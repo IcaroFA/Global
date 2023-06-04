@@ -2,9 +2,6 @@ import Sidebar from "../components/Sidebar";
 
 // images
 import one from "../asset/1.jpg";
-import celebration from "../asset/celebration.png";
-import inHonorof from "../asset/inHonorof.png";
-import inMemoryof from "../asset/inMemoryof.png";
 import foodGirl from "../asset/Girl-Food.png";
 import falimy from "../asset/family.png";
 import FoodHandout from "../asset/Food-Handout.jpg";
@@ -28,45 +25,11 @@ function Home() {
             <div className="absolute   top-0  left-0 h-full w-full flex items-center justify-center  md:flex-row flex-col     gap-8  p-4 ">
               <div className="flex flex-col    gap-4  w-full md:w-[40rem] ">
                 <h1 className="  text-[#86c540]    font-bold  text-3xl   text-center md:text-start  md:text-7xl">
-                  MAKE YOUR OWN DAY OF CHARITY
+                Sabor Solidário
                 </h1>
                 <p className=" text-white font-bold text-center md:text-start">
-                  Add goodwill to your special occasions by spreading joy among
-                  those who need your care and support the most.
+                  Levando alimento para aqueles que mais precisam.
                 </p>
-              </div>
-              <div className="w-full md:w-[40rem]  md:flex  items-center justify-center">
-                <div className="flex flex-col gap-4    md:gap-9     md:justify-start    items-center justify-center">
-                  <h1 className="text-[#86c540]   md:text-2xl  text-center   font-bold  md:text-start">
-                    CHOOSE AN OCCASION
-                  </h1>
-                  <div className="flex gap-6  md:gap-10 md:10">
-                    <div className="flex justify-center items-center gap-1 flex-col">
-                      <img
-                        className=" md:w-20  w-16"
-                        src={celebration}
-                        alt="Celibration"
-                      />
-                      <p className="text-white">Celibration</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-1 flex-col">
-                      <img
-                        className=" md:w-20  w-16"
-                        src={inHonorof}
-                        alt="inHonorof"
-                      />
-                      <p className="text-white">In Honor</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-1 flex-col">
-                      <img
-                        className=" md:w-20  w-16"
-                        src={inMemoryof}
-                        alt="inMemoryof"
-                      />
-                      <p className="text-white">In Memory</p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -75,15 +38,13 @@ function Home() {
           <section className=" flex   justify-center    md:my-[5rem]  my-10 px-4">
             <div className=" max-w-4xl   flex  flex-col  gap-10">
               <h1 className=" text-center text-[#86c540]   md:text-7xl    text-3xl   font-bold ">
-                Your gift connects families to good food.
+                Sua ajuda leva o alimento até a mesa de famílias carentes
               </h1>
               <p className="    text-center text-gray-700 font-semibold">
-                Today, millions of Indian families lack access to healthy,
-                affordable food. But with your support, Partnership for a
-                Healthier India is working to ensure that every family, in every
-                zip code has affordable access to good food. Give now, and
-                together we can achieve Food Equity and create a healthier
-                future for all.
+              Hoje, milhões de famílias brasileiras sofrem com a falta de alimentos saudáveis e acessíveis. 
+              Mas com o seu apoio, podemos garantir que cada família, em qualquer região do país, 
+              tenha acesso a alimentos de qualidade. Doe agora e juntos 
+              podemos criar um futuro mais saudável para todos.
               </p>
             </div>
           </section>
@@ -94,12 +55,12 @@ function Home() {
               <div className="flex   flex-col md:flex-row">
                 <div className=" md:w-[24rem] w-full      p-8 bg-[#38067d] text-white  items-center flex  flex-col gap-6 ">
                   <h1 className="  text-3xl text-center">
-                    Our Response to Food Insecurity
+                    Nossa Missão
                   </h1>
                   <ul className=" text-lg  list-disc  leading-loose ">
-                    <li>Added 450 new food distribution sites</li>
-                    <li>Fed 12 million people</li>
-                    <li>Provided 44 million meals</li>
+                    <li>Estamos trabalhando para criar novos centros de distribuição</li>
+                    <li>Já alimentamos mais de 100 mil famílias com sua ajuda</li>
+                    <li>Evitamos o desperdício de mais de 2 toneladas de alimentos</li>
                   </ul>
                 </div>
                 <img
@@ -116,23 +77,19 @@ function Home() {
                 />
                 <div className="md:w-[24rem]  w-full p-8  text-gray-800  items-center flex ">
                   <p className=" font-semibold  text-lg">
-                    "My husband works in construction and sometimes there were
-                    no contracts. Knowing that I have access to food gives me
-                    peace of mind. If he's not, I know I can put a hot plate in
-                    front of my family."
+                    "Levando alimentos e alegria para famílias em todo o país."
                   </p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="  w-full  md:w-[24rem]  bg-[#009aa6]  p-8">
                   <h1 className="text-white  text-4xl text-center">
-                    Food & Nutrition
+                    Alimento e Nutrição
                   </h1>
                   <p className="   text-white  text-xl  mt-4    text-semibold">
-                    we believe that access to proper nutrition, that is balanced
-                    and culturally appropriate, is a basic human right.
-                    Assisting our network to take full advantage of food support
-                    programs at our local pantries.
+                  Acreditamos que o acesso à alimentação adequada e 
+                  equilibrada é um direito humano básico. 
+                  E contamos com sua ajuda para tornar isso uma realidade.
                   </p>
                 </div>
                 <img
@@ -145,54 +102,6 @@ function Home() {
           </section>
           {/* section three */}
         </div>
-        {/* section four */}
-        <div className="mt-10 mb-20 w-full  flex flex-col gap-8">
-          <marquee
-            className="text-3xl 
-          font-bold"
-            direction="left"
-            behavior="alternate"
-          >
-            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
-            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
-            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
-            &nbsp;jhon deo
-          </marquee>{" "}
-          <marquee
-            className="text-3xl 
-          font-bold"
-            direction="right"
-            behavior="alternate"
-          >
-            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
-            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
-            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
-            &nbsp;jhon deo
-          </marquee>{" "}
-          <marquee
-            className="text-3xl 
-          font-bold"
-            direction="left"
-            behavior="alternate"
-          >
-            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
-            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
-            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
-            &nbsp;jhon deo
-          </marquee>
-          <marquee
-            className="text-3xl 
-          font-bold"
-            direction="right"
-            behavior="alternate"
-          >
-            jhon for &nbsp; &nbsp; jhon SHRIVASTAV &nbsp; SHRIVASTAV Om &nbsp;
-            Disha Pal &nbsp; &nbsp; Manish Modi &nbsp; &nbsp; Akash Sachdeva
-            &nbsp; &nbsp; Karan Naidu &nbsp; &nbsp; AYUSH ARORA &nbsp;
-            &nbsp;jhon deo
-          </marquee>{" "}
-        </div>
-        {/* section fout */}
         {/* footer */}
         <footer className="p-4 bg-white sm:p-6 dark:bg-gray-900  w-full flex items-center justify-center">
           <div className="container">
@@ -251,7 +160,7 @@ function Home() {
                   <span className="sr-only">Instagram page</span>
                 </a>
                 <a
-                  href="https://twitter.com/MangeshThakree"
+                  href=""
                   className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
                 >
                   <svg
@@ -265,7 +174,7 @@ function Home() {
                   <span className="sr-only">Twitter page</span>
                 </a>
                 <a
-                  href="https://github.com/MangeshThakre"
+                  href=""
                   className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
                 >
                   <svg
@@ -283,7 +192,7 @@ function Home() {
                   <span className="sr-only">GitHub account</span>
                 </a>
                 <a
-                  href="https://mangeshthakre.cyclic.app"
+                  href=""
                   className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
                 >
                   <svg
